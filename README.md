@@ -47,6 +47,8 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 
 ## Installation
 
+### Using Debian/Ubuntu
+
 1. **Update Package Lists**
 
     ```bash
@@ -100,6 +102,41 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     ```bash
     source ~/Robot5A-Simulation/install/setup.bash
     ```
+
+### Using Docker
+
+Alternatively, you may consider using [Docker](https://www.docker.com/).
+
+1. **Install docker**
+
+    Follow its [documentation](https://docs.docker.com/engine/install/debian/).
+
+2. **Manage Docker as a non-root user** (optional)
+
+    Follows its [documentation](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+
+    ```bash
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker
+    ```
+
+3. **Build the image**
+
+    ```bash
+    docker build -t robot5a --build-arg "USER=$USER" --build-arg "UID=$UID" --build-arg "GROUP=${GROUPS[0]}" --build-arg "HOME=$HOME" .
+    ```
+
+4. **Run a shell in a new container based on the image**
+
+    ```bash
+   docker run --rm --volume "$PWD:$PWD:rw" --user "$UID:$UID" --interactive --tty --workdir "$PWD" --env "HOME=$PWD" --entrypoint /bin/bash --env DISPLAY --env XAUTHORITY --env XSOCK --volume "$PWD/.Xauthority:$PWD/.Xauthority" --volume /tmp/.X11-unix:/tmp/.X11-unix:ro --volume /dev:/dev robot5a
+    ```
+
+5. **Enter any commands from the shell**
+
+    The commands are run in the container.
+    The image is based on the official docker image `ros:humble-ros-base` from [dockerhub](https://hub.docker.com/_/ros), it is currently derived from Ubuntu Jammy (22.04).
 
 ## Setup
 
