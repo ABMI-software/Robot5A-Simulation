@@ -217,7 +217,7 @@ This project is licensed under the MIT License.
 
 ---
 
-*Developed by [Eliott & Omar](https://github.com/Eliottfrhl)*
+*Developed by [Eliott & Omar](https://github.com/ABMI-software/Robot5A-Simulation)*
 
 # Notes to myself
 
