@@ -103,17 +103,17 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     source ~/Robot5A-Simulation/install/setup.bash
     ```
 
-### Using Docker
+### Using Docker and dosh
 
-Alternatively, you may consider using [Docker](https://www.docker.com/).
+Alternatively, you may consider using [Docker](https://www.docker.com/) and the wrapper [dosh](https://gportay.github.io/dosh/).
 
 1. **Install docker**
 
     Follow its [documentation](https://docs.docker.com/engine/install/debian/).
 
-2. **Manage Docker as a non-root user** (optional)
+2. **Manage Docker as a non-root user**
 
-    Follows its [documentation](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+    Follow its [documentation](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
 
     ```bash
     sudo groupadd docker
@@ -121,22 +121,39 @@ Alternatively, you may consider using [Docker](https://www.docker.com/).
     newgrp docker
     ```
 
-3. **Build the image**
+3. **Install dosh**
+
+    Follow its [README](https://github.com/gportay/dosh?tab=readme-ov-file#install).
 
     ```bash
-    docker build -t robot5a --build-arg "USER=$USER" --build-arg "UID=$UID" --build-arg "GROUP=${GROUPS[0]}" --build-arg "HOME=$HOME" .
+    make user-install
     ```
 
-4. **Run a shell in a new container based on the image**
+    __Note__: You may install the docker shell CLI plugin as well to run `docker shell` (or `docker bash`) in place of `dosh`.
+
 
     ```bash
-   docker run --rm --volume "$PWD:$PWD:rw" --user "$UID:$UID" --interactive --tty --workdir "$PWD" --env "HOME=$PWD" --entrypoint /bin/bash --env DISPLAY --env XAUTHORITY --env XSOCK --volume "$PWD/.Xauthority:$PWD/.Xauthority" --volume /tmp/.X11-unix:/tmp/.X11-unix:ro --volume /dev:/dev robot5a
+    make user-install-cli-plugin
+    ```
+
+4. **Run a docker shell**
+
+    ```bash
+    dosh
+    ```
+
+    __Note__: Or the following if the docker shell CLI plugin is installed (see the previous point).
+
+    ```bash
+    docker bash
     ```
 
 5. **Enter any commands from the shell**
 
-    The commands are run in the container.
+    The commands are run in the container, with the user credential, the current directory bind mounted, and few other things (see [doshrc](doshrc)).
     The image is based on the official docker image `ros:humble-ros-base` from [dockerhub](https://hub.docker.com/_/ros), it is currently derived from Ubuntu Jammy (22.04).
+
+__Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so it is unecessary to source the files `/opt/ros/humble/setup.bash` and `install/setup.bash` manually.
 
 ## Setup
 
@@ -247,7 +264,7 @@ Contributions are welcome! Please follow these steps:
 
 ## Documentation
 
-All C++ nodes created under robot control package are documented using Doxygen check the **docs/html/index.html** for an interactive code docs 
+All C++ nodes created under robot control package are documented using Doxygen check the **docs/html/index.html** for an interactive code docs
 
 ## License
 

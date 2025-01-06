@@ -1,0 +1,30 @@
+# Use /bin/bash
+DOSHELL="/bin/bash"
+for file in .bashrc .bash_history
+do
+	[ -e "$PWD/$file" ] || continue
+	DOSH_DOCKER_RUN_EXTRA_OPTS+=(--volume "$PWD/$file:$HOME/$file")
+done
+
+# Map and export X things?
+if [ -n "$DISPLAY" ]
+then
+	for env in DISPLAY XAUTHORITY XSOCK
+	do
+		[ -n "$env" ] || continue
+		DOSH_DOCKER_RUN_EXTRA_OPTS+=(--env "$env")
+	done
+	dotxauthority="${XAUTHORITY:-$HOME/.Xauthority}"
+	if [ -e "$dotxauthority" ]
+	then
+		DOSH_DOCKER_RUN_EXTRA_OPTS+=(--volume "$dotxauthority:$HOME/.Xauthority")
+	fi
+	unset dotxauthority
+	xsock="${XSOCK:-/tmp/.X11-unix}"
+	if [ -e "$xsock" ]
+	then
+		DOSH_DOCKER_RUN_EXTRA_OPTS+=(--volume "$xsock:/tmp/.X11-unix:ro")
+	fi
+	unset xsock
+	DOSH_DOCKER_RUN_EXTRA_OPTS+=(--volume "/dev:/dev")
+fi

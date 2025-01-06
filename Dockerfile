@@ -14,9 +14,5 @@ RUN apt-get update && \
                        ros-humble-ros2-control \
                        ros-humble-ros2-controllers
 
-ARG USER
-ARG UID
-ARG GROUP
-ARG HOME
-RUN groupadd --non-unique --gid "$GROUP" "$USER" && \
-    useradd  --non-unique --gid "$GROUP" --uid "$UID" --create-home --home-dir "$HOME" --shell /bin/sh "$USER"
+RUN apt-get update && \
+    apt-get install -y bash-completion
