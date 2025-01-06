@@ -18,8 +18,6 @@ find_package(Qt5Widgets REQUIRED)
 find_package(message_filters REQUIRED)
 find_package(tf2_eigen REQUIRED)
 
-
-
 # Include directories
 include_directories(
   ${OpenCV_INCLUDE_DIRS}
@@ -43,6 +41,22 @@ add_executable(visual_joint_state_publisher src/visual_joint_state_publisher.cpp
 add_executable(aruco_rotation_publisher src/aruco_rotation_publisher.cpp)
 add_executable(aruco_detector_double src/aruco_detector_double.cpp)
 
+# Add the JointStateBridge executable
+add_executable(joint_state_bridge src/joint_state_bridge.cpp)
+
+# Specify dependencies for JointStateBridge
+ament_target_dependencies(joint_state_bridge
+  rclcpp
+  sensor_msgs
+  geometry_msgs
+)
+
+# Link libraries for JointStateBridge
+target_link_libraries(joint_state_bridge
+  yaml-cpp
+  Eigen3::Eigen
+)
+
 ament_target_dependencies(
   aruco_detector_double
   rclcpp
@@ -63,7 +77,6 @@ target_link_libraries(aruco_detector_double
   Eigen3::Eigen
 )
 
-
 # Link libraries
 ament_target_dependencies(aruco_rotation_publisher
   rclcpp
@@ -76,6 +89,7 @@ ament_target_dependencies(aruco_rotation_publisher
 # Install the executable
 install(TARGETS
   aruco_rotation_publisher
+  joint_state_bridge  # Add the new executable here
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -145,7 +159,7 @@ install(TARGETS
   moveit_control_gui
   visual_joint_state_publisher
   aruco_detector_double
-  DESTINATION lib/${PROJECT_NAME}
+  joint_state_bridge DESTINATION lib/${PROJECT_NAME}
 )
 
 # Install launch and config files
