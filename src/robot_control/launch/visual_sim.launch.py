@@ -210,16 +210,19 @@ def generate_launch_description():
         parameters=[{"use_sim_time": True}],
     )
 
+    # Launch Joint State Bridge Node
+    joint_state_bridge_node = Node(
+            package="robot_control",  # Replace with the actual package name containing joint_state_bridge
+            executable="joint_state_bridge",  # Replace with the actual executable name
+            output="screen",
+            parameters=[{"use_sim_time": True}],
+        )
+
     # Return the LaunchDescription
     return LaunchDescription(
         [
             num_cameras_arg,  # Added the launch argument
-            Node(
-                package='joint_state_publisher',
-                executable='joint_state_publisher',
-                output='screen',
-                parameters=[{'use_sim_time': True}]
-            ),
+
 
             SetParameter(name="use_sim_time", value=True),  # Enable simulation time
             RegisterEventHandler(
@@ -249,6 +252,7 @@ def generate_launch_description():
                         aruco_detector_single_node,
                         aruco_detector_double_node,
                         visual_joint_state_publisher_node,
+                        joint_state_bridge_node,
                     ],
                 )
             ),
