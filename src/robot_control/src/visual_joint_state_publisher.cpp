@@ -102,7 +102,9 @@ VisualJointStatePublisher::VisualJointStatePublisher()
       "camera_config_file", "src/robot_control/config/transform.yaml");
   this->declare_parameter<std::vector<std::string>>(
       "joint_names", std::vector<std::string>{"R0_Yaw", "R1_Pitch", "R2_Pitch",
-                                              "R3_Yaw", "R4_Pitch"});
+                                              "R3_Yaw", "R4_Pitch", "ServoGear"
+                                            , "LeftPivotArm", "PassifGear", "LeftGripper", "RightGripper", "RightPivotArm"
+                                                });
 
   std::string config_file = this->get_parameter("config_file").as_string();
   std::string camera_config_file =
@@ -330,6 +332,11 @@ void VisualJointStatePublisher::timer_callback() {
     joint_state_msg.name = joint_names_;
     joint_state_msg.position = joint_positions;
     // Velocity and effort are left empty as per requirements
+    // Set velocity and effort to empty lists or nan values
+
+        joint_state_msg.velocity.resize(joint_state_msg.name.size(), std::nan("")); // or use an empty vector
+
+        joint_state_msg.effort.resize(joint_state_msg.name.size(), std::nan("")); // or use an empty vector
 
     joint_state_pub_->publish(joint_state_msg);
 
