@@ -70,29 +70,36 @@ private:
 
         // Combine names and positions
         combined_joint_states.name = true_joint_states_->name; // Start with true joint names
-        combined_joint_states.position = true_joint_states_->position; // Start with true joint positions
+        combined_joint_states.position = true_joint_states_->position; // Start with true joint 
+        combined_joint_states.velocity = true_joint_states_->velocity; // Start with true joint velocity
+        combined_joint_states.effort = true_joint_states_->effort; // Start with true joint effort
 
         // Add visual joint states
         for (size_t i = 0; i < visual_joint_states_->name.size(); ++i) {
             const auto& visual_joint_name = visual_joint_states_->name[i];
-            auto it = std::find(combined_joint_states.name.begin(), combined_joint_states.name.end(), visual_joint_name);
-            
-            if (it == combined_joint_states.name.end()) {
-                // If the joint name from visual states is not already in the combined list, add it
-                combined_joint_states.name.push_back(visual_joint_name);
-                combined_joint_states.position.push_back(visual_joint_states_->position[i]); // Add the corresponding position
-            } else {
-                // If the joint name already exists, you might want to handle it (e.g., average positions, etc.)
-                size_t index = std::distance(combined_joint_states.name.begin(), it);
-                combined_joint_states.position[index] = (combined_joint_states.position[index] + visual_joint_states_->position[i]) / 2.0; // Example: average positions
+            double visual_position = visual_joint_states_->position[i];
+
+
+            // Only consider non-zero positions
+            if (visual_position != 0.0) {
+                auto it = std::find(combined_joint_states.name.begin(), combined_joint_states.name.end(), visual_joint_name);
+                
+                if (it == combined_joint_states.name.end()) {
+                    // If the joint name from visual states is not already in the combined list, add it
+                    combined_joint_states.name.push_back(visual_joint_name);
+                    combined_joint_states.position.push_back(visual_joint_states_->position[i]); // Add the corresponding position
+                } else {
+                    // If the joint name already exists, you might want to handle it (e.g., average positions, etc.)
+                    size_t index = std::distance(combined_joint_states.name.begin(), it);
+                    combined_joint_states.position[index] = (combined_joint_states.position[index] + visual_joint_states_->position[i]) / 2.0; // Example: average positions
+                }
             }
         }
-
         // Publish the combined joint states to the new topic
         combined_joint_state_publisher_->publish(combined_joint_states);
 
         // Publish the combined joint states
-        joint_state_publisher_->publish(combined_joint_states);
+        //joint_state_publisher_->publish(combined_joint_states);
 
     }
 
