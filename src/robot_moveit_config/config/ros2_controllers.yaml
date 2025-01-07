@@ -13,8 +13,7 @@ controller_manager:
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
-      # ros__parameters:
-      #   joint_state_topic: "/visual_joint_states"
+
 
 arm_controller:
   ros__parameters:

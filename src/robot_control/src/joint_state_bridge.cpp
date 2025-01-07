@@ -99,7 +99,7 @@ private:
         combined_joint_state_publisher_->publish(combined_joint_states);
 
         // Publish the combined joint states
-        //joint_state_publisher_->publish(combined_joint_states);
+        joint_state_publisher_->publish(combined_joint_states);
 
     }
 
