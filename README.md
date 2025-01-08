@@ -90,15 +90,14 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 5. **Build the Workspace**
 
     ```bash
-    cd ~/Robot5A-Simulation
-    source /opt/ros/humble/setup.bash
+    cd Robot5A-Simulation
     colcon build
     ```
 
 6. **Source the Workspace**
 
     ```bash
-    source ~/Robot5A-Simulation/install/setup.bash
+    source install/setup.bash
     ```
 
 ## Setup
@@ -218,7 +217,7 @@ This project is licensed under the MIT License.
 
 ---
 
-*Developed by [Eliott & Omar](https://github.com/Eliottfrhl)*
+*Developed by [Eliott & Omar](https://github.com/ABMI-software/Robot5A-Simulation)*
 
 # Notes to myself
 
