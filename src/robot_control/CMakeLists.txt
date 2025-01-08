@@ -17,6 +17,7 @@ find_package(Eigen3 REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(message_filters REQUIRED)
 find_package(tf2_eigen REQUIRED)
+find_package(control_msgs REQUIRED)
 
 # Include directories
 include_directories(
@@ -40,25 +41,54 @@ add_executable(moveit_control_gui src/moveit_control_gui.cpp)
 add_executable(visual_joint_state_publisher src/visual_joint_state_publisher.cpp)
 add_executable(aruco_rotation_publisher src/aruco_rotation_publisher.cpp)
 add_executable(aruco_detector_double src/aruco_detector_double.cpp)
-
-# Add the JointStateBridge executable
 add_executable(joint_state_bridge src/joint_state_bridge.cpp)
+add_executable(arm_state_listener src/arm_state_listener.cpp)  # Added arm_state_listener
 
-# Specify dependencies for JointStateBridge
-ament_target_dependencies(joint_state_bridge
+# Specify dependencies for each executable
+ament_target_dependencies(moveit_control_simple
   rclcpp
-  sensor_msgs
+  moveit_ros_planning_interface
   geometry_msgs
 )
 
-# Link libraries for JointStateBridge
-target_link_libraries(joint_state_bridge
-  yaml-cpp
-  Eigen3::Eigen
+ament_target_dependencies(end_pose_node
+  rclcpp
+  geometry_msgs
+  tf2_ros
+  tf2_geometry_msgs
 )
 
-ament_target_dependencies(
-  aruco_detector_double
+ament_target_dependencies(aruco_detector_single
+  rclcpp
+  sensor_msgs
+  geometry_msgs
+  tf2_ros
+  cv_bridge
+)
+
+ament_target_dependencies(moveit_control_gui
+  rclcpp
+  moveit_ros_planning_interface
+  geometry_msgs
+)
+
+ament_target_dependencies(visual_joint_state_publisher
+  rclcpp
+  sensor_msgs
+  geometry_msgs
+  tf2_ros
+  tf2_geometry_msgs
+)
+
+ ament_target_dependencies(aruco_rotation_publisher
+  rclcpp
+  geometry_msgs
+  tf2
+  tf2_ros
+  tf2_geometry_msgs
+)
+
+ament_target_dependencies(aruco_detector_double
   rclcpp
   sensor_msgs
   geometry_msgs
@@ -71,49 +101,28 @@ ament_target_dependencies(
   message_filters
 )
 
-target_link_libraries(aruco_detector_double
+ament_target_dependencies(joint_state_bridge
+  rclcpp
+  sensor_msgs
+  control_msgs 
+  geometry_msgs
+)
+
+ament_target_dependencies(arm_state_listener
+  rclcpp
+  sensor_msgs
+  control_msgs
+)
+
+# Link libraries for each executable
+target_link_libraries(joint_state_bridge
   yaml-cpp
-  ${OpenCV_LIBS}
   Eigen3::Eigen
 )
 
-# Link libraries
-ament_target_dependencies(aruco_rotation_publisher
-  rclcpp
-  geometry_msgs
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
-)
-
-# Install the executable
-install(TARGETS
-  aruco_rotation_publisher
-  joint_state_bridge  # Add the new executable here
-  DESTINATION lib/${PROJECT_NAME}
-)
-
-# Link the required dependencies for moveit_control_gui
-ament_target_dependencies(moveit_control_gui
-    rclcpp
-    moveit_ros_planning_interface
-    geometry_msgs
-    tf2_ros
-)
-
-# Link Qt5Widgets using target_link_libraries
-target_link_libraries(moveit_control_gui
-  Qt5::Widgets
-)
-
-# Link libraries for aruco_detector_single (ArucoDetectorSingle)
-ament_target_dependencies(
-  aruco_detector_single
-  rclcpp
-  sensor_msgs
-  geometry_msgs
-  tf2_ros
-  cv_bridge
+target_link_libraries(arm_state_listener
+  yaml-cpp
+  Eigen3::Eigen
 )
 
 target_link_libraries(aruco_detector_single
@@ -122,28 +131,10 @@ target_link_libraries(aruco_detector_single
   Eigen3::Eigen
 )
 
-# Link libraries for moveit_control_simple
-ament_target_dependencies(moveit_control_simple
-  rclcpp
-  moveit_ros_planning_interface
-  geometry_msgs
-)
-
-# Link libraries for end_pose_node
-ament_target_dependencies(end_pose_node
-  rclcpp
-  geometry_msgs
-  tf2_ros
-  tf2_geometry_msgs
-)
-
-# Link libraries for visual_joint_state_publisher
-ament_target_dependencies(visual_joint_state_publisher
-  rclcpp
-  sensor_msgs
-  geometry_msgs
-  tf2_ros
-  tf2_geometry_msgs
+target_link_libraries(aruco_detector_double
+  yaml-cpp
+  ${OpenCV_LIBS}
+  Eigen3::Eigen
 )
 
 target_link_libraries(visual_joint_state_publisher
@@ -151,15 +142,29 @@ target_link_libraries(visual_joint_state_publisher
   Eigen3::Eigen
 )
 
+# Link Qt5Widgets for moveit_control_gui
+target_link_libraries(moveit_control_gui
+  Qt5::Widgets
+)
+
 # Install targets
 install(TARGETS
-  aruco_detector_single
   moveit_control_simple
   end_pose_node
+  aruco_detector_single
+  aruco_rotation_publisher
   moveit_control_gui
+  moveit_control_simple
   visual_joint_state_publisher
   aruco_detector_double
-  joint_state_bridge DESTINATION lib/${PROJECT_NAME}
+  joint_state_bridge
+  arm_state_listener  # Added arm_state_listener here
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+include_directories(
+    ${control_msgs_INCLUDE_DIRS}  
+    ...
 )
 
 # Install launch and config files
