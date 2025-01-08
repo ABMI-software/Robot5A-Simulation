@@ -99,6 +99,13 @@ private:
             }
         }
 
+        // Set velocity and effort to empty lists or nan values
+
+        true_joint_states_->velocity.resize(true_joint_states_->name.size(), std::nan("")); // or use an empty vector
+
+        true_joint_states_->effort.resize(true_joint_states_->name.size(), std::nan("")); // or use an empty vector
+
+
         // Publish the true joint states
         true_joint_state_publisher_->publish(*true_joint_states_);
     }
