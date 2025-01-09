@@ -47,6 +47,8 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 
 ## Installation
 
+### Using Debian/Ubuntu
+
 1. **Update Package Lists**
 
     ```bash
@@ -99,6 +101,58 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     ```bash
     source install/setup.bash
     ```
+
+### Using Docker and dosh
+
+Alternatively, you may consider using [Docker](https://www.docker.com/) and the wrapper [dosh](https://gportay.github.io/dosh/).
+
+1. **Install docker**
+
+    Follow its [documentation](https://docs.docker.com/engine/install/debian/).
+
+2. **Manage Docker as a non-root user**
+
+    Follow its [documentation](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+
+    ```bash
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker
+    ```
+
+3. **Install dosh**
+
+    Follow its [README](https://github.com/gportay/dosh?tab=readme-ov-file#install).
+
+    ```bash
+    make user-install
+    ```
+
+    __Note__: You may install the docker shell CLI plugin as well to run `docker shell` (or `docker bash`) in place of `dosh`.
+
+
+    ```bash
+    make user-install-cli-plugin
+    ```
+
+4. **Run a docker shell**
+
+    ```bash
+    dosh
+    ```
+
+    __Note__: Or the following if the docker shell CLI plugin is installed (see the previous point).
+
+    ```bash
+    docker bash
+    ```
+
+5. **Enter any commands from the shell**
+
+    The commands are run in the container, with the user credential, the current directory bind mounted, and few other things (see [doshrc](doshrc)).
+    The image is based on the official docker image `ros:humble-ros-base` from [dockerhub](https://hub.docker.com/_/ros), it is currently derived from Ubuntu Jammy (22.04).
+
+__Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so it is unecessary to source the files `/opt/ros/humble/setup.bash` and `install/setup.bash` manually.
 
 ## Setup
 
@@ -209,7 +263,7 @@ Contributions are welcome! Please follow these steps:
 
 ## Documentation
 
-All C++ nodes created under robot control package are documented using Doxygen check the **docs/html/index.html** for an interactive code docs 
+All C++ nodes created under robot control package are documented using Doxygen check the **docs/html/index.html** for an interactive code docs
 
 ## License
 
