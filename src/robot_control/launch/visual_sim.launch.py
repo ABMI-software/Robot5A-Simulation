@@ -179,7 +179,22 @@ def generate_launch_description():
             {"moveit_current_state_monitor.joint_state_qos": "sensor_data"},
         ],  # Pass MoveIt config to the GUI node
     )
+    # Launch Visual Joint State Publisher Node
+    visual_joint_state_publisher_node = Node(
+        package="robot_control",
+        executable="visual_joint_state_publisher",
+        output="screen",
+        parameters=[{"use_sim_time": True}],
+    )
 
+    # Launch Joint State Bridge Node
+    joint_state_bridge_node = Node(
+            package="robot_control",  # Replace with the actual package name containing joint_state_bridge
+            executable="joint_state_bridge",  # Replace with the actual executable name
+            output="screen",
+            parameters=[{"use_sim_time": True}],
+        )
+    
     # Aruco Detector Single Node
     aruco_detector_single_node = Node(
         package="robot_control",
@@ -202,21 +217,7 @@ def generate_launch_description():
         condition=IfCondition(PythonExpression(['"', num_cameras, '" == "2"']))
     )
 
-    # Launch Visual Joint State Publisher Node
-    visual_joint_state_publisher_node = Node(
-        package="robot_control",
-        executable="visual_joint_state_publisher",
-        output="screen",
-        parameters=[{"use_sim_time": True}],
-    )
 
-    # Launch Joint State Bridge Node
-    joint_state_bridge_node = Node(
-            package="robot_control",  # Replace with the actual package name containing joint_state_bridge
-            executable="joint_state_bridge",  # Replace with the actual executable name
-            output="screen",
-            parameters=[{"use_sim_time": True}],
-        )
 
     # Return the LaunchDescription
     return LaunchDescription(
