@@ -44,6 +44,16 @@ arm_controller:
       R2_Pitch: {p: 100.0, i: 0.01, d: 1.0}
       R3_Yaw: {p: 100.0, i: 0.01, d: 1.0}
       R4_Pitch: {p: 100.0, i: 0.01, d: 1.0}
+      
+    # If true, When set to true, the controller will not use any feedback from the system 
+    # (e.g., joint positions, velocities, efforts) to compute the control commands. 
+    open_loop_control: false
+ 
+    # When set to true, it allows the controller to integrate the trajectory goals it receives. 
+    # This means that if the goal trajectory only specifies positions, the controller will 
+    # numerically integrate the positions to compute the velocities and accelerations required 
+    # to follow the trajectory.
+    allow_integration_in_goal_trajectories: true
 
 gripper_controller:
   ros__parameters:
