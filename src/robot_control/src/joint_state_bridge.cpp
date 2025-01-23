@@ -36,6 +36,10 @@ public:
         // Initialize publisher for combined joint states
         combined_joint_state_publisher_ = this->create_publisher<sensor_msgs::msg::JointState>(
             "/combined_joint_states", rclcpp::QoS(10).reliable());
+        
+        // Initialize publisher for true joint states
+        robot_joint_state_publisher_ = this->create_publisher<sensor_msgs::msg::JointState>(
+            "robot/joint_states", rclcpp::QoS(10).reliable());
     }
 
 private:
@@ -154,6 +158,8 @@ private:
         combined_joint_state_publisher_->publish(combined_joint_states);
         // Also publish the combined joint states to the main joint states topic
         joint_state_publisher_->publish(combined_joint_states);
+
+        // robot_joint_state_publisher_->publish(combined_joint_states);
     }
 
     // Member variables
@@ -167,6 +173,7 @@ private:
     rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_state_publisher_;
     rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr combined_joint_state_publisher_;
     rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr true_joint_state_publisher_;
+    rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr robot_joint_state_publisher_;
 };
 
 int main(int argc, char **argv)
