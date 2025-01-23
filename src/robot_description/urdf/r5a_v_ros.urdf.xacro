@@ -841,7 +841,7 @@
       <parameters>$(find robot_description)/config/controller.yaml</parameters>
       <controller_manager_name>controller_manager</controller_manager_name>
       <use_sim_time>true</use_sim_time>
-    </plugin>
+    </plugin> 
   </gazebo>
   
   <gazebo>
