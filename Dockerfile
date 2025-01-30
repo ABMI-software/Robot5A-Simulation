@@ -13,6 +13,7 @@ RUN apt-get update && \
                        ros-humble-robot-state-publisher \
                        ros-humble-ros2-control \
                        ros-humble-ros2-controllers \
+                       ros-humble-rqt \
                        ros-humble-rqt-graph
 
 RUN apt-get update && \
