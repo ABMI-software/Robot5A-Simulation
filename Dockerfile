@@ -12,7 +12,8 @@ RUN apt-get update && \
                        ros-humble-moveit \
                        ros-humble-robot-state-publisher \
                        ros-humble-ros2-control \
-                       ros-humble-ros2-controllers
+                       ros-humble-ros2-controllers \
+                       ros-humble-rqt-graph
 
 RUN apt-get update && \
     apt-get install -y bash-completion \
