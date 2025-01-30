@@ -189,8 +189,8 @@ def generate_launch_description():
 
     # Launch Joint State Bridge Node
     joint_state_bridge_node = Node(
-            package="robot_control",  # Replace with the actual package name containing joint_state_bridge
-            executable="joint_state_bridge",  # Replace with the actual executable name
+            package="robot_control",  
+            executable="joint_state_bridge",  
             output="screen",
             parameters=[{"use_sim_time": True}],
         )
