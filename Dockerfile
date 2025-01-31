@@ -15,8 +15,10 @@ RUN apt-get update && \
                        ros-humble-ros2-controllers
 
 RUN apt-get update && \
-    apt-get install -y bash-completion
+    apt-get install -y bash-completion \
+                       sudo
 
 RUN apt-get update && \
     apt-get install -y pip \
                        python3-venv
+
