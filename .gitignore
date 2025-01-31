@@ -35,7 +35,7 @@ Thumbs.db
 *~
 
 # Python analysis virtual environnement and logs
-src/robot_test/data_analysis/venv/  
+src/robot_test/data_analysis/venv/
 src/robot_test/data_analysis/logs/
 
 # Temporary lock files
