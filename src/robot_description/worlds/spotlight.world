@@ -3,12 +3,12 @@
   <world name="custom_world_with_spotlight">
     <!-- Include a ground plane -->
     <include>
-      <uri>model://ground_plane</uri>
+      <uri>file:///home/chipmunk-151/.gazebo/models/ground_plane/model.sdf</uri>
     </include>
 
     <!-- Include a sun for lighting -->
     <include>
-      <uri>model://sun</uri>
+      <uri>file:///home/chipmunk-151/.gazebo/models/sun/model.sdf</uri>
     </include>
 
     <!-- Define a spotlight -->
