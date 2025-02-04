@@ -217,36 +217,72 @@ void VisualJointStatePublisher::load_camera_transform(
     throw;
   }
 }
+  double last_x_ = 0.0; // Store the last known X value
+  double x_threshold_ = 0.1; // Define a threshold for correction
+  double last_y_ = 0.0; // Store the last known Y value
+  double y_threshold_ = 0.1; // Define a threshold for correction
+  double last_z_ = 0.0; // Store the last known Z value
+  double z_threshold_ = 0.1; // Define a threshold for correction
 
 void VisualJointStatePublisher::timer_callback() {
-  std::map<std::string, std::vector<tf2::Transform>> link_poses;
-  std::map<std::string, std::vector<double>> link_weights;
-  rclcpp::Time now = this->get_clock()->now();
+    std::map<std::string, std::vector<tf2::Transform>> link_poses;
+    std::map<std::string, std::vector<double>> link_weights;
+    rclcpp::Time now = this->get_clock()->now();
 
-  // Gather all link poses from markers
-  for (const auto &[marker_id, marker_info] : marker_info_map_) {
-    std::string marker_frame = "aruco_" + std::to_string(marker_id);
-    geometry_msgs::msg::TransformStamped world_to_marker_msg;
+    // Gather all link poses from markers
+    for (const auto &[marker_id, marker_info] : marker_info_map_) {
+        std::string marker_frame = "aruco_" + std::to_string(marker_id);
+        geometry_msgs::msg::TransformStamped world_to_marker_msg;
 
-    try {
-      world_to_marker_msg = tf_buffer_->lookupTransform("world", marker_frame,
-                                                        tf2::TimePointZero);
-    } catch (tf2::TransformException &ex) {
-      continue;
+        try {
+            world_to_marker_msg = tf_buffer_->lookupTransform("world", marker_frame, tf2::TimePointZero);
+        } catch (tf2::TransformException &ex) {
+            continue;
+        }
+
+        tf2::Transform world_to_marker_tf;
+        tf2::fromMsg(world_to_marker_msg.transform, world_to_marker_tf);
+        tf2::Transform world_to_link_tf = world_to_marker_tf * marker_info.marker_to_link_tf;
+
+        // Axis Correction Logic
+        double current_x = world_to_link_tf.getOrigin().x();
+        double current_y = world_to_link_tf.getOrigin().y();
+        double current_z = world_to_link_tf.getOrigin().z();
+        if (std::abs(current_x - last_x_) > x_threshold_) {
+            // If the change is too large, correct it
+            current_x = last_x_; // correction logic
+        } else {
+            last_x_ = current_x; // Update the last known X value
+        }
+
+        if (std::abs(current_y - last_y_) > y_threshold_) {
+            // If the change is too large, correct it
+            current_y = last_y_; // correction logic
+        } else {
+            last_y_ = current_y; // Update the last known YS value
+        }
+
+        if (std::abs(current_z - last_z_) > z_threshold_) {
+            // If the change is too large, correct it
+            current_z = last_z_; // correction logic
+        } else {
+            last_z_ = current_z; // Update the last known Z value
+        }
+
+        // Set the corrected value back to the transform
+        world_to_link_tf.getOrigin().setX(current_x);
+        world_to_link_tf.getOrigin().setY(current_y);
+        world_to_link_tf.getOrigin().setZ(current_z);
+
+        double weight = compute_weight(world_to_marker_tf);
+        link_poses[marker_info.parent_link].push_back(world_to_link_tf);
+        link_weights[marker_info.parent_link].push_back(weight);
+
+        // Debugging log
+        RCLCPP_DEBUG(this->get_logger(), "Marker %d weight: %f", marker_id, weight);
     }
-
-    tf2::Transform world_to_marker_tf;
-    tf2::fromMsg(world_to_marker_msg.transform, world_to_marker_tf);
-    tf2::Transform world_to_link_tf =
-        world_to_marker_tf * marker_info.marker_to_link_tf;
-
-    double weight = compute_weight(world_to_marker_tf);
-    link_poses[marker_info.parent_link].push_back(world_to_link_tf);
-    link_weights[marker_info.parent_link].push_back(weight);
-
-    // Debugging log
-    RCLCPP_DEBUG(this->get_logger(), "Marker %d weight: %f", marker_id, weight);
-  }
+  
+  
 
   // Average poses for each link
   std::map<std::string, tf2::Transform> link_average_poses;
