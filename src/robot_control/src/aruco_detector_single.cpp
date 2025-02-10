@@ -163,6 +163,14 @@ private:
           camera_to_marker(row, 3) = tvecs[i][row];
         }
 
+        // Check for Z-axis flipping
+        if (camera_to_marker(2, 3) < 0) { // If Z is negative, flip it
+          camera_to_marker(2, 3) = -camera_to_marker(2, 3);
+          camera_to_marker(0, 2) = -camera_to_marker(0, 2);
+          camera_to_marker(1, 2) = -camera_to_marker(1, 2);
+          camera_to_marker(2, 2) = -camera_to_marker(2, 2);
+        }
+
         // Compute the transformation from the fixed frame to the ArUco marker
         Eigen::Matrix4d fixed_to_marker = camera_transform_ * camera_to_marker;
 

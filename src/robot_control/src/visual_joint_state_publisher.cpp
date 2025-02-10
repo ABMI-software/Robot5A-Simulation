@@ -40,16 +40,9 @@ private:
     tf2::Transform marker_to_link_tf; ///< Transform from marker to link.
   };
 
-  // Kalman filter variables
-  Eigen::VectorXd state_; // State vector
-  Eigen::MatrixXd process_noise_covariance_; // Process noise covariance
-  Eigen::MatrixXd measurement_noise_covariance_; // Measurement noise covariance
-  Eigen::MatrixXd state_covariance_; // State covariance
-  Eigen::MatrixXd transition_matrix_; // State transition matrix
-  Eigen::MatrixXd measurement_matrix_; // Measurement matrix
 
   std::vector<double> last_joint_positions_; // Store last published joint positions
-  double max_change_threshold_ = 0.1; // Maximum allowed change in joint angles (in radians)
+  double max_change_threshold_ = 0.3; // Maximum allowed change in joint angles (in radians)
 
 
   std::map<int, MarkerInfo>
@@ -108,18 +101,7 @@ private:
 VisualJointStatePublisher::VisualJointStatePublisher()
     : Node("visual_joint_state_publisher") ,
 
-      last_joint_positions_(joint_names_.size(), 0.0), // Initialize with zeros
-
-      state_(Eigen::VectorXd(3)), // Initializing state_ with a 3D vector
-      process_noise_covariance_(Eigen::MatrixXd::Identity(3, 3) * 0.1), // Initializing process noise covariance
-      measurement_noise_covariance_(Eigen::MatrixXd::Identity(3, 3) * 0.5), // Initializing measurement noise covariance
-      state_covariance_(Eigen::MatrixXd::Identity(3, 3)), // Initializing state covariance
-      transition_matrix_(Eigen::MatrixXd::Identity(3, 3)), // Initializing transition matrix
-      measurement_matrix_(Eigen::MatrixXd::Identity(3, 3)) // Initializing measurement matrix
-    
-   { 
-    // Initialize state
-    state_ << 0.0, 0.0, 0.0; // Initial X, Y, Z values
+    {
     
   
   // Declare and get parameters
@@ -244,12 +226,6 @@ void VisualJointStatePublisher::load_camera_transform(
     throw;
   }
 }
-  double last_x_ = 0.0; // Store the last known X value
-  double x_threshold_ = 0.1; // Define a threshold for correction
-  double last_y_ = 0.0; // Store the last known Y value
-  double y_threshold_ = 0.1; // Define a threshold for correction
-  double last_z_ = 0.0; // Store the last known Z value
-  double z_threshold_ = 0.1; // Define a threshold for correction
 
 void VisualJointStatePublisher::timer_callback() {
     std::map<std::string, std::vector<tf2::Transform>> link_poses;
@@ -270,52 +246,6 @@ void VisualJointStatePublisher::timer_callback() {
         tf2::Transform world_to_marker_tf;
         tf2::fromMsg(world_to_marker_msg.transform, world_to_marker_tf);
         tf2::Transform world_to_link_tf = world_to_marker_tf * marker_info.marker_to_link_tf;
-
-        // Get current measurements
-        double current_x = world_to_link_tf.getOrigin().x();
-        double current_y = world_to_link_tf.getOrigin().y();
-        double current_z = world_to_link_tf.getOrigin().z();
-                if (std::abs(current_x - last_x_) > x_threshold_) {
-            // If the change is too large, correct it
-            current_x = last_x_; // correction logic
-        } else {
-            last_x_ = current_x; // Update the last known X value
-        }
-
-        if (std::abs(current_y - last_y_) > y_threshold_) {
-            // If the change is too large, correct it
-            current_y = last_y_; // correction logic
-        } else {
-            last_y_ = current_y; // Update the last known YS value
-        }
-
-        if (std::abs(current_z - last_z_) > z_threshold_) {
-            // If the change is too large, correct it
-            current_z = last_z_; // correction logic
-        } else {
-            last_z_ = current_z; // Update the last known Z value
-        }
-
-        // Kalman Filter Update
-        // Prediction step
-        state_ = transition_matrix_ * state_; // Predict the next state
-        state_covariance_ = transition_matrix_ * state_covariance_ * transition_matrix_.transpose() + process_noise_covariance_; // Update state covariance
-
-        // Measurement step
-        Eigen::VectorXd measurement(3);
-        measurement << current_x, current_y, current_z; // Current measurements
-        Eigen::VectorXd y = measurement - measurement_matrix_ * state_; // Measurement residual
-        Eigen::MatrixXd S = measurement_matrix_ * state_covariance_ * measurement_matrix_.transpose() + measurement_noise_covariance_; // Residual covariance
-        Eigen::MatrixXd K = state_covariance_ * measurement_matrix_.transpose() * S.inverse(); // Kalman gain
-
-        // Update state and covariance
-        state_ += K * y; // Correct the state
-        state_covariance_ = (Eigen::MatrixXd::Identity(3, 3) - K * measurement_matrix_) * state_covariance_; // Update state covariance
-
-        // Set the corrected values back to the transform
-        world_to_link_tf.getOrigin().setX(state_(0)); // Use the filtered X value
-        world_to_link_tf.getOrigin().setY(state_(1)); // Use the filtered Y value
-        world_to_link_tf.getOrigin().setZ(state_(2)); // Use the filtered Z value
 
         double weight = compute_weight(world_to_marker_tf);
         link_poses[marker_info.parent_link].push_back(world_to_link_tf);
@@ -388,18 +318,6 @@ void VisualJointStatePublisher::timer_callback() {
             return;
         }
 
-      // Skip correction on the first iteration
-      if (last_joint_positions_.empty()) {
-          last_joint_positions_ = joint_positions; // Initialize on first run
-      } else {
-          // Apply change limits to joint positions
-          for (size_t i = 0; i < joint_positions.size(); ++i) {
-              double change = joint_positions[i] - last_joint_positions_[i];
-              if (std::abs(change) > max_change_threshold_) {
-                  joint_positions[i] = last_joint_positions_[i] + (change > 0 ? max_change_threshold_ : -max_change_threshold_);
-              }
-          }
-      }
 
         // Create and publish JointState message
         sensor_msgs::msg::JointState joint_state_msg;
