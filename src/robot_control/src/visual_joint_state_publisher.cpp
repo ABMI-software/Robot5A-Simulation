@@ -99,7 +99,7 @@ private:
 };
 
 VisualJointStatePublisher::VisualJointStatePublisher()
-    : Node("visual_joint_state_publisher") ,
+    : Node("visual_joint_state_publisher") 
 
     {
     

@@ -165,10 +165,10 @@ private:
 
         // Check for Z-axis flipping
         if (camera_to_marker(2, 3) < 0) { // If Z is negative, flip it
-          camera_to_marker(2, 3) = -camera_to_marker(2, 3);
-          camera_to_marker(0, 2) = -camera_to_marker(0, 2);
-          camera_to_marker(1, 2) = -camera_to_marker(1, 2);
-          camera_to_marker(2, 2) = -camera_to_marker(2, 2);
+          camera_to_marker(2, 3) = -camera_to_marker(2, 3); // translation of Z
+          camera_to_marker(0, 2) = -camera_to_marker(0, 2); // rotation of Z
+          camera_to_marker(1, 2) = -camera_to_marker(1, 2); // rotation of Z
+          camera_to_marker(2, 2) = -camera_to_marker(2, 2); // rotation of Z
         }
 
         // Compute the transformation from the fixed frame to the ArUco marker
