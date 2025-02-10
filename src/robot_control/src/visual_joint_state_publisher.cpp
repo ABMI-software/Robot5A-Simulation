@@ -40,6 +40,18 @@ private:
     tf2::Transform marker_to_link_tf; ///< Transform from marker to link.
   };
 
+  // Kalman filter variables
+  Eigen::VectorXd state_; // State vector
+  Eigen::MatrixXd process_noise_covariance_; // Process noise covariance
+  Eigen::MatrixXd measurement_noise_covariance_; // Measurement noise covariance
+  Eigen::MatrixXd state_covariance_; // State covariance
+  Eigen::MatrixXd transition_matrix_; // State transition matrix
+  Eigen::MatrixXd measurement_matrix_; // Measurement matrix
+
+  std::vector<double> last_joint_positions_; // Store last published joint positions
+  double max_change_threshold_ = 0.1; // Maximum allowed change in joint angles (in radians)
+
+
   std::map<int, MarkerInfo>
       marker_info_map_; ///< Map of marker ID to MarkerInfo.
   std::map<std::string, std::vector<int>>
@@ -94,7 +106,22 @@ private:
 };
 
 VisualJointStatePublisher::VisualJointStatePublisher()
-    : Node("visual_joint_state_publisher") {
+    : Node("visual_joint_state_publisher") ,
+
+      last_joint_positions_(joint_names_.size(), 0.0), // Initialize with zeros
+
+      state_(Eigen::VectorXd(3)), // Initializing state_ with a 3D vector
+      process_noise_covariance_(Eigen::MatrixXd::Identity(3, 3) * 0.1), // Initializing process noise covariance
+      measurement_noise_covariance_(Eigen::MatrixXd::Identity(3, 3) * 0.5), // Initializing measurement noise covariance
+      state_covariance_(Eigen::MatrixXd::Identity(3, 3)), // Initializing state covariance
+      transition_matrix_(Eigen::MatrixXd::Identity(3, 3)), // Initializing transition matrix
+      measurement_matrix_(Eigen::MatrixXd::Identity(3, 3)) // Initializing measurement matrix
+    
+   { 
+    // Initialize state
+    state_ << 0.0, 0.0, 0.0; // Initial X, Y, Z values
+    
+  
   // Declare and get parameters
   this->declare_parameter<std::string>(
       "config_file", "src/robot_control/config/aruco_to_link.yaml");
@@ -244,11 +271,11 @@ void VisualJointStatePublisher::timer_callback() {
         tf2::fromMsg(world_to_marker_msg.transform, world_to_marker_tf);
         tf2::Transform world_to_link_tf = world_to_marker_tf * marker_info.marker_to_link_tf;
 
-        // Axis Correction Logic
+        // Get current measurements
         double current_x = world_to_link_tf.getOrigin().x();
         double current_y = world_to_link_tf.getOrigin().y();
         double current_z = world_to_link_tf.getOrigin().z();
-        if (std::abs(current_x - last_x_) > x_threshold_) {
+                if (std::abs(current_x - last_x_) > x_threshold_) {
             // If the change is too large, correct it
             current_x = last_x_; // correction logic
         } else {
@@ -269,10 +296,26 @@ void VisualJointStatePublisher::timer_callback() {
             last_z_ = current_z; // Update the last known Z value
         }
 
-        // Set the corrected value back to the transform
-        world_to_link_tf.getOrigin().setX(current_x);
-        world_to_link_tf.getOrigin().setY(current_y);
-        world_to_link_tf.getOrigin().setZ(current_z);
+        // Kalman Filter Update
+        // Prediction step
+        state_ = transition_matrix_ * state_; // Predict the next state
+        state_covariance_ = transition_matrix_ * state_covariance_ * transition_matrix_.transpose() + process_noise_covariance_; // Update state covariance
+
+        // Measurement step
+        Eigen::VectorXd measurement(3);
+        measurement << current_x, current_y, current_z; // Current measurements
+        Eigen::VectorXd y = measurement - measurement_matrix_ * state_; // Measurement residual
+        Eigen::MatrixXd S = measurement_matrix_ * state_covariance_ * measurement_matrix_.transpose() + measurement_noise_covariance_; // Residual covariance
+        Eigen::MatrixXd K = state_covariance_ * measurement_matrix_.transpose() * S.inverse(); // Kalman gain
+
+        // Update state and covariance
+        state_ += K * y; // Correct the state
+        state_covariance_ = (Eigen::MatrixXd::Identity(3, 3) - K * measurement_matrix_) * state_covariance_; // Update state covariance
+
+        // Set the corrected values back to the transform
+        world_to_link_tf.getOrigin().setX(state_(0)); // Use the filtered X value
+        world_to_link_tf.getOrigin().setY(state_(1)); // Use the filtered Y value
+        world_to_link_tf.getOrigin().setZ(state_(2)); // Use the filtered Z value
 
         double weight = compute_weight(world_to_marker_tf);
         link_poses[marker_info.parent_link].push_back(world_to_link_tf);
@@ -281,111 +324,102 @@ void VisualJointStatePublisher::timer_callback() {
         // Debugging log
         RCLCPP_DEBUG(this->get_logger(), "Marker %d weight: %f", marker_id, weight);
     }
-  
-  
 
-  // Average poses for each link
-  std::map<std::string, tf2::Transform> link_average_poses;
-  for (const auto &[link_name, poses] : link_poses) {
-    if (!poses.empty()) {
-      RCLCPP_DEBUG(this->get_logger(), "Processing link: %s",
-                   link_name.c_str());
-      link_average_poses[link_name] =
-          weighted_average_transforms(poses, link_weights[link_name]);
-    }
-  }
-
-  // Define required links for joint angle computation
-  std::vector<std::string> required_links = {"R5A_link1", "R5A_link2",
-                                             "R5A_link3", "R5A_link4"};
-  std::vector<tf2::Transform> link_transforms;
-
-  // Check and collect transforms for required links
-  bool all_required_links_available = true;
-  for (const auto &link : required_links) {
-    auto it = link_average_poses.find(link);
-    if (it != link_average_poses.end()) {
-      link_transforms.push_back(it->second);
-    } else {
-      RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 5000,
-                           "Pose for link '%s' is not available.",
-                           link.c_str());
-      all_required_links_available = false;
-      break; // Exit early if a required link pose is missing
-    }
-  }
-
-  // Proceed only if all required link poses are available
-  if (all_required_links_available &&
-      link_transforms.size() == required_links.size()) {
-    tf2::Transform world_to_base_link;
-    world_to_base_link.setIdentity(); // Assuming base_link is fixed to world
-
-    // Compute relative transforms between consecutive links
-    tf2::Transform base_to_link1 =
-        world_to_base_link.inverse() * link_transforms[0];
-    tf2::Transform link1_to_link2 =
-        link_transforms[0].inverse() * link_transforms[1];
-    tf2::Transform link2_to_link3 =
-        link_transforms[1].inverse() * link_transforms[2];
-    tf2::Transform link3_to_link4 =
-        link_transforms[2].inverse() * link_transforms[3];
-
-    // Compute joint angles constrained to specific axes
-    double R0_Yaw_angle = get_rotation_angle_about_axis(
-        base_to_link1.getRotation(), tf2::Vector3(0, 1, 0));
-    double R1_Pitch_angle = get_rotation_angle_about_axis(
-        link1_to_link2.getRotation(), tf2::Vector3(1, 0, 0));
-    double R2_Pitch_angle = get_rotation_angle_about_axis(
-        link2_to_link3.getRotation(), tf2::Vector3(1, 0, 0));
-    double R3_Yaw_angle = get_rotation_angle_about_axis(
-        link3_to_link4.getRotation(), tf2::Vector3(0, -1, 0));
-
-    // Correct R0_Yaw angle by adding Pi
-    R0_Yaw_angle += M_PI;
-    if (R0_Yaw_angle > M_PI) {
-      R0_Yaw_angle -= 2 * M_PI; // Normalize the angle to the range [-π, π]
+    // Average poses for each link
+    std::map<std::string, tf2::Transform> link_average_poses;
+    for (const auto &[link_name, poses] : link_poses) {
+        if (!poses.empty()) {
+            RCLCPP_DEBUG(this->get_logger(), "Processing link: %s", link_name.c_str());
+            link_average_poses[link_name] = weighted_average_transforms(poses, link_weights[link_name]);
+        }
     }
 
-    // Assign joint angles
-    std::vector<double> joint_positions(joint_names_.size(),
-                                        0.0); // Initialize with zeros
-    if (joint_names_.size() >= 4) {
-      joint_positions[0] = R0_Yaw_angle;
-      joint_positions[1] = R1_Pitch_angle;
-      joint_positions[2] = R2_Pitch_angle;
-      joint_positions[3] = R3_Yaw_angle;
-      // R4_Pitch remains 0.0 as there are no markers for it
-    } else {
-      RCLCPP_ERROR(this->get_logger(),
-                   "Joint names vector is smaller than expected.");
-      return;
+    // Define required links for joint angle computation
+    std::vector<std::string> required_links = {"R5A_link1", "R5A_link2", "R5A_link3", "R5A_link4"};
+    std::vector<tf2::Transform> link_transforms;
+
+    // Check and collect transforms for required links
+    bool all_required_links_available = true;
+    for (const auto &link : required_links) {
+        auto it = link_average_poses.find(link);
+        if (it != link_average_poses.end()) {
+            link_transforms.push_back(it->second);
+        } else {
+            RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 5000,
+                                 "Pose for link '%s' is not available.", link.c_str());
+            all_required_links_available = false;
+            break; // Exit early if a required link pose is missing
+        }
     }
 
-    // Create and publish JointState message
-    sensor_msgs::msg::JointState joint_state_msg;
-    joint_state_msg.header.stamp = now;
-    joint_state_msg.name = joint_names_;
-    joint_state_msg.position = joint_positions;
-    // Velocity and effort are left empty as per requirements
-    // Set velocity and effort to empty lists or nan values
+    // Proceed only if all required link poses are available
+    if (all_required_links_available && link_transforms.size() == required_links .size()) {
+        tf2::Transform world_to_base_link;
+        world_to_base_link.setIdentity(); // Assuming base_link is fixed to world
 
+        // Compute relative transforms between consecutive links
+        tf2::Transform base_to_link1 = world_to_base_link.inverse() * link_transforms[0];
+        tf2::Transform link1_to_link2 = link_transforms[0].inverse() * link_transforms[1];
+        tf2::Transform link2_to_link3 = link_transforms[1].inverse() * link_transforms[2];
+        tf2::Transform link3_to_link4 = link_transforms[2].inverse() * link_transforms[3];
+
+        // Compute joint angles constrained to specific axes
+        double R0_Yaw_angle = get_rotation_angle_about_axis(base_to_link1.getRotation(), tf2::Vector3(0, 1, 0));
+        double R1_Pitch_angle = get_rotation_angle_about_axis(link1_to_link2.getRotation(), tf2::Vector3(1, 0, 0));
+        double R2_Pitch_angle = get_rotation_angle_about_axis(link2_to_link3.getRotation(), tf2::Vector3(1, 0, 0));
+        double R3_Yaw_angle = get_rotation_angle_about_axis(link3_to_link4.getRotation(), tf2::Vector3(0, -1, 0));
+
+        // Correct R0_Yaw angle by adding Pi
+        R0_Yaw_angle += M_PI;
+        if (R0_Yaw_angle > M_PI) {
+            R0_Yaw_angle -= 2 * M_PI; // Normalize the angle to the range [-π, π]
+        }
+
+        // Assign joint angles
+        std::vector<double> joint_positions(joint_names_.size(), 0.0); // Initialize with zeros
+        if (joint_names_.size() >= 4) {
+            joint_positions[0] = R0_Yaw_angle;
+            joint_positions[1] = R1_Pitch_angle;
+            joint_positions[2] = R2_Pitch_angle;
+            joint_positions[3] = R3_Yaw_angle;
+            // R4_Pitch remains 0.0 as there are no markers for it
+        } else {
+            RCLCPP_ERROR(this->get_logger(), "Joint names vector is smaller than expected.");
+            return;
+        }
+
+      // Skip correction on the first iteration
+      if (last_joint_positions_.empty()) {
+          last_joint_positions_ = joint_positions; // Initialize on first run
+      } else {
+          // Apply change limits to joint positions
+          for (size_t i = 0; i < joint_positions.size(); ++i) {
+              double change = joint_positions[i] - last_joint_positions_[i];
+              if (std::abs(change) > max_change_threshold_) {
+                  joint_positions[i] = last_joint_positions_[i] + (change > 0 ? max_change_threshold_ : -max_change_threshold_);
+              }
+          }
+      }
+
+        // Create and publish JointState message
+        sensor_msgs::msg::JointState joint_state_msg;
+        joint_state_msg.header.stamp = now;
+        joint_state_msg.name = joint_names_;
+        joint_state_msg.position = joint_positions;
+        // Velocity and effort are left empty as per requirements
         joint_state_msg.velocity.resize(joint_state_msg.name.size(), std::nan("")); // or use an empty vector
-
         joint_state_msg.effort.resize(joint_state_msg.name.size(), std::nan("")); // or use an empty vector
 
-    joint_state_pub_->publish(joint_state_msg);
+        joint_state_pub_->publish(joint_state_msg);
 
-    // Optional: Debugging log
-    RCLCPP_DEBUG(this->get_logger(), "Published joint states:");
-    for (size_t i = 0; i < joint_names_.size(); ++i) {
-      RCLCPP_DEBUG(this->get_logger(), "  %s: %f", joint_names_[i].c_str(),
-                   joint_positions[i]);
+        // Optional: Debugging log
+        RCLCPP_DEBUG(this->get_logger(), "Published joint states:");
+        for (size_t i = 0; i < joint_names_.size(); ++i) {
+            RCLCPP_DEBUG(this->get_logger(), "  %s: %f", joint_names_[i].c_str(), joint_positions[i]);
+        }
+    } else {
+        RCLCPP_WARN(this->get_logger(), "Required link poses are not fully available. Joint angles not updated.");
     }
-  } else {
-    RCLCPP_WARN(this->get_logger(), "Required link poses are not fully "
-                                    "available. Joint angles not updated.");
-  }
 }
 
 tf2::Transform VisualJointStatePublisher::weighted_average_transforms(
