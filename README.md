@@ -154,37 +154,20 @@ Alternatively, you may consider using [Docker](https://www.docker.com/) and the 
 
 __Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so it is unecessary to source the files `/opt/ros/humble/setup.bash` and `install/setup.bash` manually.
 
-## Setup
 
-1. **Camera Calibration**
-
-    Accurate camera calibration is essential for reliable image processing and marker detection.
-
-    ```bash
-    command for camera calibration that can be used to guide new contributers
-    ```
-
-    Follow the on-screen instructions to complete the calibration process and save the calibration parameters.
 
 ## Usage
 
-### Launching the Simulation
+### Launching the Simulation and controlling the robotic arm
 
 Start the Gazebo simulation environment with the robotic arm.
 
 ```bash
-ros2 launch robot_description gazebo.launch.py
+ros2 launch robot_control visual_sim.launch.py 
 ```
 
-### Controlling the Robotic Arm
 
-The robotic arm is controlled using a camera that detects ArUco markers. Ensure the camera is calibrated and has a clear view of all markers.
-
-```bash
-ros2 run robot_control node_name # Check CMakeLists.txt for node's names identification
-```
-
-### Object Pick and Place
+### Object Pick and Place (in Progress)
 
 To perform object pick and place operations, use the provided Python and C++ scripts that interface with MoveIt2 for motion planning.
 
