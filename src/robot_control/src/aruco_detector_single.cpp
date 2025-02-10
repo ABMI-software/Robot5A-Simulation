@@ -36,6 +36,10 @@ public:
     image_subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
         "camera1/image_raw", 10,
         std::bind(&ArucoDetectorSingle::imageCallback, this, std::placeholders::_1));
+
+    // Create a publisher for the /tf_detected topic
+    tf_detected_publisher_ = this->create_publisher<geometry_msgs::msg::TransformStamped>(
+        "/tf_detected", 10);
   }
 
 private:
@@ -180,7 +184,10 @@ private:
         transformStamped.transform.rotation.z = quaternion.z();
         transformStamped.transform.rotation.w = quaternion.w();
 
-        // Broadcast the transformation
+        // Publish the transformation to the /tf_detected topic
+        tf_detected_publisher_->publish(transformStamped);
+
+        // Optionally, broadcast the transformation as well
         tf_broadcaster_.sendTransform(transformStamped);
       }
 
@@ -195,6 +202,8 @@ private:
 
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr
       image_subscription_;         ///< Subscription to the image topic.
+  rclcpp::Publisher<geometry_msgs::msg::TransformStamped>::SharedPtr
+      tf_detected_publisher_;      ///< Publisher for the /tf_detected topic.
   cv::Mat camMatrix_, distCoeffs_; ///< Camera calibration parameters.
   tf2_ros::TransformBroadcaster
       tf_broadcaster_; ///< TF broadcaster for publishing transforms.
