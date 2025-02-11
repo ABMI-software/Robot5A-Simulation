@@ -2,4 +2,4 @@
 
 set -e
 
-exec rm -Rf .gazebo/* .ros/* .sdformat/*
+exec rm -Rf .gz/* .ros/* .sdformat/*
