@@ -1,4 +1,4 @@
-# Robotic Arm Simulation with ROS2 Humble
+# Robotic Arm Simulation with ROS2 Jassy
 
 <p align="center">
   <img src="images/rviz_view.png" alt="Robotic Arm" />
@@ -25,7 +25,7 @@
 
 ## Project Description
 
-This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazebo**, and **MoveIt2**. The robotic arm is defined using URDF (Unified Robot Description Format) and is capable of executing planned trajectories within a simulated environment. The simulation integrates ROS2 control with MoveIt2 for advanced motion planning and trajectory execution. Additionally, the robotic arm is controlled using a camera and ArUco markers placed on the robot, workspace, and objects, enabling precise object pick and place operations through image processing and computer vision techniques.
+This project simulates and controls a robotic arm using **ROS2 Jassy**, **Gazebo**, and **MoveIt2**. The robotic arm is defined using URDF (Unified Robot Description Format) and is capable of executing planned trajectories within a simulated environment. The simulation integrates ROS2 control with MoveIt2 for advanced motion planning and trajectory execution. Additionally, the robotic arm is controlled using a camera and ArUco markers placed on the robot, workspace, and objects, enabling precise object pick and place operations through image processing and computer vision techniques.
 
 ## Features
 
@@ -38,8 +38,8 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 
 ## Prerequisites
 
-- **Operating System**: Ubuntu 22.04
-- **ROS2 Distribution**: ROS2 Humble
+- **Operating System**: Ubuntu 24.04
+- **ROS2 Distribution**: ROS2 Jazzy
 - **Simulation Environment**: Gazebo
 - **Motion Planning**: MoveIt2
 - **Additional Tools**:
@@ -55,26 +55,19 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     sudo apt update
     ```
 
-2. **Install ROS2 Humble and Required Packages**
+2. **Install ROS2 Jazzy and Required Packages**
 
     ```bash
-    sudo apt install -y \
-      ros-humble-ros2-control \
-      ros-humble-ros2-controllers \
-      ros-humble-joint-state-broadcaster \
-      ros-humble-robot-state-publisher \
-      ros-humble-controller-manager \
-      ros-humble-joint-trajectory-controller \
-      ros-humble-rqt \
-      ros-humble-rqt-common-plugins \
-      ros-humble-rqt-graph \
-      ros-humble-gazebo-ros-pkgs \
-      ros-humble-gazebo-ros2-control \
-      ros-humble-xacro \
-      ros-humble-diagnostic-updater \
-      ros-humble-rviz2 \
-      ros-humble-tf2-tools \
-      ros-humble-ros2bag
+    sudo apt install -y ros-jazzy-cv-bridge \
+                        ros-jazzy-gz-ros2-control \
+                        ros-jazzy-joint-state-broadcaster \
+                        ros-jazzy-joint-state-publisher \
+                        ros-jazzy-joint-trajectory-controller \
+                        ros-jazzy-moveit \
+                        ros-jazzy-robot-state-publisher \
+                        ros-jazzy-ros2-control \
+                        ros-jazzy-ros2-controllers \
+                        ros-jazzy-rqt-graph
     ```
 
 3. **Install Additional Dependencies**
@@ -150,9 +143,9 @@ Alternatively, you may consider using [Docker](https://www.docker.com/) and the 
 5. **Enter any commands from the shell**
 
     The commands are run in the container, with the user credential, the current directory bind mounted, and few other things (see [doshrc](doshrc)).
-    The image is based on the official docker image `ros:humble-ros-base` from [dockerhub](https://hub.docker.com/_/ros), it is currently derived from Ubuntu Jammy (22.04).
+    The image is based on the official docker image `ros:jazzy-ros-base` from [dockerhub](https://hub.docker.com/_/ros), it is currently derived from Ubuntu Noble (24.04).
 
-__Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so it is unecessary to source the files `/opt/ros/humble/setup.bash` and `install/setup.bash` manually.
+__Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so it is unecessary to source the files `/opt/ros/jazzy/setup.bash` and `install/setup.bash` manually.
 
 ## Setup
 
@@ -227,7 +220,7 @@ The project is structured into several key components:
 
 ## Technologies Used
 
-- **ROS2 Humble**: Robot Operating System for middleware and communication.
+- **ROS2 Jazzy**: Robot Operating System for middleware and communication.
 - **Gazebo**: Simulation environment for robotics.
 - **MoveIt2**: Motion planning framework.
 - **URDF**: Robot description format.

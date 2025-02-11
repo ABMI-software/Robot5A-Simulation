@@ -2,5 +2,5 @@
 
 set -e
 
-source /opt/ros/humble/setup.bash
+source /opt/ros/jazzy/setup.bash
 exec colcon build
