@@ -17,7 +17,8 @@ RUN apt-get update && \
 
 RUN apt-get update && \
     apt-get install -y bash-completion \
-                       sudo
+                       sudo \
+                       vim
 
 RUN apt-get update && \
     apt-get install -y pip \
