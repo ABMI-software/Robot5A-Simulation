@@ -50,9 +50,7 @@ def generate_launch_description():
 
     # Package Directories
     pkg_name = "robot_description"  # Name of the robot description package
-    robot_moveit_config = (
-        "robot_moveit_config"  # Name of the MoveIt configuration package
-    )
+    robot_moveit_config = "robot_moveit_config"  # Name of the MoveIt configuration package
     share_dir = get_package_share_directory(
         pkg_name
     )  # Path to the robot description package
@@ -85,20 +83,20 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             [
                 os.path.join(
-                    get_package_share_directory("gazebo_ros"),
+                    get_package_share_directory("ros_gz_sim"),
                     "launch",
-                    "gazebo.launch.py",
+                    "gz_sim.launch.py",
                 )
             ]
         ),
-        launch_arguments={"use_sim_time": "true", "world": world_file_path}.items(),
+        launch_arguments={'gz_args': ['-r -v4 ', world_file_path], 'on_exit_shutdown': 'true'}.items(),
     )
 
     # Spawn Entity Node
     spawn_entity = Node(
-        package="gazebo_ros",
-        executable="spawn_entity.py",
-        arguments=["-topic", "/robot_description", "-entity", "armr5"],
+        package="ros_gz_sim",
+        executable="create",
+        arguments=["-topic", "/robot_description", "-entity", "armr5", "-z", "0.1"],
         output="screen",
     )
 
@@ -180,6 +178,20 @@ def generate_launch_description():
         ],  # Pass MoveIt config to the GUI node
     )
 
+    visual_joint_state_publisher_node = Node(
+        package="robot_control",
+        executable="visual_joint_state_publisher",
+        output="screen",
+        parameters=[{"use_sim_time": True}],
+    )
+
+    joint_state_bridge_node = Node(
+        package="robot_control",
+        executable="joint_state_bridge",
+        output="screen",
+        parameters=[{"use_sim_time": True}],
+    )
+
     # Aruco Detector Single Node
     aruco_detector_single_node = Node(
         package="robot_control",
@@ -210,6 +222,28 @@ def generate_launch_description():
         parameters=[{"use_sim_time": True}],
     )
 
+    # ROS/Gazebo bridges
+    bridge_params = os.path.join(share_dir, 'config', 'gz_bridge.yaml')
+    ros_gz_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        arguments=[
+            "--ros-args",
+            "-p",
+            f"config_file:={bridge_params}",
+        ]
+    )
+    ros_gz_image_bridge_1 = Node(
+        package="ros_gz_image",
+        executable="image_bridge",
+        arguments=["/camera1/image_raw"],
+    )
+    ros_gz_image_bridge_2 = Node(
+        package="ros_gz_image",
+        executable="image_bridge",
+        arguments=["/camera2/image_raw"],
+    )
+    
     # Return the LaunchDescription
     return LaunchDescription(
         [
@@ -249,11 +283,15 @@ def generate_launch_description():
                         aruco_detector_single_node,
                         aruco_detector_double_node,
                         visual_joint_state_publisher_node,
+                        joint_state_bridge_node,
                     ],
                 )
             ),
             gazebo,
             robot_state_publisher_node,
             spawn_entity,
+            ros_gz_bridge,
+            ros_gz_image_bridge_1,
+            ros_gz_image_bridge_2,
         ]
     )

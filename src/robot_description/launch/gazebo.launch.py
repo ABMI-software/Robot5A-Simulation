@@ -1,5 +1,5 @@
 """
-@file gazebo.launch.py
+@file gz_sim.launch.py
 @brief Launch file for setting up the robot simulation in Gazebo.
 
 This launch file initializes the robot simulation in Gazebo, spawns the robot entity,
@@ -60,13 +60,15 @@ def generate_launch_description():
     )
     # Node to spawn the entity in Gazebo
     spawn_entity = Node(
-        package="gazebo_ros",  # Package containing the node
-        executable="spawn_entity.py",  # Executable script to spawn entities
+        package="ros_gz_sim",  # Package containing the node
+        executable="create.py",  # Executable script to spawn entities
         arguments=[
             "-topic",
             "/robot_description",
-            "-entity",
+            "-name",
             "armr5",
+            "-z",
+            "0.1",
         ],  # Arguments for spawning
         output="screen",
     )
@@ -74,8 +76,8 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
-                os.path.join(get_package_share_directory("gazebo_ros"), "launch"),
-                "/gazebo.launch.py",
+                os.path.join(get_package_share_directory("ros_gz_sim"), "launch"),
+                "/gz_sim.launch.py",
             ]
         ),
     )

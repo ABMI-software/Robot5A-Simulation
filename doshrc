@@ -7,7 +7,7 @@ do
 done
 
 # Map gazebo things?
-for dir in .gazebo .ros .sdformat
+for dir in .gz .ros .sdformat
 do
 	[ -e "$PWD/$dir" ] || continue
 	DOSH_DOCKER_RUN_EXTRA_OPTS+=(--volume "$PWD/$dir:$HOME/$dir")

@@ -9,7 +9,7 @@
 #include <QWidget>
 #include <cmath> // For M_PI
 #include <geometry_msgs/msg/pose_stamped.h>
-#include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit/move_group_interface/move_group_interface.hpp>
 #include <rclcpp/executors/single_threaded_executor.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>

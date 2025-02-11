@@ -2,7 +2,7 @@
 /// @brief Node that detects ArUco markers in images and broadcasts their poses as TF transforms.
 
 #include <ament_index_cpp/get_package_share_directory.hpp>  // Include ament_index_cpp
-#include <cv_bridge/cv_bridge.h>
+#include <cv_bridge/cv_bridge.hpp>
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
