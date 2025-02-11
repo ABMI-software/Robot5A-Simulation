@@ -9,6 +9,7 @@
 #include "tf2_ros/transform_broadcaster.h"
 #include <Eigen/Dense>
 #include <opencv2/aruco.hpp>
+#include <opencv2/calib3d.hpp>
 #include <opencv2/opencv.hpp>
 #include <yaml-cpp/yaml.h>
 
@@ -147,8 +148,8 @@ private:
         cv::Rodrigues(rvecs[i], rotation_matrix);
 
         // Draw axis for each marker
-        cv::aruco::drawAxis(outputImage, camMatrix_, distCoeffs_, rvecs[i],
-                            tvecs[i], marker_length_ * 1.5f);
+        cv::drawFrameAxes(outputImage, camMatrix_, distCoeffs_, rvecs[i],
+                          tvecs[i], marker_length_ * 1.5f);
 
         // Build the transformation matrix from camera to marker
         Eigen::Matrix4d camera_to_marker = Eigen::Matrix4d::Identity();
