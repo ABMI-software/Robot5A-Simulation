@@ -176,7 +176,7 @@ private:
           camera_to_marker(row, 3) = tvecs[i][row];
 
           // Check for translation threshold
-          if (std::abs(tvecs[i][row] - previous_tvecs[i][row]) > translation_threshold) {
+          if (std::abs(tvecs[i][row] - previous_tvecs[i][row]) < translation_threshold) {
             should_update = true;
           }
         }
@@ -184,7 +184,7 @@ private:
         // Check for rotation threshold (using norm of the difference)
         cv::Vec3d current_rvec = rvecs[i];
         cv::Vec3d previous_rvec = previous_rvecs[i];
-        if (cv::norm(current_rvec - previous_rvec) > rotation_threshold) {
+        if (cv::norm(current_rvec - previous_rvec) < rotation_threshold) {
           should_update = true;
         }
 
