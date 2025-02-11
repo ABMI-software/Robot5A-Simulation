@@ -143,6 +143,14 @@ private:
       cv::aruco::estimatePoseSingleMarkers(
           markerCorners, marker_length_, camMatrix_, distCoeffs_, rvecs, tvecs);
 
+      // Define thresholds for translation and rotation
+      const double translation_threshold = 0.003; // threshold for translation
+      const double rotation_threshold = 0.05; // threshold for rotation (in radians)
+
+      // Previous tvec and rvec for comparison
+      static std::vector<cv::Vec3d> previous_tvecs(100, cv::Vec3d(0, 0, 0)); // Adjust size as needed
+      static std::vector<cv::Vec3d> previous_rvecs(100, cv::Vec3d(0, 0, 0)); // Adjust size as needed
+
       for (size_t i = 0; i < nMarkers; i++) {
         int marker_id = markerIds[i];
 
@@ -150,25 +158,51 @@ private:
         cv::Mat rotation_matrix;
         cv::Rodrigues(rvecs[i], rotation_matrix);
 
-        // Draw axis for each marker
+        // Draw detected markers on the image
+        cv::aruco::drawDetectedMarkers(outputImage, markerCorners, markerIds);
+
+        // Draw axis for each marker using corrected rvecs and tvecs
         cv::aruco::drawAxis(outputImage, camMatrix_, distCoeffs_, rvecs[i],
                             tvecs[i], marker_length_ * 1.5f);
 
         // Build the transformation matrix from camera to marker
         Eigen::Matrix4d camera_to_marker = Eigen::Matrix4d::Identity();
+        bool should_update = false;
+
         for (int row = 0; row < 3; ++row) {
           for (int col = 0; col < 3; ++col) {
             camera_to_marker(row, col) = rotation_matrix.at<double>(row, col);
           }
           camera_to_marker(row, 3) = tvecs[i][row];
+
+          // Check for translation threshold
+          if (std::abs(tvecs[i][row] - previous_tvecs[i][row]) > translation_threshold) {
+            should_update = true;
+          }
         }
 
-        // Check for Z-axis flipping
-        if (camera_to_marker(2, 3) < 0) { // If Z is negative, flip it
-          camera_to_marker(2, 3) = -camera_to_marker(2, 3); // translation of Z
-          camera_to_marker(0, 2) = -camera_to_marker(0, 2); // rotation of Z
-          camera_to_marker(1, 2) = -camera_to_marker(1, 2); // rotation of Z
-          camera_to_marker(2, 2) = -camera_to_marker(2, 2); // rotation of Z
+        // Check for rotation threshold (using norm of the difference)
+        cv::Vec3d current_rvec = rvecs[i];
+        cv::Vec3d previous_rvec = previous_rvecs[i];
+        if (cv::norm(current_rvec - previous_rvec) > rotation_threshold) {
+          should_update = true;
+        }
+
+        // If the update is significant, log and store the previous values
+        if (should_update) {
+          
+          
+            // RCLCPP_INFO(this->get_logger(), "Camera to Marker transformation matrix for marker %d:\n[%f, %f, %f, %f]\n[%f, %f, %f, %f]\n[%f, %f, %f, %f]\n[%f, %f, %f, %f]",
+            //             marker_id,
+            //             camera_to_marker(0, 0), camera_to_marker(0, 1), camera_to_marker(0, 2), camera_to_marker(0, 3),
+            //             camera_to_marker(1, 0), camera_to_marker(1, 1), camera_to_marker(1, 2), camera_to_marker(1, 3),
+            //             camera_to_marker(2, 0), camera_to_marker(2, 1), camera_to_marker(2, 2), camera_to_marker(2, 3),
+            //             camera_to_marker(3, 0), camera_to_marker(3, 1), camera_to_marker(3, 2), camera_to_marker(3, 3));
+          
+
+          // Update previous values
+          previous_tvecs[i] = tvecs[i];
+          previous_rvecs[i] = rvecs[i];
         }
 
         // Compute the transformation from the fixed frame to the ArUco marker
@@ -198,9 +232,6 @@ private:
         // Optionally, broadcast the transformation as well
         tf_broadcaster_.sendTransform(transformStamped);
       }
-
-      // Draw detected markers on the image
-      cv::aruco::drawDetectedMarkers(outputImage, markerCorners, markerIds);
     }
 
     // Display the image for verification (optional)
