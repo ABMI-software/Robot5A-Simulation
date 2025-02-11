@@ -2,7 +2,7 @@
 /// @brief Simple ROS2 node using MoveIt to move a robot arm to a target pose.
 
 #include <geometry_msgs/msg/pose_stamped.hpp>
-#include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit/move_group_interface/move_group_interface.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 /// @brief Main function that initializes the node and moves the robot arm to a

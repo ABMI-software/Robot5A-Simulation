@@ -111,9 +111,9 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             [
                 os.path.join(
-                    get_package_share_directory("gazebo_ros"),
+                    get_package_share_directory("ros_gz_sim"),
                     "launch",
-                    "gazebo.launch.py",
+                    "gz_sim.launch.py",
                 )
             ]
         ),
@@ -122,9 +122,9 @@ def generate_launch_description():
 
     # Spawn Entity Node
     spawn_entity = Node(
-        package="gazebo_ros",
-        executable="spawn_entity.py",
-        arguments=["-topic", "/robot_description", "-entity", "armr5"],
+        package="ros_gz_sim",
+        executable="create.py",
+        arguments=["-topic", "/robot_description", "-name", "armr5"],
         output="screen",
     )
 

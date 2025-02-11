@@ -738,7 +738,7 @@
   <ros2_control name="GazeboSystem" type="system">
     
     <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
       <param name="use_sim_time" type="bool">true</param>
     </hardware>
 
@@ -833,35 +833,17 @@
   </ros2_control>
 
   <gazebo>
-    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+    <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
     <robotNamespace>/</robotNamespace>
       <robot_param>robot_description</robot_param>
       <robot_param_node>robot_state_publisher</robot_param_node>
-      <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
+      <robot_sim_type>gz_ros2_control/GazeboSystem</robot_sim_type>
       <parameters>$(find robot_description)/config/controller.yaml</parameters>
       <controller_manager_name>controller_manager</controller_manager_name>
       <use_sim_time>true</use_sim_time>
     </plugin>
   </gazebo>
   
-  <gazebo>
-    <plugin name="gazebo_ros_joint_pose_trajectory" filename="libgazebo_ros_joint_pose_trajectory.so">
-        <update_rate>50
-        </update_rate>
-        <joint_name>R0_Yaw</joint_name>
-        <joint_name>R1_Pitch</joint_name>
-        <joint_name>R2_Pitch</joint_name>
-        <joint_name>R3_Yaw</joint_name>
-        <joint_name>R4_Pitch</joint_name>
-        <joint_name>ServoGear</joint_name>
-        <joint_name>LeftGripper</joint_name>
-        <joint_name>LeftPivotArm</joint_name>
-        <joint_name>PassifGear</joint_name>
-        <joint_name>RightGripper</joint_name>
-        <joint_name>RightPivotArm</joint_name>
-    </plugin> 
-  </gazebo>
-
 <!-- First Camera -->
   <link name="camera_link1"> 
     <visual> 
@@ -908,21 +890,11 @@
           <mean>0.0</mean>
           <stddev>0.007</stddev>
         </noise>
+        <camera_info_topic>camera_info</camera_info_topic>
       </camera>
-      <plugin name="camera_controller1" filename="libgazebo_ros_camera.so">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <cameraName>mybot/camera1</cameraName>
-        <imageTopicName>image_raw</imageTopicName>
-        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>camera_link1</frameName>
-        <hackBaseline>0.07</hackBaseline>
-        <distortionK1>0.0</distortionK1>
-        <distortionK2>0.0</distortionK2>
-        <distortionK3>0.0</distortionK3>
-        <distortionT1>0.0</distortionT1>
-        <distortionT2>0.0</distortionT2>
-      </plugin>
+      <always_on>true</always_on>
+      <topic>camera/image_raw</topic>
+      <gz_frame_id>camera_link1</gz_frame_id>
     </sensor>
   </gazebo>
 
@@ -972,21 +944,12 @@
           <mean>0.0</mean>
           <stddev>0.007</stddev>
         </noise>
+        <camera_info_topic>camera_info2</camera_info_topic>
       </camera>
-      <plugin name="camera_controller2" filename="libgazebo_ros_camera.so">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <cameraName>mybot/camera2</cameraName>
-        <imageTopicName>image_raw2</imageTopicName>
-        <cameraInfoTopicName>camera_info2</cameraInfoTopicName>
-        <frameName>camera_link2</frameName>
-        <hackBaseline>0.07</hackBaseline>
-        <distortionK1>0.0</distortionK1>
-        <distortionK2>0.0</distortionK2>
-        <distortionK3>0.0</distortionK3>
-        <distortionT1>0.0</distortionT1>
-        <distortionT2>0.0</distortionT2>
-      </plugin>
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <gz_frame_id>camera_link2</gz_frame_id>
+      <topic>camera/image_raw</topic>
     </sensor>
   </gazebo>
 

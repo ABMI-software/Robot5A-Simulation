@@ -6,7 +6,7 @@
 #include <sensor_msgs/msg/image.hpp>
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <tf2_ros/transform_broadcaster.h>
-#include <cv_bridge/cv_bridge.h>
+#include <cv_bridge/cv_bridge.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/aruco.hpp>
 #include <Eigen/Dense>

@@ -10,6 +10,9 @@
 
   <!-- ROS 2 dependencies -->
   <depend>rclcpp</depend>
+  <depend>ros_gz_sim</depend>
+  <depend>ros_gz_image</depend>
+  <depend>ros_gz_bridge</depend>
   <depend>moveit_ros_planning_interface</depend>
   <depend>geometry_msgs</depend>
   <depend>tf2_ros</depend>

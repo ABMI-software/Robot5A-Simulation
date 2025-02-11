@@ -34,7 +34,8 @@
 
     <!-- Assign custom material to the plane -->
     <gazebo reference="aruco_plane_${plane_number}">
-      <material>id${plane_number}_Plane_Material</material>
+      <!-- FIXME -->
+      <material>Gazebo/Red</material>
       <disable_collision>true</disable_collision>
     </gazebo>
   </xacro:macro>
