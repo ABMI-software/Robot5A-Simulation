@@ -1,7 +1,7 @@
 /// @file aruco_detector_double.cpp
 /// @brief ROS2 node for detecting ArUco markers using two cameras and fusing their detections.
 
-#include "ament_index_cpp/get_package_share_directory.hpp"  // Include ament_index_cpp
+#include <ament_index_cpp/get_package_share_directory.hpp>  // Include ament_index_cpp
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <geometry_msgs/msg/transform_stamped.hpp>
