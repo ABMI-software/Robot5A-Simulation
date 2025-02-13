@@ -230,14 +230,6 @@ void ArucoDetectorDouble::processImages(const cv::Mat &image1,
       camera_to_marker(row, 3) = tvec[row];
     }
 
-        // Check for Z-axis flipping
-    if (camera_to_marker(2, 3) < 0) { // If Z is negative, flip it
-      camera_to_marker(2, 3) = -camera_to_marker(2, 3); // translation of Z
-      camera_to_marker(0, 2) = -camera_to_marker(0, 2); // rotation of Z
-      camera_to_marker(1, 2) = -camera_to_marker(1, 2); // rotation of Z
-      camera_to_marker(2, 2) = -camera_to_marker(2, 2); // rotation of Z
-    }
-
     // Transform to fixed frame
     Eigen::Matrix4d fixed_to_marker =
         camera_transform1_ * camera_to_marker;

@@ -144,8 +144,8 @@ private:
           markerCorners, marker_length_, camMatrix_, distCoeffs_, rvecs, tvecs);
 
       // Define thresholds for translation and rotation
-      const double translation_threshold = 0.03; // threshold for translation
-      const double rotation_threshold = 0.05; // threshold for rotation (in radians)
+      const double translation_threshold = 0.1; // threshold for translation
+      const double rotation_threshold = 0.1; // threshold for rotation (in radians)
 
       // Previous tvec and rvec for comparison
       static std::vector<cv::Vec3d> previous_tvecs(100, cv::Vec3d(0, 0, 0)); // Adjust size (100) as needed
