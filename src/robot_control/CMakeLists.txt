@@ -17,6 +17,7 @@ find_package(Eigen3 REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(message_filters REQUIRED)
 find_package(tf2_eigen REQUIRED)
+find_package(ament_index_cpp REQUIRED)
 
 
 
@@ -55,6 +56,13 @@ ament_target_dependencies(
   Eigen3
   yaml-cpp
   message_filters
+  ament_index_cpp
+)
+
+target_include_directories(aruco_detector_double
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(aruco_detector_double
@@ -100,6 +108,13 @@ ament_target_dependencies(
   geometry_msgs
   tf2_ros
   cv_bridge
+  ament_index_cpp
+)
+
+target_include_directories(aruco_detector_single
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(aruco_detector_single
