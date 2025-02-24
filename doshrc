@@ -6,6 +6,13 @@ do
 	DOSH_DOCKER_RUN_EXTRA_OPTS+=(--volume "$PWD/$file:$HOME/$file")
 done
 
+# Map gazebo things?
+for dir in .gazebo .ros .sdformat
+do
+	[ -e "$PWD/$dir" ] || continue
+	DOSH_DOCKER_RUN_EXTRA_OPTS+=(--volume "$PWD/$dir:$HOME/$dir")
+done
+
 # Map and export X things?
 if [ -n "$DISPLAY" ]
 then
