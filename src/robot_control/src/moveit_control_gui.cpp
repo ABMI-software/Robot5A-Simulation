@@ -120,13 +120,13 @@ void moveToRandomPose() {
     double random_x = x_min + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (x_max - x_min)));
     double random_y = y_min + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (y_max - y_min)));
     double random_z = z_min + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (z_max - z_min)));
-    
+
+
     // Define a random orientation (roll, pitch, yaw)
     double random_roll = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (2.0 * M_PI))); // You can generate random values if needed
     double random_pitch = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (2.0 * M_PI))); // You can generate random values if needed
     double random_yaw = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (2.0 * M_PI))); // Random yaw between 0 and 2π
     double random_w = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (2.0 * M_PI))); // Random yaw between 0 and 2π
-    
 
     // Move to the generated random pose
     moveToPosition(random_x, random_y, random_z, random_roll, random_pitch, random_yaw, random_w);
@@ -228,7 +228,6 @@ void moveToRandomPose() {
         move_group_interface_.move();
         status_label_->setText("Status: Moved to target position");
     }
-    
 
 };
 

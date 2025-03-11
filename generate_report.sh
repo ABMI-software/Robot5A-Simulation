@@ -14,4 +14,4 @@ pip install fpdf \
 	    pandas
 
 mkdir logs
-exec python3 scripts/generate_report.py 
+exec python3 scripts/generate_report.py
