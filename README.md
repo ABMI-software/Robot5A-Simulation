@@ -130,7 +130,7 @@ Alternatively, you may consider using [Docker](https://www.docker.com/) and the 
     make user-install
     ```
 
-4. **Run a docker shell**
+4. **Run an interactive docker shell**
 
     ```bash
     dosh
