@@ -125,26 +125,15 @@ Alternatively, you may consider using [Docker](https://www.docker.com/) and the 
     Follow its [README](https://github.com/gportay/dosh?tab=readme-ov-file#install).
 
     ```bash
+    git clone https://github.com/gportay/dosh.git
+    cd dosh
     make user-install
     ```
 
-    __Note__: You may install the docker shell CLI plugin as well to run `docker shell` (or `docker bash`) in place of `dosh`.
-
-
-    ```bash
-    make user-install-cli-plugin
-    ```
-
-4. **Run a docker shell**
+4. **Run an interactive docker shell**
 
     ```bash
     dosh
-    ```
-
-    __Note__: Or the following if the docker shell CLI plugin is installed (see the previous point).
-
-    ```bash
-    docker bash
     ```
 
 5. **Enter any commands from the shell**
