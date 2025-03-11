@@ -58,49 +58,80 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 2. **Install ROS2 Humble and Required Packages**
 
     ```bash
-    sudo apt install -y \
-      ros-humble-ros2-control \
-      ros-humble-ros2-controllers \
-      ros-humble-joint-state-broadcaster \
-      ros-humble-robot-state-publisher \
-      ros-humble-controller-manager \
-      ros-humble-joint-trajectory-controller \
-      ros-humble-rqt \
-      ros-humble-rqt-common-plugins \
-      ros-humble-rqt-graph \
-      ros-humble-gazebo-ros-pkgs \
-      ros-humble-gazebo-ros2-control \
-      ros-humble-xacro \
-      ros-humble-diagnostic-updater \
-      ros-humble-rviz2 \
-      ros-humble-tf2-tools \
-      ros-humble-ros2bag
+    sudo apt-get install -y \
+        libgeometric-shapes-dev \
+        meshlab \
+        ros-humble-gazebo-ros-pkgs \
+        ros-humble-gazebo-ros2-control \
+        ros-humble-joint-state-broadcaster \
+        ros-humble-joint-state-publisher \
+        ros-humble-joint-trajectory-controller \
+        ros-humble-moveit \
+        ros-humble-robot-state-publisher \
+        ros-humble-ros2-control \
+        ros-humble-ros2-controllers \
+        ros-humble-rqt \
+        ros-humble-rqt-graph
+        ros-humble-xacro \
+        ros-humble-diagnostic-updater \
+        ros-humble-rviz2 \
+        ros-humble-tf2-tools \
+        ros-humble-ros2bag
     ```
 
-3. **Install Additional Dependencies**
+
+3. **Clone the Repository**
 
     ```bash
-    sudo apt install -y meshlab
-    ```
-
-4. **Clone the Repository**
-
-    ```bash
+    cd ~/
     git clone https://github.com/ABMI-software/Robot5A-Simulation.git
     ```
 
-5. **Build the Workspace**
+4. **Build the Workspace**
 
     ```bash
     cd Robot5A-Simulation
+    source /opt/ros/humble/setup.bash
+    rosdep update
+    rosdep install --from-paths src --ignore-src -r -y
+    ```
+
+    ```bash
     colcon build
     ```
 
-6. **Source the Workspace**
+5. **Source the Workspace**
 
     ```bash
     source install/setup.bash
     ```
+
+6. **Export the settings**
+
+    ```bash
+    export GAZEBO_RESOURCE_PATH="~/Robot5A-Simulation/src/robot_description/:/usr/share/gazebo-11/models:/usr/share/gazebo-11"
+    export QT_QPA_PLATFORM=xcb
+    ```
+
+
+7. **Write to bashrc for automatic export and source when launching the terminal**
+
+    ```bash
+    echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+    echo "source ~/Robot5A-Simulation/install/setup.bash" >> ~/.bashrc
+    echo "export GAZEBO_RESOURCE_PATH="~/Robot5A-Simulation/src/robot_description/:/usr/share/gazebo-11/models:/usr/share/gazebo-11"" >> ~/.bashrc
+    echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
+    ```
+
+### Build Clean
+
+    ```bash
+    cd ~/Robot5A-Simulation
+    rm -rf build install log
+    source /opt/ros/humble/setup.bash
+    colcon build --symlink-install --cmake-clean-cache
+    ```
+
 
 ### Using Docker and dosh
 
@@ -154,65 +185,17 @@ Alternatively, you may consider using [Docker](https://www.docker.com/) and the 
 
 __Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so it is unecessary to source the files `/opt/ros/humble/setup.bash` and `install/setup.bash` manually.
 
-## Setup
-
-1. **Camera Calibration**
-
-    Accurate camera calibration is essential for reliable image processing and marker detection.
-
-    ```bash
-    command for camera calibration that can be used to guide new contributers
-    ```
-
-    Follow the on-screen instructions to complete the calibration process and save the calibration parameters.
 
 ## Usage
 
-### Launching the Simulation
+### Launching the Simulation and controlling the robotic arm
 
-Start the Gazebo simulation environment with the robotic arm.
-
-```bash
-ros2 launch robot_description gazebo.launch.py
-```
-
-### Controlling the Robotic Arm
-
-The robotic arm is controlled using a camera that detects ArUco markers. Ensure the camera is calibrated and has a clear view of all markers.
+Start the Gazebo simulation environment with the robotic arm using MoveIt.
 
 ```bash
-ros2 run robot_control node_name # Check CMakeLists.txt for node's names identification
+ros2 launch robot_control visual_sim.launch.py 
 ```
-
-### Object Pick and Place
-
-To perform object pick and place operations, use the provided Python and C++ scripts that interface with MoveIt2 for motion planning.
-
-1. **Start MoveIt2**
-
-    ```bash
-    ros2 launch robot_moveit_config moveit_gazebo.launch.py
-    ```
-
-2. **Execute Pick Operation**
-
-    ```bash
-    # In progress
-    ```
-
-3. **Execute Place Operation**
-
-    ```bash
-    # In progress
-    ```
-
-### Image Processing
-
-Image processing scripts handle the detection of ArUco markers and object recognition.
-
-```bash
-ros2 run robotic_control object_detector
-```
+N.B. : It's also possible to control the arm using rviz2
 
 ## Architecture
 
@@ -271,8 +254,6 @@ This project is licensed under the MIT License.
 
 ---
 
-*Developed by [Eliott & Omar - ABMI Groupe](https://github.com/ABMI-software/Robot5A-Simulation)*
+*Developed by [Eliott, Omar & Matthieu - ABMI Groupe](https://github.com/ABMI-software/Robot5A-Simulation)*
 
-# Notes to myself
 
-export robot_description folder as gazebo resource path for materials
