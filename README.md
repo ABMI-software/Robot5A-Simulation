@@ -119,7 +119,9 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
     ```
 
-### Build Clean
+### Rebuild your Project
+
+1. **Build Clean**
 
     ```bash
     cd ~/Robot5A-Simulation
