@@ -77,7 +77,3 @@ gripper_controller:
       PassifGear: {p: 100.0, i: 0.01, d: 1.0}
       RightGripper: {p: 100.0, i: 0.01, d: 1.0}
       RightPivotArm: {p: 100.0, i: 0.01, d: 1.0}
-
-
-
-
