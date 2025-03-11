@@ -125,6 +125,8 @@ Alternatively, you may consider using [Docker](https://www.docker.com/) and the 
     Follow its [README](https://github.com/gportay/dosh?tab=readme-ov-file#install).
 
     ```bash
+    git clone https://github.com/gportay/dosh.git
+    cd dosh
     make user-install
     ```
 
