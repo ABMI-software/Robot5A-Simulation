@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 100 #Hz  
+    update_rate: 100 #Hz
     use_sim_time: true
 
     arm_controller:
@@ -19,7 +19,7 @@ arm_controller:
     state_interfaces:
       - position
       - velocity
-    joints: 
+    joints:
       - R0_Yaw
       - R1_Pitch
       - R2_Pitch
@@ -32,11 +32,11 @@ arm_controller:
     allow_partial_joints_goal: true # Defaults to false
     hardware_state_has_offset: true
     deduce_states_from_derivatives: true
-    
+
     constraints:
       stopped_velocity_tolerance: 0.01 # Defaults to 0.01
       goal_time: 0.0 # Defaults to 0.0 (start immediately)
-    
+
     gains:
       R0_Yaw: {p: 100.0, i: 0.01, d: 1.0}
       R1_Pitch: {p: 100.0, i: 0.01, d: 1.0}
@@ -57,7 +57,7 @@ gripper_controller:
       - position
     state_interfaces:
       - position
-      - velocity    
+      - velocity
 
     state_publish_rate: 50.0 # Defaults to 50
     action_monitor_rate: 20.0 # Defaults to 20
@@ -65,11 +65,11 @@ gripper_controller:
     allow_partial_joints_goal: true # Defaults to false
     hardware_state_has_offset: true
     deduce_states_from_derivatives: true
-    
+
     constraints:
       stopped_velocity_tolerance: 0.01 # Defaults to 0.01
       goal_time: 0.0 # Defaults to 0.0 (start immediately)
-    
+
     gains:
       ServoGear: {p: 100.0, i: 0.01, d: 1.0}
       LeftGripper: {p: 100.0, i: 0.01, d: 1.0}

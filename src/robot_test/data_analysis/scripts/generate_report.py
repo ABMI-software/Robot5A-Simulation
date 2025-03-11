@@ -10,7 +10,7 @@ def process_logs():
     # Iterate through all folders in the logs directory
     for folder in os.listdir(LOGS_DIR):
         log_folder_path = os.path.join(LOGS_DIR, folder)
-        
+
         # Skip if it's not a directory
         if not os.path.isdir(log_folder_path):
             continue

@@ -188,7 +188,7 @@
     <disable_collisions link1="R5A_link4" link2="R5A_GripperRight_Link1" reason="Never"/>
     <disable_collisions link1="R5A_link4" link2="R5A_GripperRight_Link2" reason="Never"/>
     <disable_collisions link1="R5A_link4" link2="R5A_GripperRight_Link3" reason="Never"/>
-    
+
     <!-- Disable collisions between ArUco planes and all robot links -->
     <disable_collisions link1="aruco_plane_0" link2="base_link" reason="ArUco marker"/>
     <disable_collisions link1="aruco_plane_0" link2="R5A_link1" reason="ArUco marker"/>
@@ -424,7 +424,7 @@
     <disable_collisions link1="camera_link1" link2="R5A_link3" reason="Camera"/>
     <disable_collisions link1="camera_link1" link2="R5A_link4" reason="Camera"/>
     <disable_collisions link1="camera_link1" link2="R5A_link5" reason="Camera"/>
-  
+
     <disable_collisions link1="camera_link2" link2="R5A_link1" reason="Camera"/>
     <disable_collisions link1="camera_link2" link2="R5A_link2" reason="Camera"/>
     <disable_collisions link1="camera_link2" link2="R5A_link3" reason="Camera"/>
