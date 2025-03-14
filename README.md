@@ -64,7 +64,7 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
         ros-humble-joint-state-publisher \
         ros-humble-joint-trajectory-controller \
         ros-humble-moveit \
-        ros-humble-robot-state-publisher \
+        ros-humble-ros-base \
         ros-humble-ros2-control \
         ros-humble-ros2-controllers \
         ros-humble-ros2bag \
