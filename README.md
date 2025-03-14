@@ -57,22 +57,22 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     sudo apt-get install -y \
         libgeometric-shapes-dev \
         meshlab \
+        ros-humble-diagnostic-updater \
         ros-humble-gazebo-ros-pkgs \
         ros-humble-gazebo-ros2-control \
         ros-humble-joint-state-broadcaster \
         ros-humble-joint-state-publisher \
         ros-humble-joint-trajectory-controller \
         ros-humble-moveit \
-        ros-humble-robot-state-publisher \
+        ros-humble-ros-base \
         ros-humble-ros2-control \
         ros-humble-ros2-controllers \
+        ros-humble-ros2bag \
         ros-humble-rqt \
         ros-humble-rqt-graph \
-        ros-humble-xacro \
-        ros-humble-diagnostic-updater \
         ros-humble-rviz2 \
         ros-humble-tf2-tools \
-        ros-humble-ros2bag
+        ros-humble-xacro
     ```
 
 
