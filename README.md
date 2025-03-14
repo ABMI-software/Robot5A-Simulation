@@ -67,7 +67,7 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
         ros-humble-ros2-control \
         ros-humble-ros2-controllers \
         ros-humble-rqt \
-        ros-humble-rqt-graph
+        ros-humble-rqt-graph \
         ros-humble-xacro \
         ros-humble-diagnostic-updater \
         ros-humble-rviz2 \
