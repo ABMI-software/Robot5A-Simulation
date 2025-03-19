@@ -143,18 +143,6 @@ private:
       cv::aruco::estimatePoseSingleMarkers(
           markerCorners, marker_length_, camMatrix_, distCoeffs_, rvecs, tvecs);
 
-      // Define thresholds for translation and rotation
-      const double translation_threshold = 0.1; // threshold for translation
-      const double rotation_threshold = 0.1; // threshold for rotation (in radians)
-
-      // Previous tvec and rvec for comparison
-      static std::vector<cv::Vec3d> previous_tvecs(100, cv::Vec3d(0, 0, 0)); // Adjust size (100) as needed
-      static std::vector<cv::Vec3d> previous_rvecs(100, cv::Vec3d(0, 0, 0)); // Adjust size (100) as needed
-
-      // Define the low-pass filter coefficients
-      const double alpha = 0.1; // adjust this value to control the filter strength
-
-
       for (size_t i = 0; i < nMarkers; i++) {
         int marker_id = markerIds[i];
 
@@ -172,57 +160,24 @@ private:
           }
           camera_to_marker(row, 3) = tvecs[i][row];
         }
-        // Check for translation threshold 
-        cv::Vec3d current_tvec = tvecs[i];
-        cv::Vec3d previous_tvec = previous_tvecs[marker_id];
 
-        if (std::abs(current_tvec[0] - previous_tvec[0]) < translation_threshold || // individual method
-            std::abs(current_tvec[1] - previous_tvec[1]) < translation_threshold ||
-            std::abs(current_tvec[2] - previous_tvec[2]) < translation_threshold) {
-            should_update = true;
-        }
+        // if (marker_id == 14){
+        // // Log the translation vector for the current marker
+        // RCLCPP_INFO(this->get_logger(), "Translation vector for marker %d: [%f, %f, %f]",
+        //       marker_id, tvecs[i][0], tvecs[i][1], tvecs[i][2]);
 
-        // Check for rotation threshold (using norm of the difference)
-        cv::Vec3d current_rvec = rvecs[i];
-        cv::Vec3d previous_rvec = previous_rvecs[marker_id];
 
-        // if (cv::norm(current_rvec - previous_rvec) < rotation_threshold) {  // norm method
-        //   should_update = true;
+        // // Log the rotation vector for the current marker
+        // RCLCPP_INFO(this->get_logger(), "Rotation    vector for marker %d: [%f, %f, %f]",
+        //       marker_id, rvecs[i][0], rvecs[i][1], rvecs[i][2]);
         // }
 
-        if (std::abs(current_rvec[0] - previous_rvec[0]) < rotation_threshold || // individual method
-            std::abs(current_rvec[1] - previous_rvec[1]) < rotation_threshold ||
-            std::abs(current_rvec[2] - previous_rvec[2]) < rotation_threshold) {
-            should_update = true;
-        }
+        // // Draw detected markers on the image
+        // cv::aruco::drawDetectedMarkers(outputImage, markerCorners, markerIds);
 
-        // If the update is significant, log and store the previous values
-        if (should_update) {
-          // Update previous values
-          previous_tvecs[marker_id] = tvecs[i];
-          previous_rvecs[marker_id] = rvecs[i];
-        }else{
-          tvecs[i] = previous_tvecs[marker_id];
-          rvecs[i] = previous_rvecs[marker_id];
-        }
-
-        if (marker_id == 14){
-        // Log the translation vector for the current marker
-        RCLCPP_INFO(this->get_logger(), "Translation vector for marker %d: [%f, %f, %f]",
-              marker_id, tvecs[i][0], tvecs[i][1], tvecs[i][2]);
-
-
-        // Log the rotation vector for the current marker
-        RCLCPP_INFO(this->get_logger(), "Rotation    vector for marker %d: [%f, %f, %f]",
-              marker_id, rvecs[i][0], rvecs[i][1], rvecs[i][2]);
-        }
-
-        // Draw detected markers on the image
-        cv::aruco::drawDetectedMarkers(outputImage, markerCorners, markerIds);
-
-        // Draw axis for each marker using corrected rvecs and tvecs
-        cv::aruco::drawAxis(outputImage, camMatrix_, distCoeffs_, rvecs[i],
-                            tvecs[i], marker_length_ * 1.5f);
+        // // Draw axis for each marker using corrected rvecs and tvecs
+        // cv::aruco::drawAxis(outputImage, camMatrix_, distCoeffs_, rvecs[i],
+        //                     tvecs[i], marker_length_ * 1.5f);
 
         // Compute the transformation from the fixed frame to the ArUco marker
         Eigen::Matrix4d fixed_to_marker = camera_transform_ * camera_to_marker;
