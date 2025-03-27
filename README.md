@@ -4,7 +4,6 @@
   <img src="images/rviz_view.png" alt="Robotic Arm" />
 </p>
 
-
 ## Table of Contents
 
 - [Project Description](#project-description)
@@ -75,7 +74,6 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
         ros-humble-xacro
     ```
 
-
 3. **Clone the Repository**
 
     ```bash
@@ -105,17 +103,16 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 6. **Export the settings**
 
     ```bash
-    export GAZEBO_RESOURCE_PATH="~/Robot5A-Simulation/src/robot_description/:/usr/share/gazebo-11/models:/usr/share/gazebo-11"
+    export GAZEBO_RESOURCE_PATH="~/Robot5A-Simulation/src/robot_description:/usr/share/gazebo-11/models:/usr/share/gazebo-11"
     export QT_QPA_PLATFORM=xcb
     ```
-
 
 7. **Write to bashrc for automatic export and source when launching the terminal**
 
     ```bash
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
     echo "source ~/Robot5A-Simulation/install/setup.bash" >> ~/.bashrc
-    echo "export GAZEBO_RESOURCE_PATH="~/Robot5A-Simulation/src/robot_description/:/usr/share/gazebo-11/models:/usr/share/gazebo-11"" >> ~/.bashrc
+    echo "export GAZEBO_RESOURCE_PATH=\"~/Robot5A-Simulation/src/robot_description:/usr/share/gazebo-11/models:/usr/share/gazebo-11\"" >> ~/.bashrc
     echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
     ```
 
@@ -129,7 +126,6 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     source /opt/ros/humble/setup.bash
     colcon build --symlink-install --cmake-clean-cache
     ```
-
 
 ### Using Docker and dosh
 
@@ -172,7 +168,6 @@ Alternatively, you may consider using [Docker](https://www.docker.com/) and the 
 
 __Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so it is unecessary to source the files `/opt/ros/humble/setup.bash` and `install/setup.bash` manually.
 
-
 ## Usage
 
 ### Launching the Simulation and controlling the robotic arm
@@ -210,26 +205,37 @@ The project is structured into several key components:
 
 Contributions are welcome! Please follow these steps:
 
-1. **Fork the Repository**
-2. **Create a Feature Branch**
+1. **Fork the Repository and fork it**
+
+    Create a new [fork](https://github.com/ABMI-software/Robot5A-Simulation/fork).
+
+2. **Enter the sources**
+
+    ```bash
+    cd Robot5A-Simulation
+    ```
+
+3. **Create a Feature Branch**
 
     ```bash
     git checkout -b feature/YourFeature
     ```
 
-3. **Commit Your Changes**
+4. **Commit Your Changes**
 
     ```bash
     git commit -m "Add your feature"
     ```
 
-4. **Push to the Branch**
+5. **Push to the Branch**
 
     ```bash
     git push origin feature/YourFeature
     ```
 
-5. **Open a Pull Request**
+6. **Open a Pull Request**
+
+    Open a [pull request](https://github.com/ABMI-software/Robot5A-Simulation/compare)
 
 ## Documentation
 
@@ -242,5 +248,3 @@ This project is licensed under the MIT License.
 ---
 
 *Developed by [Eliott, Omar & Matthieu - ABMI Groupe](https://github.com/ABMI-software/Robot5A-Simulation)*
-
-
