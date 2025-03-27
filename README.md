@@ -4,7 +4,6 @@
   <img src="images/rviz_view.png" alt="Robotic Arm" />
 </p>
 
-
 ## Table of Contents
 
 - [Project Description](#project-description)
@@ -75,7 +74,6 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
         ros-humble-xacro
     ```
 
-
 3. **Clone the Repository**
 
     ```bash
@@ -109,7 +107,6 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     export QT_QPA_PLATFORM=xcb
     ```
 
-
 7. **Write to bashrc for automatic export and source when launching the terminal**
 
     ```bash
@@ -129,7 +126,6 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     source /opt/ros/humble/setup.bash
     colcon build --symlink-install --cmake-clean-cache
     ```
-
 
 ### Using Docker and dosh
 
@@ -171,7 +167,6 @@ Alternatively, you may consider using [Docker](https://www.docker.com/) and the 
     The image is based on the official docker image `ros:humble-ros-base` from [dockerhub](https://hub.docker.com/_/ros), it is currently derived from Ubuntu Jammy (22.04).
 
 __Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so it is unecessary to source the files `/opt/ros/humble/setup.bash` and `install/setup.bash` manually.
-
 
 ## Usage
 
@@ -242,5 +237,3 @@ This project is licensed under the MIT License.
 ---
 
 *Developed by [Eliott, Omar & Matthieu - ABMI Groupe](https://github.com/ABMI-software/Robot5A-Simulation)*
-
-
