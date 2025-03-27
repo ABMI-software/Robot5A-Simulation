@@ -214,7 +214,7 @@ def generate_launch_description():
     # Append the resource path
     set_env_vars_resources = AppendEnvironmentVariable(
         'GAZEBO_RESOURCE_PATH',
-        os.pathsep.join([share_dir, "/usr/share/gazebo-11"])
+        share_dir
     )
 
     # Return the LaunchDescription

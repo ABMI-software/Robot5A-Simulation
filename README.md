@@ -110,6 +110,7 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 
     ```bash
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+    echo "source /usr/share/gazebo/setup.bash" >> ~/.bashrc
     echo "source ~/Robot5A-Simulation/install/setup.bash" >> ~/.bashrc
     echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
     ```
@@ -173,6 +174,7 @@ __Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so 
 Start the Gazebo simulation environment with the robotic arm using MoveIt.
 
 ```bash
+source /usr/share/gazebo/setup.bash
 ros2 launch robot_control visual_sim.launch.py 
 ```
 N.B. : It's also possible to control the arm using rviz2
