@@ -205,26 +205,37 @@ The project is structured into several key components:
 
 Contributions are welcome! Please follow these steps:
 
-1. **Fork the Repository**
-2. **Create a Feature Branch**
+1. **Fork the Repository and fork it**
+
+    Create a new [fork](https://github.com/ABMI-software/Robot5A-Simulation/fork).
+
+2. **Enter the sources**
+
+    ```bash
+    cd Robot5A-Simulation
+    ```
+
+3. **Create a Feature Branch**
 
     ```bash
     git checkout -b feature/YourFeature
     ```
 
-3. **Commit Your Changes**
+4. **Commit Your Changes**
 
     ```bash
     git commit -m "Add your feature"
     ```
 
-4. **Push to the Branch**
+5. **Push to the Branch**
 
     ```bash
     git push origin feature/YourFeature
     ```
 
-5. **Open a Pull Request**
+6. **Open a Pull Request**
+
+    Open a [pull request](https://github.com/ABMI-software/Robot5A-Simulation/compare)
 
 ## Documentation
 
