@@ -103,7 +103,6 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 6. **Export the settings**
 
     ```bash
-    export GAZEBO_RESOURCE_PATH="~/Robot5A-Simulation/install/robot_description:/usr/share/gazebo-11"
     export QT_QPA_PLATFORM=xcb
     ```
 
@@ -112,7 +111,6 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
     ```bash
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
     echo "source ~/Robot5A-Simulation/install/setup.bash" >> ~/.bashrc
-    echo "export GAZEBO_RESOURCE_PATH=\"~/Robot5A-Simulation/install/robot_description:/usr/share/gazebo-11\"" >> ~/.bashrc
     echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
     ```
 
