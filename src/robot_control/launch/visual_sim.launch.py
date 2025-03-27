@@ -211,6 +211,12 @@ def generate_launch_description():
         parameters=[{"use_sim_time": True}],
     )
 
+    # Append the model path
+    set_env_vars_models = AppendEnvironmentVariable(
+        'GAZEBO_MODEL_PATH',
+        os.path.join(share_dir, "models")
+    )
+
     # Append the resource path
     set_env_vars_resources = AppendEnvironmentVariable(
         'GAZEBO_RESOURCE_PATH',
@@ -220,6 +226,7 @@ def generate_launch_description():
     # Return the LaunchDescription
     return LaunchDescription(
         [
+            set_env_vars_models,
             set_env_vars_resources,
             num_cameras_arg,  # Added the launch argument
             Node(
