@@ -118,8 +118,8 @@ fi
 
 # source the setup files
 # https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Configuring-ROS2-Environment.html#add-sourcing-to-your-shell-startup-script
-if [ ! -f install/setup.bash ]; then
-	source /opt/ros/humble/setup.bash
-else
-	source install/setup.bash
-fi
+for i in /opt/ros/humble/setup.bash install/setup.bash; do
+  if [ -f "$i" ]; then
+    . "$i"
+  fi
+done
