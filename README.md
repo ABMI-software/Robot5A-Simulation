@@ -174,7 +174,9 @@ __Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so 
 Start the Gazebo simulation environment with the robotic arm using MoveIt.
 
 ```bash
+source /opt/ros/humble/setup.bash
 source /usr/share/gazebo/setup.bash
+source install/setup.bash
 ros2 launch robot_control visual_sim.launch.py 
 ```
 N.B. : It's also possible to control the arm using rviz2
