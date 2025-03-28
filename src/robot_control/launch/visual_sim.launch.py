@@ -11,7 +11,6 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import (
-    AppendEnvironmentVariable,
     IncludeLaunchDescription,
     ExecuteProcess,
     RegisterEventHandler,
@@ -211,16 +210,9 @@ def generate_launch_description():
         parameters=[{"use_sim_time": True}],
     )
 
-    # Append the resource path
-    set_env_vars_resources = AppendEnvironmentVariable(
-        'GAZEBO_RESOURCE_PATH',
-        os.pathsep.join([share_dir, "/usr/share/gazebo-11"])
-    )
-
     # Return the LaunchDescription
     return LaunchDescription(
         [
-            set_env_vars_resources,
             num_cameras_arg,  # Added the launch argument
             Node(
                 package='joint_state_publisher',
