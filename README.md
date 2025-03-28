@@ -77,14 +77,13 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 3. **Clone the Repository**
 
     ```bash
-    cd ~/
-    git clone https://github.com/ABMI-software/Robot5A-Simulation.git
+    git clone https://github.com/ABMI-software/Robot5A-Simulation.git ~/Robot5A-Simulation
     ```
 
 4. **Build the Workspace**
 
     ```bash
-    cd Robot5A-Simulation
+    cd ~/Robot5A-Simulation
     source /opt/ros/humble/setup.bash
     rosdep update
     rosdep install --from-paths src --ignore-src -r -y
@@ -149,8 +148,8 @@ Alternatively, you may consider using [Docker](https://www.docker.com/) and the 
     Follow its [README](https://github.com/gportay/dosh?tab=readme-ov-file#install).
 
     ```bash
-    git clone https://github.com/gportay/dosh.git
-    cd dosh
+    git clone https://github.com/gportay/dosh.git ~/dosh
+    cd ~/dosh
     make user-install
     ```
 
@@ -174,7 +173,9 @@ __Note__: The run-command file [.bashrc](.bashrc) sources the necessary bits so 
 Start the Gazebo simulation environment with the robotic arm using MoveIt.
 
 ```bash
+source /opt/ros/humble/setup.bash
 source /usr/share/gazebo/setup.bash
+source install/setup.bash
 ros2 launch robot_control visual_sim.launch.py 
 ```
 N.B. : It's also possible to control the arm using rviz2
@@ -212,7 +213,7 @@ Contributions are welcome! Please follow these steps:
 2. **Enter the sources**
 
     ```bash
-    cd Robot5A-Simulation
+    cd ~/Robot5A-Simulation
     ```
 
 3. **Create a Feature Branch**
