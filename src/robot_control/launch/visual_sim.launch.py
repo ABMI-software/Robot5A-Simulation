@@ -32,9 +32,9 @@ def generate_launch_description():
     This function sets up the robot description, launches Gazebo with a custom world file,
     spawns the robot entity, configures MoveIt, and starts the necessary nodes and controllers,
     including the GUI node, object detector node, and visual joint state publisher node.
-    
+
     It now accepts a parameter 'num_cameras' to determine whether to launch the single or double ArUco detector.
-    
+
     @return LaunchDescription object containing all the nodes and configurations to launch.
     """
 
@@ -77,7 +77,7 @@ def generate_launch_description():
         parameters=[robot_description, {"use_sim_time": True}],
     )
 
-    # Gazebo launch with a custom world file that includes a spotlight
+    # Gazebo Launch
     world_file_path = os.path.join(
         share_dir, "worlds", "spotlight.world"
     )  # Path to the custom world file
@@ -156,7 +156,6 @@ def generate_launch_description():
     )
 
     load_gripper_controller = ExecuteProcess(
-
         cmd=[
             "ros2",
             "control",
@@ -166,8 +165,8 @@ def generate_launch_description():
             "gripper_controller",
         ],
         output="screen",
-
     )
+
     # Launch the GUI Node
     gui_node = Node(
         package="robot_control",  # Package name containing the GUI node
@@ -177,7 +176,7 @@ def generate_launch_description():
             moveit_config.to_dict(),
             {"use_sim_time": True},
             {"moveit_current_state_monitor.joint_state_qos": "sensor_data"},
-        ],  # Pass MoveIt config to the GUI node
+        ],  # Pass the MoveIt config to the GUI node
     )
 
     # Aruco Detector Single Node
@@ -220,7 +219,6 @@ def generate_launch_description():
                 output='screen',
                 parameters=[{'use_sim_time': True}]
             ),
-
             SetParameter(name="use_sim_time", value=True),  # Enable simulation time
             RegisterEventHandler(
                 event_handler=OnProcessExit(
@@ -237,8 +235,10 @@ def generate_launch_description():
             RegisterEventHandler(
                 event_handler=OnProcessExit(
                     target_action=load_arm_controller,
-                    on_exit=[load_gripper_controller, move_group_node],  # Load gripper controller before move group
-
+                    on_exit=[
+                        load_gripper_controller,
+                        move_group_node
+                    ],  # Load gripper controller before move group
                 )
             ),
             RegisterEventHandler(
