@@ -34,7 +34,6 @@ def generate_launch_description():
 
     # Specify the name of the package and path to xacro file within the package
     pkg_name = "robot_description"  # Name of the robot description package
-
     share_dir = get_package_share_directory(
         pkg_name
     )  # Get the share directory of the package
@@ -58,6 +57,7 @@ def generate_launch_description():
             {"use_sim_time": True},
         ],  # Parameters
     )
+
     # Node to spawn the entity in Gazebo
     spawn_entity = Node(
         package="gazebo_ros",  # Package containing the node
@@ -70,6 +70,7 @@ def generate_launch_description():
         ],  # Arguments for spawning
         output="screen",
     )
+
     # Include the Gazebo launch file
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -92,6 +93,7 @@ def generate_launch_description():
         ],  # Command to load and activate joint_state_broadcaster
         output="screen",
     )
+
     load_arm_controller = ExecuteProcess(
         cmd=[
             "ros2",

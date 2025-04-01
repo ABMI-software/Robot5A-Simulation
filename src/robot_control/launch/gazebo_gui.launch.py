@@ -146,7 +146,6 @@ def generate_launch_description():
             {"use_sim_time": True},
             {"moveit_current_state_monitor.joint_state_qos": "sensor_data"},
         ],  # Pass the MoveIt config to the GUI node
-        # arguments=['--ros-args', '--log-level', 'debug'],
     )
 
     # Return the LaunchDescription
