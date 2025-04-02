@@ -28,8 +28,8 @@ public:
     std::string package_share_directory = ament_index_cpp::get_package_share_directory("robot_control");
 
     // Construct the full paths to the configuration files
-    std::string calib_file_1 = package_share_directory + "/config/camera_1_calibration.yaml";
-    std::string calib_file_2 = package_share_directory + "/config/camera_2_calibration.yaml";
+    std::string calib_file_1 = package_share_directory + "/config/camera_calibration.yaml";
+    std::string calib_file_2 = package_share_directory + "/config/camera_calibration.yaml";
     std::string transform_file = package_share_directory + "/config/transform.yaml";
 
     // Load calibration and transform data
