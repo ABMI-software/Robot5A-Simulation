@@ -1,0 +1,15 @@
+Gazebo multi-robot simulator, version 11.10.2
+Copyright (C) 2012 Open Source Robotics Foundation.
+Released under the Apache 2 License.
+http://gazebosim.org
+
+
+(1743673444 348229838) [Msg] Waiting for master.
+(1743673444 349743642) Failed to create connection to remote host[localhost:11345]
+(1743673445 354430674) [Msg] Connected to gazebo master @ http://127.0.0.1:11345
+(1743673445 354566780) [Msg] Publicized address: 172.17.0.2
+(1743673445 355634871) [Wrn] [GuiIface.cc:298] Couldn't locate specified .ini. Creating file at "/home/chipmunk-151/.gazebo/gui.ini"
+(1743673445 355951928) Loaded .ini file from: "/home/chipmunk-151/.gazebo/gui.ini"
+(1743673445 498704840) [Wrn] [GuiIface.cc:120] QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-chipmunk-151'
+(1743673446 717236908) No spacenav daemon found. Spacenav functionality is disabled
+(1743673446 851105387) Loaded GUI plugin[libgazebo_ros_eol_gui.so]

@@ -1,0 +1,31 @@
+Gazebo multi-robot simulator, version 11.10.2
+Copyright (C) 2012 Open Source Robotics Foundation.
+Released under the Apache 2 License.
+http://gazebosim.org
+
+
+(1743673444 505706826) [Wrn] [gazebo_ros_init.cpp:178] 
+#     # ####### ####### ###  #####  #######
+##    # #     #    #     #  #     # #
+# #   # #     #    #     #  #       #
+#  #  # #     #    #     #  #       #####
+#   # # #     #    #     #  #       #
+#    ## #     #    #     #  #     # #
+#     # #######    #    ###  #####  #######
+
+This version of Gazebo, now called Gazebo classic, reaches end-of-life
+in January 2025. Users are highly encouraged to migrate to the new Gazebo
+using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration?utm_source=gazebo_ros_pkgs&utm_medium=cli)
+
+
+(1743673444 549754489) [Msg] Waiting for master.
+(1743673444 556902165) [Msg] Connected to gazebo master @ http://127.0.0.1:11345
+(1743673444 556982203) [Msg] Publicized address: 172.17.0.2
+(1743673444 834735105) [Msg] Loading world file [/home/chipmunk-151/Robot5A/install/robot_description/share/robot_description/worlds/spotlight.world]
+(1743673444 896599027) [Err] [OpenAL.cc:84] Unable to open audio device[default]
+ Audio will be disabled.
+(1743673445 110067192) Init world[custom_world_with_spotlight]
+(1743673445 852028737) applying Gaussian noise model with mean 0, stddev 0.007, bias 0
+(1743673445 906342415) applying Gaussian noise model with mean 0, stddev 0.007, bias 0
+(1743673516 421926920) [Wrn] [Publisher.cc:135] Queue limit reached for topic /gazebo/custom_world_with_spotlight/pose/local/info, deleting message. This warning is printed only once.
+(1743673516 463977309) [Wrn] [Publisher.cc:135] Queue limit reached for topic /gazebo/custom_world_with_spotlight/physics/contacts, deleting message. This warning is printed only once.
