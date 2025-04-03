@@ -269,6 +269,24 @@ private:
     double cx = camMatrix_.at<double>(0, 2);
     double cy = camMatrix_.at<double>(1, 2);
     cv::circle(undistortedFrame, cv::Point(static_cast<int>(cx), static_cast<int>(cy)), 5, cv::Scalar(0, 255, 255), -1);
+  
+    // Define 3D points for the world origin axes
+    std::vector<cv::Point3f> worldAxes = {
+        cv::Point3f(0, 0, 0),          // Origin
+        cv::Point3f(0.05, 0, 0),       // X-axis (red)
+        cv::Point3f(0, 0.05, 0),       // Y-axis (green)
+        cv::Point3f(0, 0, 0.05)        // Z-axis (blue)
+    };
+
+    // Project the 3D points to the image plane
+    std::vector<cv::Point2f> imagePoints2;
+    cv::projectPoints(worldAxes, rvec, tvec, camMatrix_, distCoeffs_, imagePoints2);
+
+    // Draw the coordinate frame at the world origin
+    cv::line(undistortedFrame, imagePoints2[0], imagePoints2[1], cv::Scalar(0, 0, 255), 3); // X-axis (Red)
+    cv::line(undistortedFrame, imagePoints2[0], imagePoints2[2], cv::Scalar(0, 255, 0), 3); // Y-axis (Green)
+    cv::line(undistortedFrame, imagePoints2[0], imagePoints2[3], cv::Scalar(255, 0, 0), 3); // Z-axis (Blue)
+
 
     // Display the processed image
     cv::imshow("Detected ArUco markers", undistortedFrame);

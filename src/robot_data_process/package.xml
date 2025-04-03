@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>slush_engine_communication</name>
+  <name>robot_data_process</name>
   <version>0.0.1</version>
   <description>ROS 2 node for SlushEngine communication</description>
   <maintainer email="your@email.com">Your Name</maintainer>

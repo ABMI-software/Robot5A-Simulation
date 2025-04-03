@@ -23,7 +23,7 @@ class JointSyncMoveItNode(Node):
         self.is_executing_arm = False
         self.is_executing_gripper = False
         self.csv_file_path = os.path.join(
-            get_package_share_directory('slush_engine_communication'), 'logs', 'joint_sync_log.csv'
+            get_package_share_directory('robot_data_process'), 'logs', 'joint_sync_log.csv'
         )
 
         # QoS profile
@@ -62,7 +62,7 @@ class JointSyncMoveItNode(Node):
             ])
 
     def load_commands(self, filename):
-        package_share_directory = get_package_share_directory('slush_engine_communication')
+        package_share_directory = get_package_share_directory('robot_data_process')
         full_path = os.path.join(package_share_directory, filename)
         self.get_logger().info(f"Attempting to load commands from: {full_path}")
         if os.path.isfile(full_path):
