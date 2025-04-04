@@ -38,7 +38,7 @@ public:
 
     // Create a subscription for receiving images
     image_subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "camera2/image_raw", 10,
+        "camera1/image_raw", 10,
         std::bind(&ArucoDetectorSingle::imageCallback, this, std::placeholders::_1));
 
     // Create a publisher for the /tf_detected topic
@@ -85,7 +85,7 @@ private:
       YAML::Node config = YAML::LoadFile(filename);
       if (config["camera"]) {
         for (const auto &camera_node : config["camera"]) {
-          if (camera_node["id"].as<int>() == 2) {
+          if (camera_node["id"].as<int>() == 1) {
             camera_transform_ = parseTransform(camera_node["transform"]);
             break;
           }
