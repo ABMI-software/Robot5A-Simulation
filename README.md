@@ -47,6 +47,9 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
 1. **Update Package Lists**
 
     ```bash
+    sudo apt update && sudo apt install curl -y
+    sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo apt-key add -
+    sudo sh -c 'echo "deb http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2.list'
     sudo apt update
     ```
 
