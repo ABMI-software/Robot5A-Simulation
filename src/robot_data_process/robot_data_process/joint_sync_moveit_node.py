@@ -16,7 +16,7 @@ class JointSyncMoveItNode(Node):
 
         # Define joint names for arm and gripper separately
         self.arm_joint_names = ["R0_Yaw", "R1_Pitch", "R2_Pitch", "R3_Yaw", "R4_Pitch"]
-        self.gripper_joint_names = ["ServoGear"]
+        self.gripper_joint_names = ["ServoGear", "LeftGripper", "RightGripper", "LeftPivotArm", "RightPivotArm", "PassifGear"]
         self.all_joint_names = self.arm_joint_names + self.gripper_joint_names
         self.commands = []
         self.current_command_index = 0
