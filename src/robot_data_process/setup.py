@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'joint_syns_moveit_node = slush_engine_communication.joint_syns_moveit_node:main',
+            'joint_sync_moveit_node = robot_data_process.joint_sync_moveit_node:main',
         ],
     },
 )

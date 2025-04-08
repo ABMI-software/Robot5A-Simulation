@@ -3,12 +3,12 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from rclpy.action import ActionClient
 from sensor_msgs.msg import JointState
-from moveit_msgs.msg import MoveGroupAction, MoveGroupGoal, MoveGroupFeedback, MoveGroupResult
-from message_filters import ApproximateTimeSynchronizer, Subscriber
+from moveit_msgs.action import MoveGroup  # Updated to use MoveGroup action
 import csv
 import os
 import time
 from ament_index_python.packages import get_package_share_directory
+from message_filters import ApproximateTimeSynchronizer, Subscriber
 
 class JointSyncMoveItNode(Node):
     def __init__(self):
@@ -36,8 +36,8 @@ class JointSyncMoveItNode(Node):
         self.ts.registerCallback(self.sync_callback)
 
         # MoveIt 2 Action Clients for arm and gripper
-        self.arm_move_group_client = ActionClient(self, MoveGroupAction, '/move_group')
-        self.gripper_move_group_client = ActionClient(self, MoveGroupAction, '/move_group')
+        self.arm_move_group_client = ActionClient(self, MoveGroup, '/move_group')
+        self.gripper_move_group_client = ActionClient(self, MoveGroup, '/move_group')
         self.get_logger().info("Waiting for MoveGroup action server...")
         if not self.arm_move_group_client.wait_for_server(timeout_sec=10.0):
             raise RuntimeError("MoveGroup action server not available for arm. Ensure move_group node is running.")
@@ -106,7 +106,7 @@ class JointSyncMoveItNode(Node):
             self.is_executing_arm = True
 
     def execute_group_command(self, client, group_name, joint_names, positions):
-        goal = MoveGroupGoal()
+        goal = MoveGroup.Goal()  # Updated to MoveGroup.Goal
         goal.request.group_name = group_name
         goal.request.num_planning_attempts = 10
         goal.request.allowed_planning_time = 5.0
