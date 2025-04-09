@@ -24,6 +24,8 @@ class JointSyncMoveItNode(Node):
         self.current_command_index = 0
         self.is_executing_arm = False
         self.is_executing_gripper = False
+        self.command_delay = 1.0  # Delay in seconds between commands
+        self.last_command_time = None
         self.csv_file_path = os.path.join(
             get_package_share_directory('robot_data_process'), 'logs', 'joint_sync_log.csv'
         )
@@ -123,6 +125,11 @@ class JointSyncMoveItNode(Node):
             return
 
         if not self.is_executing_arm and not self.is_executing_gripper:
+            # Check if enough time has elapsed since the last command
+            current_time = time.time()
+            if self.last_command_time and (current_time - self.last_command_time < self.command_delay):
+                return
+
             command = self.commands[self.current_command_index]
             self.get_logger().info(f"Executing command {self.current_command_index + 1}/{len(self.commands)}: {command}")
 
@@ -214,28 +221,36 @@ class JointSyncMoveItNode(Node):
             self.is_executing_gripper = True
         else:
             self.is_executing_gripper = False
-            self.current_command_index += 1
+            self.last_command_time = time.time()  # Record time when gripper completes
 
     def check_command_completion(self):
         if not hasattr(self, 'combined_joint_states') or not hasattr(self, 'true_joint_states'):
             self.get_logger().debug("Waiting for joint state messages...")
             return
 
-        if not self.combined_joint_states.position or not self.true_joint_states.position:
-            self.get_logger().warn("Received empty joint state messages")
+        if not self.combined_joint_states.name or not self.combined_joint_states.position:
+            self.get_logger().warn("Received empty joint state message (no names or positions)")
             return
 
         tolerance = 0.05
         if self.is_executing_arm:
             target_positions = self.commands[self.current_command_index][:5]
             if len(self.combined_joint_states.position) < len(target_positions):
-                self.get_logger().warn(f"Insufficient joint positions: got {len(self.combined_joint_states.position)}, need {len(target_positions)}")
+                self.get_logger().warn(f"Insufficient joint positions for arm: got {len(self.combined_joint_states.position)}, need {len(target_positions)}")
                 return
-            current_positions = self.combined_joint_states.position[:5]
-            all_close = all(abs(current_positions[i] - target_positions[i]) < tolerance for i in range(len(target_positions)))
-            if all_close:
-                self.get_logger().info(f"Arm command {self.current_command_index + 1} completed")
-                self.is_executing_arm = False
+            current_positions = []
+            for joint in self.arm_joint_names:
+                if joint in self.combined_joint_states.name:
+                    idx = self.combined_joint_states.name.index(joint)
+                    current_positions.append(self.combined_joint_states.position[idx])
+                else:
+                    self.get_logger().warn(f"Joint {joint} not found in combined_joint_states")
+                    return
+            if len(current_positions) == len(target_positions):
+                all_close = all(abs(current_positions[i] - target_positions[i]) < tolerance for i in range(len(target_positions)))
+                if all_close:
+                    self.get_logger().info(f"Arm command {self.current_command_index + 1} completed")
+                    self.is_executing_arm = False
 
         elif self.is_executing_gripper:
             servo_gear_target = self.commands[self.current_command_index][5]
@@ -265,8 +280,8 @@ class JointSyncMoveItNode(Node):
                 self.get_logger().info(f"Gripper command {self.current_command_index + 1} completed")
                 self.is_executing_gripper = False
                 self.current_command_index += 1
-                time.sleep(0.5)
-                self.execute_command()
+                self.last_command_time = time.time()  # Record time when gripper completes
+                self.execute_command()  # Next command will wait for delay
 
     def log_to_csv(self):
         if not hasattr(self, 'combined_joint_states') or not hasattr(self, 'true_joint_states'):
