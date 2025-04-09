@@ -1,6 +1,6 @@
 """
-@file visual_sim.launch.py
-@brief Launch file for setting up the robot simulation with visual servoing components, supporting single or dual cameras.
+@file joint_sync_moveit.launch.py
+@brief Launch file for setting up the robot simulation with visual servoing components and joint synchronization node.
 """
 
 import os
@@ -11,6 +11,7 @@ from launch.actions import (
     ExecuteProcess,
     RegisterEventHandler,
     DeclareLaunchArgument,
+    TimerAction,
 )
 from launch.event_handlers import OnProcessExit, OnProcessStart
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -20,14 +21,12 @@ from launch_ros.actions import Node, SetParameter
 import xacro
 from moveit_configs_utils import MoveItConfigsBuilder
 
-
 def generate_launch_description():
     """
-    @brief Generates the launch description for the robot simulation with visual servoing components.
+    @brief Generates the launch description for the robot simulation with visual servoing and joint sync components.
 
-    This function sets up the robot description with one or two cameras based on the 'num_cameras' argument,
-    launches Gazebo with a custom world, spawns the robot entity, configures MoveIt, and starts the necessary
-    nodes and controllers, including the appropriate ArUco detector node (single or double).
+    This function sets up the robot description, launches Gazebo, spawns the robot, configures MoveIt, and starts
+    the joint synchronization node with a delay to ensure all dependencies are ready.
     
     @return LaunchDescription object containing all the nodes and configurations to launch.
     """
@@ -50,7 +49,7 @@ def generate_launch_description():
     xacro_file = os.path.join(share_dir, "urdf", "r5a_v_ros.urdf.xacro")
     robot_description_config = xacro.process_file(
         xacro_file,
-        mappings={'num_cameras': num_cameras}  # Pass num_cameras to XACRO
+        mappings={'num_cameras': num_cameras}
     )
     robot_description = {"robot_description": robot_description_config.toxml()}
 
@@ -115,7 +114,6 @@ def generate_launch_description():
         output="screen",
     )
 
-
     # Visual Joint State Publisher Node
     visual_joint_state_publisher_node = Node(
         package="robot_control",
@@ -150,6 +148,14 @@ def generate_launch_description():
         condition=IfCondition(PythonExpression(['"', num_cameras, '" == "2"']))
     )
 
+    # Joint Sync MoveIt Node (with a 15-second delay)
+    joint_sync_moveit_node = Node(
+        package="robot_data_process",
+        executable="joint_sync_moveit_node",
+        output="screen",
+        parameters=[{"use_sim_time": True}],
+    )
+
     # Launch Description
     return LaunchDescription([
         num_cameras_arg,
@@ -180,6 +186,10 @@ def generate_launch_description():
                     aruco_detector_double_node,
                     visual_joint_state_publisher_node,
                     joint_state_bridge_node,
+                    TimerAction(
+                        period=15.0,  # 15-second delay
+                        actions=[joint_sync_moveit_node],
+                    ),
                 ],
             )
         ),
@@ -187,7 +197,6 @@ def generate_launch_description():
         robot_state_publisher_node,
         spawn_entity,
     ])
-
 
 if __name__ == "__main__":
     generate_launch_description()
