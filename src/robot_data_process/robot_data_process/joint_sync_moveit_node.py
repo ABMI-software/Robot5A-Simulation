@@ -26,9 +26,10 @@ class JointSyncMoveItNode(Node):
         self.is_executing_gripper = False
         self.command_delay = 1.0  # Delay in seconds between commands
         self.last_command_time = None
-        self.csv_file_path = os.path.join(
-            get_package_share_directory('robot_data_process'), 'logs', 'joint_sync_log.csv'
-        )
+
+        # Set CSV file path explicitly to workspace src directory
+        self.csv_file_path = "/home/chipmunk-151/Robot5A/src/robot_data_process/data_analysis/logs/joint_sync_log.csv"
+        self.get_logger().info(f"CSV file path set to: {self.csv_file_path}")
 
         # QoS profile
         qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE, history=HistoryPolicy.KEEP_LAST)
@@ -38,6 +39,12 @@ class JointSyncMoveItNode(Node):
         self.true_sub = Subscriber(self, JointState, '/true_joint_states', qos_profile=qos)
         self.ts = ApproximateTimeSynchronizer([self.combined_sub, self.true_sub], queue_size=10, slop=0.05)
         self.ts.registerCallback(self.sync_callback)
+
+        # Standalone subscribers for debugging
+        self.combined_sub_standalone = self.create_subscription(
+            JointState, '/combined_joint_states', self.combined_callback, qos)
+        self.true_sub_standalone = self.create_subscription(
+            JointState, '/true_joint_states', self.true_callback, qos)
 
         # Connect to MoveGroup action server
         possible_action_servers = ['/move_action', '/move_group', '/armr5/move_group']
@@ -77,15 +84,15 @@ class JointSyncMoveItNode(Node):
                 break
 
         if not self.move_group_action_name:
-            raise RuntimeError(f"Failed to connect to any MoveGroup action server: {possible_action_servers}. Ensure move_group node is running and check 'ros2 action list -t'.")
+            raise RuntimeError(f"Failed to connect to any MoveGroup action server: {possible_action_servers}")
 
         # Initialize CSV and load commands
         self.initialize_csv()
         self.load_commands('config/joint_commands.txt')
 
         # Timers
-        self.create_timer(4.0, self.start_command_execution)
-        self.create_timer(0.1, self.check_command_completion)
+        self.execution_timer = self.create_timer(4.0, self.start_command_execution)
+        self.check_timer = self.create_timer(0.1, self.check_joint_states)
 
     def initialize_csv(self):
         os.makedirs(os.path.dirname(self.csv_file_path), exist_ok=True)
@@ -96,6 +103,7 @@ class JointSyncMoveItNode(Node):
                 'Combined Joints', 'Combined Positions', 'Combined Velocities',
                 'Arm MoveIt Success', 'Gripper MoveIt Success'
             ])
+        self.get_logger().info(f"Initialized CSV log at {self.csv_file_path}")
 
     def load_commands(self, filename):
         package_share_directory = get_package_share_directory('robot_data_process')
@@ -111,13 +119,22 @@ class JointSyncMoveItNode(Node):
     def sync_callback(self, combined_msg, true_msg):
         self.combined_joint_states = combined_msg
         self.true_joint_states = true_msg
+        self.get_logger().debug("Received synchronized joint states")
         self.log_to_csv()
 
+    def combined_callback(self, msg):
+        self.get_logger().debug(f"Received /combined_joint_states: {msg.name}")
+
+    def true_callback(self, msg):
+        self.get_logger().debug(f"Received /true_joint_states: {msg.name}")
+
     def start_command_execution(self):
-        if self.commands:
+        if self.commands and self.current_command_index < len(self.commands):
+            self.get_logger().info("Starting command execution")
             self.execute_command()
+            self.execution_timer.cancel()
         else:
-            self.get_logger().error("No commands loaded. Execution will not start.")
+            self.get_logger().info("No commands to execute or all commands completed.")
 
     def execute_command(self):
         if self.current_command_index >= len(self.commands):
@@ -125,34 +142,30 @@ class JointSyncMoveItNode(Node):
             return
 
         if not self.is_executing_arm and not self.is_executing_gripper:
-            # Check if enough time has elapsed since the last command
             current_time = time.time()
-            if self.last_command_time and (current_time - self.last_command_time < self.command_delay):
-                return
+            # Temporarily disable delay for debugging
+            # if self.last_command_time and (current_time - self.last_command_time < self.command_delay):
+            #     self.get_logger().debug(f"Waiting for delay: {current_time - self.last_command_time:.2f}/{self.command_delay}s")
+            #     return
 
             command = self.commands[self.current_command_index]
             self.get_logger().info(f"Executing command {self.current_command_index + 1}/{len(self.commands)}: {command}")
+            self.log_to_csv()
 
             if len(command) != self.expected_command_length:
                 self.get_logger().error(f"Command {command} has {len(command)} values, expected {self.expected_command_length}")
                 self.current_command_index += 1
+                self.execute_command()
                 return
 
-            # Split command into arm and gripper parts
-            arm_command = command[:5]  # First 5 joints for arm
+            arm_command = command[:5]
             servo_gear = command[5]
-            gripper_command = [
-                servo_gear,      # ServoGear
-                -servo_gear,     # LeftGripper
-                servo_gear,      # RightGripper
-                -servo_gear,     # LeftPivotArm
-                -servo_gear,     # RightPivotArm
-                -servo_gear      # PassifGear
-            ]
+            gripper_command = [servo_gear, -servo_gear, servo_gear, -servo_gear, -servo_gear, -servo_gear]
 
-            # Execute arm command first
             self.execute_group_command(self.arm_move_group_client, "arm", self.arm_joint_names, arm_command)
             self.is_executing_arm = True
+        else:
+            self.get_logger().debug("Waiting for current execution to complete")
 
     def execute_group_command(self, client, group_name, joint_names, positions):
         goal = MoveGroup.Goal()
@@ -161,7 +174,6 @@ class JointSyncMoveItNode(Node):
         goal.request.allowed_planning_time = 5.0
         goal.request.start_state.is_diff = True
 
-        # Create a Constraints object
         constraints = Constraints()
         for name, pos in zip(joint_names, positions):
             joint_constraint = JointConstraint()
@@ -172,7 +184,6 @@ class JointSyncMoveItNode(Node):
             joint_constraint.weight = 1.0
             constraints.joint_constraints.append(joint_constraint)
 
-        # Assign the Constraints object to goal_constraints as a list
         goal.request.goal_constraints = [constraints]
 
         self.get_logger().info(f"Sending MoveGroup goal for {group_name} with joints: {joint_names}, positions: {positions}")
@@ -182,7 +193,7 @@ class JointSyncMoveItNode(Node):
         ).add_done_callback(lambda future, gn=group_name: self.goal_response_callback(future, gn))
 
     def feedback_callback(self, feedback_msg):
-        pass  # Log feedback if needed
+        pass
 
     def goal_response_callback(self, future, group_name):
         goal_handle = future.result()
@@ -193,6 +204,7 @@ class JointSyncMoveItNode(Node):
             else:
                 self.is_executing_gripper = False
             self.current_command_index += 1
+            self.execute_command()
             return
 
         self.get_logger().info(f"{group_name} MoveGroup goal accepted")
@@ -202,6 +214,7 @@ class JointSyncMoveItNode(Node):
         result = future.result().result
         if result.error_code.val == 1:  # SUCCESS
             self.get_logger().info(f"{group_name} MoveIt execution succeeded")
+            self.log_to_csv()
         else:
             self.get_logger().error(f"{group_name} MoveIt execution failed with error code: {result.error_code.val}")
 
@@ -209,104 +222,56 @@ class JointSyncMoveItNode(Node):
             self.is_executing_arm = False
             command = self.commands[self.current_command_index]
             servo_gear = command[5]
-            gripper_command = [
-                servo_gear,      # ServoGear
-                -servo_gear,     # LeftGripper
-                servo_gear,      # RightGripper
-                -servo_gear,     # LeftPivotArm
-                -servo_gear,     # RightPivotArm
-                -servo_gear      # PassifGear
-            ]
+            gripper_command = [servo_gear, -servo_gear, servo_gear, -servo_gear, -servo_gear, -servo_gear]
+            self.get_logger().debug("Arm completed, starting gripper")
             self.execute_group_command(self.gripper_move_group_client, "gripper", self.gripper_joint_names, gripper_command)
             self.is_executing_gripper = True
         else:
             self.is_executing_gripper = False
-            self.last_command_time = time.time()  # Record time when gripper completes
+            self.last_command_time = time.time()
+            self.get_logger().debug(f"Gripper completed, advancing to command {self.current_command_index + 1}")
+            self.current_command_index += 1
+            self.log_to_csv()
+            self.execute_command()
 
-    def check_command_completion(self):
+    def check_joint_states(self):
         if not hasattr(self, 'combined_joint_states') or not hasattr(self, 'true_joint_states'):
             self.get_logger().debug("Waiting for joint state messages...")
-            return
-
-        if not self.combined_joint_states.name or not self.combined_joint_states.position:
-            self.get_logger().warn("Received empty joint state message (no names or positions)")
-            return
-
-        tolerance = 0.05
-        if self.is_executing_arm:
-            target_positions = self.commands[self.current_command_index][:5]
-            if len(self.combined_joint_states.position) < len(target_positions):
-                self.get_logger().warn(f"Insufficient joint positions for arm: got {len(self.combined_joint_states.position)}, need {len(target_positions)}")
-                return
-            current_positions = []
-            for joint in self.arm_joint_names:
-                if joint in self.combined_joint_states.name:
-                    idx = self.combined_joint_states.name.index(joint)
-                    current_positions.append(self.combined_joint_states.position[idx])
-                else:
-                    self.get_logger().warn(f"Joint {joint} not found in combined_joint_states")
-                    return
-            if len(current_positions) == len(target_positions):
-                all_close = all(abs(current_positions[i] - target_positions[i]) < tolerance for i in range(len(target_positions)))
-                if all_close:
-                    self.get_logger().info(f"Arm command {self.current_command_index + 1} completed")
-                    self.is_executing_arm = False
-
-        elif self.is_executing_gripper:
-            servo_gear_target = self.commands[self.current_command_index][5]
-            target_positions = [
-                servo_gear_target,   # ServoGear
-                -servo_gear_target,  # LeftGripper
-                servo_gear_target,   # RightGripper
-                -servo_gear_target,  # LeftPivotArm
-                -servo_gear_target,  # RightPivotArm
-                -servo_gear_target   # PassifGear
-            ]
-            current_positions = []
-            for joint in self.gripper_joint_names:
-                if joint in self.combined_joint_states.name:
-                    idx = self.combined_joint_states.name.index(joint)
-                    current_positions.append(self.combined_joint_states.position[idx])
-                else:
-                    self.get_logger().warn(f"Joint {joint} not found in combined_joint_states")
-                    return
-
-            if len(current_positions) != len(target_positions):
-                self.get_logger().warn(f"Gripper position mismatch: got {len(current_positions)}, expected {len(target_positions)}")
-                return
-
-            all_close = all(abs(current_positions[i] - target_positions[i]) < tolerance for i in range(len(target_positions)))
-            if all_close:
-                self.get_logger().info(f"Gripper command {self.current_command_index + 1} completed")
-                self.is_executing_gripper = False
-                self.current_command_index += 1
-                self.last_command_time = time.time()  # Record time when gripper completes
-                self.execute_command()  # Next command will wait for delay
+        else:
+            self.get_logger().debug("Joint states received, monitoring...")
 
     def log_to_csv(self):
-        if not hasattr(self, 'combined_joint_states') or not hasattr(self, 'true_joint_states'):
-            return
-
         current_time = time.time()
-        true_joints = ' '.join(self.true_joint_states.name)
-        true_positions = ' '.join(map(str, self.true_joint_states.position))
-        true_velocities = ' '.join(map(str, self.true_joint_states.velocity)) if self.true_joint_states.velocity else "N/A"
-        combined_joints = ' '.join(self.combined_joint_states.name)
-        combined_positions = ' '.join(map(str, self.combined_joint_states.position))
-        combined_velocities = ' '.join(map(str, self.combined_joint_states.velocity)) if self.combined_joint_states.velocity else "N/A"
-        command = (self.commands[self.current_command_index] if (self.is_executing_arm or self.is_executing_gripper) and
+        command = (str(self.commands[self.current_command_index]) if (self.is_executing_arm or self.is_executing_gripper) and
                    self.current_command_index < len(self.commands) else "Idle")
         arm_success = "Yes" if not self.is_executing_arm else "In Progress"
         gripper_success = "Yes" if not self.is_executing_gripper else "In Progress"
 
-        with open(self.csv_file_path, mode='a', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow([
-                command, current_time,
-                true_joints, true_positions, true_velocities,
-                combined_joints, combined_positions, combined_velocities,
-                arm_success, gripper_success
-            ])
+        true_joints = true_positions = true_velocities = "N/A"
+        combined_joints = combined_positions = combined_velocities = "N/A"
+
+        if hasattr(self, 'true_joint_states') and self.true_joint_states and self.true_joint_states.name:
+            true_joints = ' '.join(self.true_joint_states.name)
+            true_positions = ' '.join(map(str, self.true_joint_states.position)) if self.true_joint_states.position else "N/A"
+            true_velocities = ' '.join(map(str, self.true_joint_states.velocity)) if self.true_joint_states.velocity else "N/A"
+
+        if hasattr(self, 'combined_joint_states') and self.combined_joint_states and self.combined_joint_states.name:
+            combined_joints = ' '.join(self.combined_joint_states.name)
+            combined_positions = ' '.join(map(str, self.combined_joint_states.position)) if self.combined_joint_states.position else "N/A"
+            combined_velocities = ' '.join(map(str, self.combined_joint_states.velocity)) if self.combined_joint_states.velocity else "N/A"
+
+        try:
+            with open(self.csv_file_path, mode='a', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([
+                    command, current_time,
+                    true_joints, true_positions, true_velocities,
+                    combined_joints, combined_positions, combined_velocities,
+                    arm_success, gripper_success
+                ])
+            self.get_logger().debug(f"Logged to CSV: {command}, {arm_success}, {gripper_success}")
+        except Exception as e:
+            self.get_logger().error(f"Failed to write to CSV: {str(e)}")
 
 def main(args=None):
     rclpy.init(args=args)
