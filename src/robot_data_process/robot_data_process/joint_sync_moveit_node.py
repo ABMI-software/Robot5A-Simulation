@@ -173,8 +173,10 @@ class JointSyncMoveItNode(Node):
         goal = MoveGroup.Goal()
         goal.request.group_name = group_name
         goal.request.num_planning_attempts = 10
-        goal.request.allowed_planning_time = 5.0
+        goal.request.allowed_planning_time = 10.0    # Increased planning time for smoother plans
         goal.request.start_state.is_diff = True
+        goal.request.max_velocity_scaling_factor = 0.1  # Slow down to 30% of max speed
+        goal.request.max_acceleration_scaling_factor = 0.1  # Slow down to 30% of max acceleration
 
         constraints = Constraints()
         for name, pos in zip(joint_names, positions):
