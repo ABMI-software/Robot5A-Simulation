@@ -12,6 +12,7 @@
 #include <opencv2/opencv.hpp>
 #include <yaml-cpp/yaml.h>
 #include <unordered_map>
+#include <opencv2/calib3d.hpp>
 
 /// @class ArucoDetectorSingle
 /// @brief Detects ArUco markers in simulation images and publishes their poses using TF.
@@ -203,28 +204,40 @@ private:
 
         // Filter rotation vectors
         if (first_detection.count(marker_id) == 0) {
-          first_detection[marker_id] = true;
-          first_tvecs[marker_id] = tvecs[i];
-          first_rvecs[marker_id] = rvecs[i];
+            first_detection[marker_id] = true;
+            first_tvecs[marker_id] = tvecs[i];
+            first_rvecs[marker_id] = rvecs[i];
         } else {
-          const double rotation_threshold = 0.1;
-          const double zero_crossing_threshold = 0.1;
-          cv::Vec3d previous_rvec = first_rvecs[marker_id];
+            // Convert current and previous rvecs to rotation matrices
+            cv::Mat R_current, R_previous;
+            cv::Rodrigues(rvecs[i], R_current);
+            cv::Rodrigues(first_rvecs[marker_id], R_previous);
 
-          for (int j = 0; j < 3; j++) {
-            double current = rvecs[i][j];
-            double previous = previous_rvec[j];
-            double diff = std::abs(current - previous);
-            bool sign_changed = (current * previous < 0);
+            // Compute the relative rotation
+            cv::Mat R_diff = R_current * R_previous.t();
+            cv::Mat rvec_diff;
+            cv::Rodrigues(R_diff, rvec_diff);
 
-            if (sign_changed) {
-              if (diff < zero_crossing_threshold) {
-                // Small oscillation, no action needed
-              } else if (diff > rotation_threshold) {
-                rvecs[i][j] = -current;
-              }
+            // Check the angle of the relative rotation
+            double angle = cv::norm(rvec_diff);
+            const double angle_threshold = 0.1; // ~5.7 degrees
+
+            // If the angle is large, it may indicate a sign flip or significant change
+            if (angle > angle_threshold) {
+                // Try flipping the current rvec
+                cv::Vec3d flipped_rvec = -rvecs[i];
+                cv::Mat R_flipped;
+                cv::Rodrigues(flipped_rvec, R_flipped);
+                cv::Mat R_diff_flipped = R_flipped * R_previous.t();
+                cv::Mat rvec_diff_flipped;
+                cv::Rodrigues(R_diff_flipped, rvec_diff_flipped);
+                double angle_flipped = cv::norm(rvec_diff_flipped);
+
+                // Choose the rvec that results in a smaller rotation difference
+                if (angle_flipped < angle) {
+                    rvecs[i] = flipped_rvec;
+                }
             }
-          }
           first_tvecs[marker_id] = tvecs[i];
           first_rvecs[marker_id] = rvecs[i];
         }
