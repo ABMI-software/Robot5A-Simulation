@@ -26,6 +26,7 @@ class JointSyncMoveItNode(Node):
         self.is_executing_gripper = False
         self.command_delay = 1.0  # Delay in seconds between commands
         self.last_command_time = None
+        self.enable_logging = True  # Flag to control logging
 
         # Set CSV file path explicitly to workspace src directory
         self.csv_file_path = "/home/chipmunk-151/Robot5A/src/robot_data_process/data_analysis/logs/joint_sync_log.csv"
@@ -139,6 +140,7 @@ class JointSyncMoveItNode(Node):
     def execute_command(self):
         if self.current_command_index >= len(self.commands):
             self.get_logger().info("All commands executed.")
+            self.enable_logging = False  # Stop logging
             return
 
         if not self.is_executing_arm and not self.is_executing_gripper:
@@ -241,6 +243,10 @@ class JointSyncMoveItNode(Node):
             self.get_logger().debug("Joint states received, monitoring...")
 
     def log_to_csv(self):
+        if not self.enable_logging:
+            self.get_logger().debug("Logging disabled, skipping CSV write.")
+            return
+
         current_time = time.time()
         command = (str(self.commands[self.current_command_index]) if (self.is_executing_arm or self.is_executing_gripper) and
                    self.current_command_index < len(self.commands) else "Idle")

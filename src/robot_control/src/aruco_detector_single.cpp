@@ -207,8 +207,8 @@ private:
           first_tvecs[marker_id] = tvecs[i];
           first_rvecs[marker_id] = rvecs[i];
         } else {
-          const double rotation_threshold = 0.02;
-          const double zero_crossing_threshold = 0.02;
+          const double rotation_threshold = 0.05;
+          const double zero_crossing_threshold = 0.05;
           cv::Vec3d previous_rvec = first_rvecs[marker_id];
 
           for (int j = 0; j < 3; j++) {
