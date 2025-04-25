@@ -136,7 +136,7 @@ This project simulates and controls a robotic arm using **ROS2 Humble**, **Gazeb
  
         ros-humble-rqt \
  
-        ros-humble-rqt-graph
+        ros-humble-rqt-graph \
  
         ros-humble-xacro \
  
