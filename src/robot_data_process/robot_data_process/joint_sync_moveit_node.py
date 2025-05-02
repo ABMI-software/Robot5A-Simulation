@@ -29,7 +29,7 @@ class JointSyncMoveItNode(Node):
         self.enable_logging = True  # Flag to control logging
 
         # Set CSV file path explicitly to workspace src directory
-        self.csv_file_path = "/home/chipmunk-151/Robot5A/src/robot_data_process/data_analysis/logs/joint_sync_log.csv"
+        self.csv_file_path = "/home/linux_os/Robot5A-Simulation/src/robot_data_process/data_analysis/logs/joint_sync_log.csv"
         self.get_logger().info(f"CSV file path set to: {self.csv_file_path}")
 
         # QoS profile

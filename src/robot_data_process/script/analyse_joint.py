@@ -4,8 +4,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 
 # Define paths
-input_csv_path = '/home/chipmunk-151/Robot5A/src/robot_data_process/data_analysis/logs/joint_sync_log.csv'
-output_pdf_path = '/home/chipmunk-151/Robot5A/src/robot_data_process/data_analysis/output/joint_sync_log_analysis.pdf'
+input_csv_path = '/home/linux_os/Robot5A-Simulation/src/robot_data_process/data_analysis/logs/joint_sync_log.csv'
+output_pdf_path = '/home/linux_os/Robot5A-Simulation/src/robot_data_process/data_analysis/output/joint_sync_log_analysis.pdf'
 
 # Load the CSV file
 df = pd.read_csv(input_csv_path)
