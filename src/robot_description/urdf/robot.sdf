@@ -1,0 +1,1632 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.11">
+  <model name="armr5">
+
+    <joint name="base_joint" type="fixed">
+      <pose relative_to="__model__">0 0 0 0 0 0</pose>
+      <parent>world</parent>
+      <child>base_link</child>
+    </joint>
+
+ 
+  
+    <link name="aruco_plane_0">
+      <pose relative_to="R5A_link1">0 0 0.08 0 0 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id0.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_0" type="fixed">
+      <parent>R5A_link1</parent>
+      <child>aruco_plane_0</child>
+    </joint>
+  
+    <link name="aruco_plane_1">
+      <pose relative_to="R5A_link1">0 0 -0.08 0 0 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id1.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_1" type="fixed">
+      <parent>R5A_link1</parent>
+      <child>aruco_plane_1</child>
+    </joint>
+  
+    <link name="aruco_plane_2">
+      <pose relative_to="R5A_link1">0.08 0 0 0 1.5708 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id2.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_2" type="fixed">
+      <parent>R5A_link1</parent>
+      <child>aruco_plane_2</child>
+    </joint>
+  
+    <link name="aruco_plane_3">
+      <pose relative_to="R5A_link1">-0.08 0 0 0 -1.5708 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id3.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_3" type="fixed">
+      <parent>R5A_link1</parent>
+      <child>aruco_plane_3</child>
+    </joint>
+
+    <link name="base_link">
+      <pose relative_to="base_joint">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0.0068300028983921401 0.049285818585611103 0.102410796188668 0 0 0</pose>
+        <mass>1.54608760930939</mass>
+        <inertia>
+          <ixx>0.0033532550740912599</ixx>
+          <ixy>-2.7433967331470001e-05</ixy>
+          <ixz>6.86594556642029e-08</ixz>
+          <iyy>0.0038182114681515598</iyy>
+          <iyz>-1.9423420965472001e-06</iyz>
+          <izz>0.00646111115889031</izz>
+        </inertia>
+      </inertial>
+      <collision name="base_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="base_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/White</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+       
+      <collision name="base_link_fixed_joint_lump__camera_link1_collision_1">
+        <pose>1.2 0 0.45000000000000001 -3.1415899999999999 1.5707963267948966 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/3dCamera.DAE</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <collision name="base_link_fixed_joint_lump__camera_link2_collision_2">
+        <pose>-0.5 0.5 1 3.1415926535897931 0.78539265358979338 2.356192653589793</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/3dCamera.DAE</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="base_link_fixed_joint_lump__camera_link1_visual_1">
+        <pose>1.2 0 0.45000000000000001 -3.1415899999999999 1.5707963267948966 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/3dCamera.DAE</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Black</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <visual name="base_link_fixed_joint_lump__camera_link2_visual_2">
+        <pose>-0.5 0.5 1 3.1415926535897931 0.78539265358979338 2.356192653589793</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/3dCamera.DAE</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Black</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <sensor name="camera1" type="camera">
+        <update_rate>30</update_rate>
+        <camera name="head1">
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.0070000000000000001</stddev>
+          </noise>
+          <camera_info_topic>camera_info</camera_info_topic>
+        </camera>
+        <always_on>true</always_on>
+        <topic>camera/image_raw</topic>
+        <pose>1.2 0 0.45000000000000001 0 0 3.1415899999999999</pose>
+        <plugin name="gz_ros_camera_plugin" filename="libgz_ros_camera.so"><gz_frame_id>camera_link1</gz_frame_id></plugin></sensor>
+      <sensor name="camera2" type="camera">
+        <update_rate>30</update_rate>
+        <camera name="head2">
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.0070000000000000001</stddev>
+          </noise>
+          <camera_info_topic>camera_info2</camera_info_topic>
+        </camera>
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <topic>camera/image_raw</topic>
+        <pose>-0.5 0.5 1 7.850476711637678e-17 0.78539999999999976 -0.78539999999999999</pose>
+        <plugin name="gz_ros_camera_plugin" filename="libgz_ros_camera.so"><gz_frame_id>camera_link2</gz_frame_id></plugin></sensor>
+    </link>
+
+
+
+    <link name="R5A_link1">
+      <pose relative_to="R0_Yaw">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.00086353987913421299 0.0792884229151367 0.000217126309188408 0 0 0</pose>
+        <mass>2.0866034554666602</mass>
+        <inertia>
+          <ixx>0.0070520298461083401</ixx>
+          <ixy>4.1849576953685499e-07</ixy>
+          <ixz>-5.3509052785754603e-08</ixz>
+          <iyy>0.0065025772702290898</iyy>
+          <iyz>-7.9545000191951901e-07</iyz>
+          <izz>0.0085923501428656294</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_link1_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link1.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_link1_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link1.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/White</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="R0_Yaw" type="revolute">
+      <pose relative_to="base_link">0.0068572604519951197 0 0.15825 1.5707963267949003 0 0</pose>
+      <parent>base_link</parent>
+      <child>R5A_link1</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.5</lower>
+          <upper>1.5</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+
+    <link name="aruco_plane_4">
+      <pose relative_to="R5A_link2">0 0 0.06 0 0 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id4.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_4" type="fixed">
+      <parent>R5A_link2</parent>
+      <child>aruco_plane_4</child>
+    </joint>
+
+    <link name="aruco_plane_5">
+      <pose relative_to="R5A_link2">0 0 -0.06 0 0 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id5.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_5" type="fixed">
+      <parent>R5A_link2</parent>
+      <child>aruco_plane_5</child>
+    </joint>
+
+    <link name="aruco_plane_6">
+      <pose relative_to="R5A_link2">0.08 0 0 0 1.5708 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id6.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_6" type="fixed">
+      <parent>R5A_link2</parent>
+      <child>aruco_plane_6</child>
+    </joint>
+
+    <link name="aruco_plane_7">
+      <pose relative_to="R5A_link2">-0.08 0 0 0 -1.5708 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id7.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_7" type="fixed">
+      <parent>R5A_link2</parent>
+      <child>aruco_plane_7</child>
+    </joint>
+    
+    <joint name="R1_Pitch" type="revolute">
+      <pose relative_to="R5A_link1">-0.0031090154792553799 0.16550000000000001 0 0 0 0</pose>
+      <parent>R5A_link1</parent>
+      <child>R5A_link2</child>
+      <axis>
+        <xyz>-0.99993411232887497 0 -0.011479155067573001</xyz>
+        <limit>
+          <lower>-1.5</lower>
+          <upper>1.5</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="R5A_link2">
+      <pose relative_to="R1_Pitch">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0.000590340031700784 0.079274978934538304 -1.6057586521582799e-05 0 0 0</pose>
+        <mass>1.9224708219806299</mass>
+        <inertia>
+          <ixx>0.0048769938385287703</ixx>
+          <ixy>-3.6797699062708599e-05</ixy>
+          <ixz>1.05680472821134e-06</ixz>
+          <iyy>0.00293274601666501</iyy>
+          <iyz>-4.8580453490183099e-08</iyz>
+          <izz>0.0050356227123870599</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_link2_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link2.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_link2_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link2.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/White</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+
+
+    <link name="aruco_plane_8">
+      <pose relative_to="R5A_link3">0 0 0.05 0 0 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id8.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_8" type="fixed">
+      <parent>R5A_link3</parent>
+      <child>aruco_plane_8</child>
+    </joint>
+  
+    <link name="aruco_plane_9">
+      <pose relative_to="R5A_link3">0 0 -0.05 0 0 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id9.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_9" type="fixed">
+      <parent>R5A_link3</parent>
+      <child>aruco_plane_9</child>
+    </joint>
+  
+    <link name="aruco_plane_10">
+      <pose relative_to="R5A_link3">0.07 0 0 0 1.5708 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id10.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_10" type="fixed">
+      <parent>R5A_link3</parent>
+      <child>aruco_plane_10</child>
+    </joint>
+  
+    <link name="aruco_plane_11">
+      <pose relative_to="R5A_link3">-0.07 0 0 0 -1.5708 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id11.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_11" type="fixed">
+      <parent>R5A_link3</parent>
+      <child>aruco_plane_11</child>
+    </joint>
+
+    <joint name="R2_Pitch" type="revolute">
+      <pose relative_to="R5A_link2">0.0030070423023106901 0.22112379280356401 0 0 0 0</pose>
+      <parent>R5A_link2</parent>
+      <child>R5A_link3</child>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <limit>
+          <lower>-1.5</lower>
+          <upper>1.5</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="R5A_link3">
+      <pose relative_to="R2_Pitch">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.00031554927916678901 0.042444959407996002 0.00042316309562433002 0 0 0</pose>
+        <mass>0.74929233608185497</mass>
+        <inertia>
+          <ixx>0.0020042560133289298</ixx>
+          <ixy>9.1795637501825002e-06</ixy>
+          <ixz>-2.5576633205678499e-08</ixz>
+          <iyy>0.00069735819745095199</iyy>
+          <iyz>-7.8406365662464102e-06</iyz>
+          <izz>0.0019648056338934898</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_link3_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link3.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_link3_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link3.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/White</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+  
+  
+    <link name="aruco_plane_12">
+      <pose relative_to="R5A_link4">0 0.04 0.04 0 0 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id12.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_12" type="fixed">
+      <parent>R5A_link4</parent>
+      <child>aruco_plane_12</child>
+    </joint>
+  
+    <link name="aruco_plane_13">
+      <pose relative_to="R5A_link4">0 0.04 -0.04 0 0 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id13.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_13" type="fixed">
+      <parent>R5A_link4</parent>
+      <child>aruco_plane_13</child>
+    </joint>
+  
+    <link name="aruco_plane_14">
+      <pose relative_to="R5A_link4">0.042 0.04 0 0 1.5708 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id14.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="aruco_joint_14" type="fixed">
+      <parent>R5A_link4</parent>
+      <child>aruco_plane_14</child>
+    </joint>
+  
+    <link name="aruco_plane_15">
+      <pose relative_to="R5A_link4">-0.042 0.04 0 0 -1.5708 0</pose>
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>0.05 0.05 0.001</size></box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco/materials/scripts</uri>
+            <uri>model://aruco/materials/textures</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco/materials/textures/id15.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+    <joint name="aruco_joint_15" type="fixed">
+      <parent>R5A_link4</parent>
+      <child>aruco_plane_15</child>
+    </joint>
+
+    <joint name="R3_Yaw" type="revolute">
+      <pose relative_to="R5A_link3">0 0.13750000000000001 0 0 0 0</pose>
+      <parent>R5A_link3</parent>
+      <child>R5A_link4</child>
+      <axis>
+        <xyz>0 -0.99971830306773402 -0.023734247647023098</xyz>
+        <limit>
+          <lower>-1.5</lower>
+          <upper>1.5</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="R5A_link4">
+      <pose relative_to="R3_Yaw">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.00020604777118721801 0.045487390414341501 -0.000219105733632293 0 0 0</pose>
+        <mass>0.35507724331747798</mass>
+        <inertia>
+          <ixx>0.00066980520012306199</ixx>
+          <ixy>-4.7199673963769698e-07</ixy>
+          <ixz>-1.5773644558460401e-07</ixz>
+          <iyy>0.00035867455844089098</iyy>
+          <iyz>-5.4199096868258897e-08</iyz>
+          <izz>0.00076811625156411405</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_link4_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link4.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_link4_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link4.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/White</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="R4_Pitch" type="revolute">
+      <pose relative_to="R5A_link4">0 0.095000000000000195 0 1.5707963267949003 0 3.14159265358979</pose>
+      <parent>R5A_link4</parent>
+      <child>R5A_link5</child>
+      <axis>
+        <xyz>-0.99563479074283401 0.093334685205842594 0</xyz>
+        <limit>
+          <lower>-1.5</lower>
+          <upper>1.5</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="R5A_link5">
+      <pose relative_to="R4_Pitch">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.000347552332670687 0.00016702837825188801 0.013817338076661899 0 0 0</pose>
+        <mass>0.198451767848984</mass>
+        <inertia>
+          <ixx>0.000113354976202718</ixx>
+          <ixy>-9.1633661632937998e-08</ixy>
+          <ixz>2.5450016512559902e-07</ixz>
+          <iyy>8.4721172668381103e-05</iyy>
+          <iyz>4.4543875805715999e-08</iyz>
+          <izz>6.47134110451793e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_link5_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link5.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_link5_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_link5.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Black</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="LeftPivotArm" type="revolute">
+      <pose relative_to="R5A_link5">0.0070000000002369998 -0.00051561339501937696 0.084998436119900295 1.5707963267949003 0 3.14159265358979</pose>
+      <parent>R5A_link5</parent>
+      <child>R5A_GripperLeft_Link3</child>
+      <axis>
+        <xyz>0 0.0060660399415210699 0.99998160141046</xyz>
+        <limit>
+          <lower>-1</lower>
+          <upper>0.01</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="R5A_GripperLeft_Link3">
+      <pose relative_to="LeftPivotArm">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.019999999752565199 3.14595219752523e-06 -1.9083866895606999e-08 0 0 0</pose>
+        <mass>0.0016702739169993199</mass>
+        <inertia>
+          <ixx>1.0506836483145001e-08</ixx>
+          <ixy>4.7083875464671599e-11</ixy>
+          <ixz>-2.8561858516814599e-13</ixz>
+          <iyy>3.0983674474302902e-07</iyy>
+          <iyz>5.5788238397283099e-12</iyz>
+          <izz>3.1075637533631802e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_GripperLeft_Link3_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperLeft_Link3.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_GripperLeft_Link3_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperLeft_Link3.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/White</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="PassifGear" type="revolute">
+      <pose relative_to="R5A_link5">-0.014 -0.00039428999999999999 0.064999000000000001 1.5708 -4.2351647362715017e-22 -3.1415853071795872</pose>
+      <parent>R5A_link5</parent>
+      <child>R5A_GripperRight_Link1</child>
+      <axis>
+        <xyz>0 -0.0060660000000000002 -0.99997999999999998</xyz>
+        <limit>
+          <lower>-1</lower>
+          <upper>0.01</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="R5A_GripperRight_Link1">
+      <pose relative_to="PassifGear">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0.0064517375136263497 -0.00042074208963249798 2.5511220477594299e-06 0 0 0</pose>
+        <mass>0.0050032197309173004</mass>
+        <inertia>
+          <ixx>2.2935533057740601e-07</ixx>
+          <ixy>-1.79692415236652e-08</ixy>
+          <ixz>1.09050530560748e-10</ixz>
+          <iyy>9.5760807063582994e-07</iyy>
+          <iyz>1.2137458620362501e-09</iyz>
+          <izz>1.1576798913076201e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_GripperRight_Link1_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperRight_Link1.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_GripperRight_Link1_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperRight_Link1.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/White</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="RightGripper" type="revolute">
+      <pose relative_to="R5A_GripperRight_Link1">0.039999904526416601 -8.7393343622843594e-05 0 0 0 0</pose>
+      <parent>R5A_GripperRight_Link1</parent>
+      <child>R5A_GripperRight_Link2</child>
+      <axis>
+        <xyz>0 -0.0060660399415220501 -0.99998160141046</xyz>
+        <limit>
+          <lower>-0.01</lower>
+          <upper>1</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="R5A_GripperRight_Link2">
+      <pose relative_to="RightGripper">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.012176912102243699 0.026498762999710199 -0.00015823993564140101 0 0 0</pose>
+        <mass>0.010285143205824999</mass>
+        <inertia>
+          <ixx>3.2443719058920501e-06</ixx>
+          <ixy>1.5451136051083901e-06</ixy>
+          <ixz>-9.5682182577503706e-09</ixz>
+          <iyy>1.3052751101256901e-06</iyy>
+          <iyz>1.63061443850165e-08</iyz>
+          <izz>3.9267330879873299e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_GripperRight_Link2_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperRight_Link2.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_GripperRight_Link2_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperRight_Link2.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Black</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="RightPivotArm" type="revolute">
+      <pose relative_to="R5A_link5">-0.0069999999999592897 -0.00051561339498856296 0.084998436119900406 1.5707963267949003 0 3.14159265358979</pose>
+      <parent>R5A_link5</parent>
+      <child>R5A_GripperRight_Link3</child>
+      <axis>
+        <xyz>0 -0.0060660399415220301 -0.99998160141046</xyz>
+        <limit>
+          <lower>-1</lower>
+          <upper>0.01</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="R5A_GripperRight_Link3">
+      <pose relative_to="RightPivotArm">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0.019999952263323399 -4.36966718082576e-05 2.6507067727745099e-07 0 0 0</pose>
+        <mass>0.0016702739169993199</mass>
+        <inertia>
+          <ixx>1.05082579798437e-08</ixx>
+          <ixy>6.5398443571128801e-10</ixy>
+          <ixz>-3.9671693593768196e-12</ixz>
+          <iyy>3.0983532329863698e-07</iyy>
+          <iyz>5.58744653817654e-12</iyz>
+          <izz>3.1075637528401098e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_GripperRight_Link3_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperRight_Link3.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_GripperRight_Link3_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperRight_Link3.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/White</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="ServoGear" type="revolute">
+      <pose relative_to="R5A_link5">0.0140000000000435 -0.00039429259620415302 0.064998804091690301 1.5707963267949003 0 3.14159265358979</pose>
+      <parent>R5A_link5</parent>
+      <child>R5A_GripperLeft_Link1</child>
+      <axis>
+        <xyz>0 -0.0060660399415150001 -0.99998160141046</xyz>
+        <limit>
+          <lower>-0.01</lower>
+          <upper>1</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="R5A_GripperLeft_Link1">
+      <pose relative_to="ServoGear">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.0065945235777975803 -0.00039422979337755398 2.3341200789042801e-06 0 0 0</pose>
+        <mass>0.00487858122952023</mass>
+        <inertia>
+          <ixx>2.2809432492097801e-07</ixx>
+          <ixy>1.6939216964312901e-08</ixy>
+          <ixz>-1.00081436396101e-10</ixz>
+          <iyy>9.5106223442536099e-07</iyy>
+          <iyz>1.21242073786193e-09</iyz>
+          <izz>1.1506063543120899e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_GripperLeft_Link1_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperLeft_Link1.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_GripperLeft_Link1_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperLeft_Link1.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/White</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="LeftGripper" type="revolute">
+      <pose relative_to="R5A_GripperLeft_Link1">-0.0399999995050676 0 0 0 0 0</pose>
+      <parent>R5A_GripperLeft_Link1</parent>
+      <child>R5A_GripperLeft_Link2</child>
+      <axis>
+        <xyz>0 -0.0060660399415210899 -0.99998160141046</xyz>
+        <limit>
+          <lower>-1</lower>
+          <upper>0.01</upper>
+          <effort>5</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="R5A_GripperLeft_Link2">
+      <pose relative_to="LeftGripper">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0.0121769148397674 0.026498791463390799 -0.00015844305881356001 0 0 0</pose>
+        <mass>0.010285119366326</mass>
+        <inertia>
+          <ixx>3.24436687710476e-06</ixx>
+          <ixy>-1.54511287979719e-06</ixy>
+          <ixz>9.5801179550987305e-09</ixz>
+          <iyy>1.30527398272079e-06</iyy>
+          <iyz>1.6273938332971799e-08</iyz>
+          <izz>3.9267289910886003e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="R5A_GripperLeft_Link2_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperLeft_Link2.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R5A_GripperLeft_Link2_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>../meshes/R5A_GripperLeft_Link2.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Black</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>       
+
+
+    <frame name="camera_joint1" attached_to="base_link">
+      <pose>1.2 0 0.45000000000000001 0 0 3.1415899999999999</pose>
+    </frame>
+    <frame name="camera_link1" attached_to="camera_joint1">
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+    <frame name="camera_joint2" attached_to="base_link">
+      <pose>-0.5 0.5 1 0 0.78540000000000021 -0.78539999999999988</pose>
+    </frame>
+    <frame name="camera_link2" attached_to="camera_joint2">
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+    <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so"><ros><namespace>/</namespace></ros><ros2_control name="GazeboSystem" type="system"><hardware><plugin>gz_ros2_control/GazeboSimSystem</plugin></hardware><joint name="R0_Yaw"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="R1_Pitch"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="R2_Pitch"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="R3_Yaw"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="R4_Pitch"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="ServoGear"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="LeftGripper"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="PassifGear"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="RightGripper"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="LeftPivotArm"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint><joint name="RightPivotArm"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint></ros2_control></plugin></model>
+</sdf>
