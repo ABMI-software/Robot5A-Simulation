@@ -1,0 +1,66 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+joint_state_broadcaster:
+  ros__parameters:
+    type: "joint_state_broadcaster/JointStateBroadcaster"
+    publish_rate: 50.0
+
+arm_controller:
+  ros__parameters:
+    type: "joint_trajectory_controller/JointTrajectoryController"
+    joints:
+      - R0_Yaw
+      - R1_Pitch
+      - R2_Pitch
+      - R3_Yaw
+      - R4_Pitch
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    state_publish_rate: 25.0
+    action_monitor_rate: 20.0
+    constraints:
+      goal_time: 0.5
+      stopped_velocity_tolerance: 0.01
+      R0_Yaw:
+        trajectory: 0.1
+        goal: 0.1
+      R1_Pitch:
+        trajectory: 0.1
+        goal: 0.1
+      R2_Pitch:
+        trajectory: 0.1
+        goal: 0.1
+      R3_Yaw:
+        trajectory: 0.1
+        goal: 0.1
+      R4_Pitch:
+        trajectory: 0.1
+        goal: 0.1
+
+gripper_controller:
+  ros__parameters:
+    type: "joint_trajectory_controller/JointTrajectoryController"
+    joints:
+      - LeftGripper
+      - RightGripper
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    state_publish_rate: 25.0
+    action_monitor_rate: 20.0
+    constraints:
+      goal_time: 0.5
+      stopped_velocity_tolerance: 0.01
+      LeftGripper:
+        trajectory: 0.1
+        goal: 0.1
+      RightGripper:
+        trajectory: 0.1
+        goal: 0.1
