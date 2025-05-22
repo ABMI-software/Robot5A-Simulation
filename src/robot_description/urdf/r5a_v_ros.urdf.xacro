@@ -105,6 +105,7 @@
       upper="1.5"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
   </joint>
   <link
     name="R5A_link2">
@@ -163,6 +164,7 @@
       upper="1.5"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
   </joint>
   <link
     name="R5A_link3">
@@ -221,6 +223,8 @@
       upper="1.5"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
+
   </joint>
   <link
     name="R5A_link4">
@@ -279,6 +283,7 @@
       upper="1.5"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
   </joint>
   <link
     name="R5A_link5">
@@ -337,6 +342,8 @@
       upper="1.5"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
+
   </joint>
   <link
     name="R5A_GripperLeft_Link1">
@@ -395,6 +402,8 @@
       upper="1.0"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
+   
   </joint>
   <link
     name="R5A_GripperLeft_Link2">
@@ -453,6 +462,8 @@
       upper="0.01"
       effort="5"
       velocity="1" />
+   <hardwareInterface>position</hardwareInterface>
+
   </joint>
   <link
     name="R5A_GripperRight_Link1">
@@ -511,6 +522,8 @@
       upper="0.01"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
+   
   </joint>
   <link
     name="R5A_GripperRight_Link2">
@@ -569,6 +582,8 @@
       upper="1.0"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
+
   </joint>
   <link
     name="R5A_GripperLeft_Link3">
@@ -627,6 +642,8 @@
       upper="0.01"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
+
   </joint>
   <link
     name="R5A_GripperRight_Link3">
@@ -685,165 +702,135 @@
       upper="0.01"
       effort="5"
       velocity="1" />
+    <hardwareInterface>position</hardwareInterface>
+
   </joint>
-  <gazebo reference="base_link">                                                                
-    <material>Gazebo/White</material>
-  </gazebo>                                         
+                                           
   
-  <gazebo reference="R5A_link1">
-    <material>Gazebo/White</material>
-  </gazebo>                 
-                          
-  <gazebo reference="R5A_link2">
-    <material>Gazebo/White</material>
-  </gazebo>
-
-  <gazebo reference="R5A_link3">
-    <material>Gazebo/White</material>
-  </gazebo>
-
-  <gazebo reference="R5A_link4">
-    <material>Gazebo/White</material>
-  </gazebo>
-
-  <gazebo reference="R5A_link5">
-    <material>Gazebo/Black</material>
-  </gazebo>
-
-  <gazebo reference="R5A_GripperRight_Link1">
-    <material>Gazebo/White</material>
-  </gazebo>
-
-  <gazebo reference="R5A_GripperRight_Link2">
-    <material>Gazebo/Black</material>
-  </gazebo>
-
-  <gazebo reference="R5A_GripperRight_Link3">
-    <material>Gazebo/White</material>
-  </gazebo>
-
-  <gazebo reference="R5A_GripperLeft_Link1">
-    <material>Gazebo/White</material>
-  </gazebo>
-
-  <gazebo reference="R5A_GripperLeft_Link2">
-    <material>Gazebo/Black</material>
-  </gazebo>
-
-  <gazebo reference="R5A_GripperLeft_Link3">
-    <material>Gazebo/White</material>
-  </gazebo>
+                   
+  
 
 
-  <ros2_control name="GazeboSystem" type="system">
-    
-    <hardware>
-      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-      <param name="use_sim_time" type="bool">true</param>
-    </hardware>
+  
 
+  
+
+
+<!-- Automatically updated r5a_v_ros.urdf.xacro with <transmission> blocks -->
+
+<!-- You still need to insert this into your full file manually at the correct spot -->
+
+<!-- Begin transmission blocks -->
+  <transmission name="R0_Yaw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="R0_Yaw">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    
+    <actuator name="R0_Yaw_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="R1_Pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="R1_Pitch">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    
+    <actuator name="R1_Pitch_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="R2_Pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="R2_Pitch">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    
+    <actuator name="R2_Pitch_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="R3_Yaw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="R3_Yaw">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
+    <actuator name="R3_Yaw_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 
+  <transmission name="R4_Pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="R4_Pitch">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
+    <actuator name="R4_Pitch_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 
+  <transmission name="ServoGear_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="ServoGear">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
+    <actuator name="ServoGear_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 
+  <transmission name="LeftGripper_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="LeftGripper">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
+    <actuator name="LeftGripper_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 
+  <transmission name="LeftPivotArm_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="LeftPivotArm">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
+    <actuator name="LeftPivotArm_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 
+  <transmission name="PassifGear_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="PassifGear">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
+    <actuator name="PassifGear_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 
+  <transmission name="RightGripper_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="RightGripper">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
+    <actuator name="RightGripper_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 
+  <transmission name="RightPivotArm_trans">
+    <type>transmission_interface/SimpleTransmission</type>
     <joint name="RightPivotArm">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
+    <actuator name="RightPivotArm_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 
-  </ros2_control>
-
-  <gazebo>
-    <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
-    <robotNamespace>/</robotNamespace>
-      <robot_param>robot_description</robot_param>
-      <robot_param_node>robot_state_publisher</robot_param_node>
-      <robot_sim_type>gz_ros2_control/GazeboSystem</robot_sim_type>
-      <parameters>$(find robot_description)/config/controller.yaml</parameters>
-      <controller_manager_name>controller_manager</controller_manager_name>
-      <use_sim_time>true</use_sim_time>
-    </plugin>
-  </gazebo>
-  
 <!-- First Camera -->
   <link name="camera_link1"> 
     <visual> 
@@ -860,9 +847,7 @@
     </collision> 
   </link>
 
-  <gazebo reference="camera_link1">
-    <material>Gazebo/Black</material>
-  </gazebo>
+  
 
   <joint name="camera_joint1" type="fixed"> 
     <origin xyz="1.2 0.0 0.45" rpy="0 0 3.14159"/> 
@@ -871,32 +856,7 @@
   </joint> 
 
   <!-- Gazebo Camera Plugin for First Camera --> 
-  <gazebo reference="camera_link1">
-    <sensor type="camera" name="camera1">
-      <update_rate>30.0</update_rate>
-      <camera name="head1">
-        <horizontal_fov>1.3962634</horizontal_fov>
-        <image>
-          <width>1920</width>
-          <height>1080</height>
-          <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.02</near>
-          <far>300</far> 
-        </clip>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.007</stddev>
-        </noise>
-        <camera_info_topic>camera_info</camera_info_topic>
-      </camera>
-      <always_on>true</always_on>
-      <topic>camera/image_raw</topic>
-      <gz_frame_id>camera_link1</gz_frame_id>
-    </sensor>
-  </gazebo>
+  
 
   <!-- Second Camera -->
   <link name="camera_link2"> 
@@ -914,9 +874,7 @@
     </collision> 
   </link>
 
-  <gazebo reference="camera_link2">
-    <material>Gazebo/Black</material>
-  </gazebo>
+  
 
   <joint name="camera_joint2" type="fixed"> 
     <origin xyz="-0.5 0.5 1" rpy="0 0.7854 -0.7854"/> <!-- Adjust xyz to place in front of the first camera --> 
@@ -924,33 +882,203 @@
     <child link="camera_link2"/> 
   </joint> 
 
-  <!-- Gazebo Camera Plugin for Second Camera --> 
-  <gazebo reference="camera_link2">
-    <sensor type="camera" name="camera2">
-      <update_rate>30.0</update_rate>
-      <camera name="head2">
-        <horizontal_fov>1.3962634</horizontal_fov>
-        <image>
-          <width>1920</width>
-          <height>1080</height>
-          <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.02</near>
-          <far>300</far>
-        </clip>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.007</stddev>
-        </noise>
-        <camera_info_topic>camera_info2</camera_info_topic>
-      </camera>
-      <always_on>true</always_on>
-      <visualize>true</visualize>
-      <gz_frame_id>camera_link2</gz_frame_id>
-      <topic>camera/image_raw</topic>
-    </sensor>
+  <!-- Gazebo  --> 
+    
+<!-- Add this for Gazebo ros2_control plugin integration -->
+  
+  <gazebo>
+    <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
+      <ros2_control>
+        <robot_param>robot_description</robot_param>
+        <parameters>/home/rothvichea/ros2_jazzy/install/robot_control/share/robot_control/config/controller.yaml</parameters>
+      </ros2_control>
+    </plugin>
   </gazebo>
+
+
+
+
+  <transmission name="R0_Yaw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="R0_Yaw">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="R0_Yaw_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="R1_Pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="R1_Pitch">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="R1_Pitch_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="R2_Pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="R2_Pitch">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="R2_Pitch_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="R3_Yaw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="R3_Yaw">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="R3_Yaw_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="R4_Pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="R4_Pitch">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="R4_Pitch_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="ServoGear_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ServoGear">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="ServoGear_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="LeftGripper_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="LeftGripper">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="LeftGripper_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="PassifGear_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="PassifGear">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="PassifGear_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="RightGripper_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="RightGripper">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="RightGripper_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="LeftPivotArm_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="LeftPivotArm">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="LeftPivotArm_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="RightPivotArm_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="RightPivotArm">
+      <hardwareInterface>position</hardwareInterface>
+    </joint>
+    <actuator name="RightPivotArm_motor">
+      <hardwareInterface>position</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+
+    <joint name="R0_Yaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="R1_Pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="R2_Pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="R3_Yaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="R4_Pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="ServoGear">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LeftGripper">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="PassifGear">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RightGripper">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LeftPivotArm">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RightPivotArm">
+      <command_interface name="position"/> 
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
 
 </robot>
