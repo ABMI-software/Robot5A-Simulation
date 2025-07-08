@@ -18,8 +18,14 @@ from launch.actions import (
 )
 from launch.event_handlers import OnProcessExit, OnProcessStart
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.conditions import IfCondition, UnlessCondition  # Added for conditional execution
-from launch.substitutions import LaunchConfiguration, PythonExpression  # Added for launch configurations and expressions
+from launch.conditions import (
+    IfCondition,
+    UnlessCondition,
+)  # Added for conditional execution
+from launch.substitutions import (
+    LaunchConfiguration,
+    PythonExpression,
+)  # Added for launch configurations and expressions
 from launch_ros.actions import Node, SetParameter
 import xacro
 from moveit_configs_utils import MoveItConfigsBuilder
@@ -40,13 +46,11 @@ def generate_launch_description():
 
     # Declare the 'num_cameras' launch argument
     num_cameras_arg = DeclareLaunchArgument(
-        'num_cameras',
-        default_value='1',
-        description='Number of cameras (1 or 2)'
+        "num_cameras", default_value="1", description="Number of cameras (1 or 2)"
     )
 
     # Launch configuration to access 'num_cameras' argument
-    num_cameras = LaunchConfiguration('num_cameras')
+    num_cameras = LaunchConfiguration("num_cameras")
 
     # Package Directories
     pkg_name = "robot_description"  # Name of the robot description package
@@ -187,7 +191,7 @@ def generate_launch_description():
         parameters=[
             {"use_sim_time": True},
         ],
-        condition=UnlessCondition(PythonExpression(['"', num_cameras, '" == "2"']))
+        condition=UnlessCondition(PythonExpression(['"', num_cameras, '" == "2"'])),
     )
 
     # Aruco Detector Double Node
@@ -198,7 +202,7 @@ def generate_launch_description():
         parameters=[
             {"use_sim_time": True},
         ],
-        condition=IfCondition(PythonExpression(['"', num_cameras, '" == "2"']))
+        condition=IfCondition(PythonExpression(['"', num_cameras, '" == "2"'])),
     )
 
     # Launch Visual Joint State Publisher Node
@@ -214,10 +218,10 @@ def generate_launch_description():
         [
             num_cameras_arg,  # Added the launch argument
             Node(
-                package='joint_state_publisher',
-                executable='joint_state_publisher',
-                output='screen',
-                parameters=[{'use_sim_time': True}]
+                package="joint_state_publisher",
+                executable="joint_state_publisher",
+                output="screen",
+                parameters=[{"use_sim_time": True}],
             ),
             SetParameter(name="use_sim_time", value=True),  # Enable simulation time
             RegisterEventHandler(
@@ -237,7 +241,7 @@ def generate_launch_description():
                     target_action=load_arm_controller,
                     on_exit=[
                         load_gripper_controller,
-                        move_group_node
+                        move_group_node,
                     ],  # Load gripper controller before move group
                 )
             ),

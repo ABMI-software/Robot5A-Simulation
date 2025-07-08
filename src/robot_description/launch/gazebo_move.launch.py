@@ -42,17 +42,19 @@ def generate_launch_description():
 
     # Configure custom materials path for Gazebo
     materials_path = os.path.join(share_dir, "materials")
-    
+
     # Path to custom spotlight world
     world_file = os.path.join(share_dir, "worlds", "spotlight.world")
-    
+
     # Check if materials directory exists
     if not os.path.exists(materials_path):
         print(f"⚠️  Warning: Materials directory not found at {materials_path}")
-        print("   Robot will use default Gazebo materials instead of custom plastic materials")
+        print(
+            "   Robot will use default Gazebo materials instead of custom plastic materials"
+        )
     else:
         print(f"✅ Custom materials found at: {materials_path}")
-    
+
     # Check if custom world exists
     if os.path.exists(world_file):
         print(f"✅ Using custom spotlight world: {world_file}")
@@ -97,15 +99,15 @@ def generate_launch_description():
 
     # Include the Gazebo launch file with custom world and materials
     gazebo_launch_args = {
-        'verbose': 'true',  # Enable verbose output for debugging materials
-        'pause': 'false',   # Don't pause simulation on start
+        "verbose": "true",  # Enable verbose output for debugging materials
+        "pause": "false",  # Don't pause simulation on start
     }
-    
+
     # Add world file if it exists
     if world_file:
-        gazebo_launch_args['world'] = world_file
+        gazebo_launch_args["world"] = world_file
         print(f"💡 Gazebo will launch with spotlight world for maximum reflections")
-    
+
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -113,7 +115,7 @@ def generate_launch_description():
                 "/gazebo.launch.py",
             ]
         ),
-        launch_arguments=gazebo_launch_args.items()
+        launch_arguments=gazebo_launch_args.items(),
     )
 
     # Commands to load and start controllers after spawning the robot
@@ -144,9 +146,7 @@ def generate_launch_description():
     # MoveIt configuration using MoveItConfigsBuilder
     moveit_config = (
         MoveItConfigsBuilder("robot_moveit_config", package_name="robot_moveit_config")
-        .robot_description(
-            file_path=xacro_file, mappings={"use_sim_time": "true"}
-        )
+        .robot_description(file_path=xacro_file, mappings={"use_sim_time": "true"})
         .robot_description_semantic("config/armr5.srdf")
         .robot_description_kinematics("config/kinematics.yaml")
         .joint_limits("config/joint_limits.yaml")
@@ -171,28 +171,17 @@ def generate_launch_description():
 
     # Environment variables to configure Gazebo for custom materials
     set_gazebo_resource_path = SetEnvironmentVariable(
-        name='GAZEBO_RESOURCE_PATH',
-        value=[
-            materials_path, 
-            ':', 
-            os.environ.get('GAZEBO_RESOURCE_PATH', '')
-        ]
+        name="GAZEBO_RESOURCE_PATH",
+        value=[materials_path, ":", os.environ.get("GAZEBO_RESOURCE_PATH", "")],
     )
 
     set_gazebo_model_path = SetEnvironmentVariable(
-        name='GAZEBO_MODEL_PATH',
-        value=[
-            share_dir,
-            ':',
-            os.environ.get('GAZEBO_MODEL_PATH', '')
-        ]
+        name="GAZEBO_MODEL_PATH",
+        value=[share_dir, ":", os.environ.get("GAZEBO_MODEL_PATH", "")],
     )
 
     # Optional: Add a small delay before spawning to ensure Gazebo is fully loaded
-    delay_spawn_entity = ExecuteProcess(
-        cmd=['sleep', '2'],
-        output='screen'
-    )
+    delay_spawn_entity = ExecuteProcess(cmd=["sleep", "2"], output="screen")
 
     # Return the LaunchDescription with all the nodes and event handlers
     return LaunchDescription(
@@ -200,16 +189,12 @@ def generate_launch_description():
             # Set environment variables first for custom materials
             set_gazebo_resource_path,
             set_gazebo_model_path,
-            
             # Launch Gazebo with custom spotlight world
             gazebo,
-            
             # Robot state publisher
             node_robot_state_publisher,
-            
             # Delay before spawning to ensure Gazebo is ready
             delay_spawn_entity,
-            
             # Sequential controller and node loading with proper dependencies
             RegisterEventHandler(
                 event_handler=OnProcessExit(

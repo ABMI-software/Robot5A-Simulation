@@ -36,9 +36,7 @@ def generate_launch_description():
     # MoveIt configuration using MoveItConfigsBuilder
     moveit_config = (
         MoveItConfigsBuilder("robot_moveit_config", package_name="robot_moveit_config")
-        .robot_description(
-            file_path=xacro_file, mappings={"use_sim_time": "true"}
-        )
+        .robot_description(file_path=xacro_file, mappings={"use_sim_time": "true"})
         .robot_description_semantic("config/armr5.srdf")
         .robot_description_kinematics("config/kinematics.yaml")
         .joint_limits("config/joint_limits.yaml")

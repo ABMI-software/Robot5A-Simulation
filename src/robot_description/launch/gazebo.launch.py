@@ -48,7 +48,9 @@ def generate_launch_description():
     # Check materials
     if os.path.exists(materials_path):
         print(f"✅ Custom materials found: {materials_path}")
-        if os.path.exists(os.path.join(materials_path, "scripts", "robot_materials_PLA.material")):
+        if os.path.exists(
+            os.path.join(materials_path, "scripts", "robot_materials_PLA.material")
+        ):
             print("✅ PLA materials file found")
         else:
             print("⚠️  robot_materials_PLA.material not found in scripts/")
@@ -79,21 +81,13 @@ def generate_launch_description():
 
     # Environment variables for custom materials
     set_gazebo_resource_path = SetEnvironmentVariable(
-        name='GAZEBO_RESOURCE_PATH',
-        value=[
-            materials_path,
-            ':',
-            os.environ.get('GAZEBO_RESOURCE_PATH', '')
-        ]
+        name="GAZEBO_RESOURCE_PATH",
+        value=[materials_path, ":", os.environ.get("GAZEBO_RESOURCE_PATH", "")],
     )
 
     set_gazebo_model_path = SetEnvironmentVariable(
-        name='GAZEBO_MODEL_PATH',
-        value=[
-            share_dir,
-            ':',
-            os.environ.get('GAZEBO_MODEL_PATH', '')
-        ]
+        name="GAZEBO_MODEL_PATH",
+        value=[share_dir, ":", os.environ.get("GAZEBO_MODEL_PATH", "")],
     )
 
     # Robot state publisher node
@@ -110,23 +104,27 @@ def generate_launch_description():
 
     # Gazebo launch configuration
     gazebo_launch_args = {
-        'verbose': 'true',
-        'pause': 'false',
-        'use_sim_time': 'true',
+        "verbose": "true",
+        "pause": "false",
+        "use_sim_time": "true",
     }
 
     # Add custom world if available
     if use_custom_world:
-        gazebo_launch_args['world'] = world_file
-        print("🌟 Gazebo will launch with custom spotlight world for enhanced reflections")
+        gazebo_launch_args["world"] = world_file
+        print(
+            "🌟 Gazebo will launch with custom spotlight world for enhanced reflections"
+        )
 
     # Gazebo server and client launch
     gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(get_package_share_directory("gazebo_ros"), "launch"),
-            "/gazebo.launch.py",
-        ]),
-        launch_arguments=gazebo_launch_args.items()
+        PythonLaunchDescriptionSource(
+            [
+                os.path.join(get_package_share_directory("gazebo_ros"), "launch"),
+                "/gazebo.launch.py",
+            ]
+        ),
+        launch_arguments=gazebo_launch_args.items(),
     )
 
     # Robot spawn node
@@ -135,11 +133,16 @@ def generate_launch_description():
         executable="spawn_entity.py",
         name="spawn_entity",
         arguments=[
-            "-topic", "/robot_description",
-            "-entity", "armr5",
-            "-x", "0.0",
-            "-y", "0.0", 
-            "-z", "0.1",
+            "-topic",
+            "/robot_description",
+            "-entity",
+            "armr5",
+            "-x",
+            "0.0",
+            "-y",
+            "0.0",
+            "-z",
+            "0.1",
         ],
         output="screen",
     )
@@ -147,8 +150,11 @@ def generate_launch_description():
     # Joint state broadcaster controller
     load_joint_state_broadcaster = ExecuteProcess(
         cmd=[
-            "ros2", "control", "load_controller",
-            "--set-state", "active",
+            "ros2",
+            "control",
+            "load_controller",
+            "--set-state",
+            "active",
             "joint_state_broadcaster",
         ],
         output="screen",
@@ -157,8 +163,11 @@ def generate_launch_description():
     # Arm controller
     load_arm_controller = ExecuteProcess(
         cmd=[
-            "ros2", "control", "load_controller", 
-            "--set-state", "active",
+            "ros2",
+            "control",
+            "load_controller",
+            "--set-state",
+            "active",
             "arm_controller",
         ],
         output="screen",
@@ -170,61 +179,60 @@ def generate_launch_description():
         executable="joint_state_publisher",
         name="joint_state_publisher",
         parameters=[{"use_sim_time": True}],
-        condition=lambda: not os.path.exists("/tmp/gazebo_controllers_active")
+        condition=lambda: not os.path.exists("/tmp/gazebo_controllers_active"),
     )
 
     # Startup info node
     info_node = ExecuteProcess(
         cmd=[
-            "bash", "-c", 
+            "bash",
+            "-c",
             "sleep 5 && echo '✅ Robot simulation ready!' && "
             "echo '🎮 Test robot movement:' && "
-            "echo 'ros2 topic pub /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory \"{joint_names: [R0_Yaw, R1_Pitch, R2_Pitch, R3_Yaw, R4_Pitch], points: [{positions: [0.5, 0.5, 0.5, 0.5, 0.5], time_from_start: {sec: 3}}]}\" --once'"
+            "echo 'ros2 topic pub /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory \"{joint_names: [R0_Yaw, R1_Pitch, R2_Pitch, R3_Yaw, R4_Pitch], points: [{positions: [0.5, 0.5, 0.5, 0.5, 0.5], time_from_start: {sec: 3}}]}\" --once'",
         ],
         output="screen",
     )
 
     # Launch description with proper sequencing
-    return LaunchDescription([
-        # Environment setup
-        set_gazebo_resource_path,
-        set_gazebo_model_path,
-        
-        # Core simulation
-        gazebo,
-        node_robot_state_publisher,
-        joint_state_publisher,
-        
-        # Sequential robot spawning and controller loading
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=gazebo,
-                on_exit=[
-                    ExecuteProcess(cmd=["sleep", "3"], output="screen"),  # Wait for Gazebo
-                ]
-            )
-        ),
-        
-        spawn_entity,
-        
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=spawn_entity,
-                on_exit=[load_joint_state_broadcaster],
-            )
-        ),
-        
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=load_joint_state_broadcaster,
-                on_exit=[load_arm_controller],
-            )
-        ),
-        
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=load_arm_controller,
-                on_exit=[info_node],
-            )
-        ),
-    ])
+    return LaunchDescription(
+        [
+            # Environment setup
+            set_gazebo_resource_path,
+            set_gazebo_model_path,
+            # Core simulation
+            gazebo,
+            node_robot_state_publisher,
+            joint_state_publisher,
+            # Sequential robot spawning and controller loading
+            RegisterEventHandler(
+                event_handler=OnProcessExit(
+                    target_action=gazebo,
+                    on_exit=[
+                        ExecuteProcess(
+                            cmd=["sleep", "3"], output="screen"
+                        ),  # Wait for Gazebo
+                    ],
+                )
+            ),
+            spawn_entity,
+            RegisterEventHandler(
+                event_handler=OnProcessExit(
+                    target_action=spawn_entity,
+                    on_exit=[load_joint_state_broadcaster],
+                )
+            ),
+            RegisterEventHandler(
+                event_handler=OnProcessExit(
+                    target_action=load_joint_state_broadcaster,
+                    on_exit=[load_arm_controller],
+                )
+            ),
+            RegisterEventHandler(
+                event_handler=OnProcessExit(
+                    target_action=load_arm_controller,
+                    on_exit=[info_node],
+                )
+            ),
+        ]
+    )

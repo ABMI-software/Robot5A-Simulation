@@ -27,6 +27,7 @@ from launch_ros.actions import Node, SetParameter
 import xacro
 from moveit_configs_utils import MoveItConfigsBuilder
 
+
 def generate_launch_description():
     """
     @brief Generates the launch description for running standard joint tests with visual servoing components.
@@ -42,56 +43,95 @@ def generate_launch_description():
 
     # Declare the 'num_cameras' launch argument
     num_cameras_arg = DeclareLaunchArgument(
-        'num_cameras',
-        default_value='1',
-        description='Number of cameras (1 or 2)'
+        "num_cameras", default_value="1", description="Number of cameras (1 or 2)"
     )
 
     # Launch configuration to access 'num_cameras' argument
-    num_cameras = LaunchConfiguration('num_cameras')
+    num_cameras = LaunchConfiguration("num_cameras")
 
     # Package Directories
     pkg_name = "robot_description"  # Name of the robot description package
-    robot_moveit_config = "robot_moveit_config"  # Name of the MoveIt configuration package
-    share_dir = get_package_share_directory(pkg_name)  # Path to the robot description package
-    moveit_config_pkg_path = get_package_share_directory(robot_moveit_config)  # Path to the MoveIt config package
+    robot_moveit_config = (
+        "robot_moveit_config"  # Name of the MoveIt configuration package
+    )
+    share_dir = get_package_share_directory(
+        pkg_name
+    )  # Path to the robot description package
+    moveit_config_pkg_path = get_package_share_directory(
+        robot_moveit_config
+    )  # Path to the MoveIt config package
 
     # Load and process URDF/XACRO file
-    xacro_file = os.path.join(share_dir, "urdf", "r5a_v_ros.urdf.xacro")  # Path to the XACRO file
+    xacro_file = os.path.join(
+        share_dir, "urdf", "r5a_v_ros.urdf.xacro"
+    )  # Path to the XACRO file
     robot_description_config = xacro.process_file(xacro_file)  # Process the XACRO file
-    robot_description = {"robot_description": robot_description_config.toxml()}  # Convert to XML format
+    robot_description = {
+        "robot_description": robot_description_config.toxml()
+    }  # Convert to XML format
 
     # Joint positions parameter (Define your joint positions here)
     joint_positions = [
         # Position 0: Home position
-        0.0, 0.0, 0.0, 0.0, 0.0,
-
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
         # Position 1: Extend first joint (Base rotation)
-        0.5, 0.0, 0.0, 0.0, 0.0,
-
+        0.5,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
         # Position 2: Extend second joint (Shoulder)
-        0.0, 0.5, 0.0, 0.0, 0.0,
-
+        0.0,
+        0.5,
+        0.0,
+        0.0,
+        0.0,
         # Position 3: Extend third joint (Elbow)
-        0.0, 0.0, 0.5, 0.0, 0.0,
-
+        0.0,
+        0.0,
+        0.5,
+        0.0,
+        0.0,
         # Position 4: Extend fourth joint (Wrist pitch)
-        0.0, 0.0, 0.0, 0.5, 0.0,
-
+        0.0,
+        0.0,
+        0.0,
+        0.5,
+        0.0,
         # Position 5: Extend fifth joint (Wrist roll)
-        0.0, 0.0, 0.0, 0.0, 0.5,
-
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.5,
         # Position 6: All joints at positive quarter range
-        0.25, 0.25, 0.25, 0.25, 0.25,
-
+        0.25,
+        0.25,
+        0.25,
+        0.25,
+        0.25,
         # Position 7: All joints at negative quarter range
-        -0.25, -0.25, -0.25, -0.25, -0.25,
-
+        -0.25,
+        -0.25,
+        -0.25,
+        -0.25,
+        -0.25,
         # Position 8: Alternate joints positive and negative
-        0.5, -0.5, 0.5, -0.5, 0.5,
-
+        0.5,
+        -0.5,
+        0.5,
+        -0.5,
+        0.5,
         # Position 9: Arm Pointing towards Camera 1
-        1.5, -1.5, 0.0, 0.0, 0.0,
+        1.5,
+        -1.5,
+        0.0,
+        0.0,
+        0.0,
     ]
 
     # Test type parameter
@@ -106,7 +146,9 @@ def generate_launch_description():
     )
 
     # Gazebo launch with a custom world file that includes a spotlight
-    world_file_path = os.path.join(share_dir, "worlds", "spotlight.world")  # Path to the custom world file
+    world_file_path = os.path.join(
+        share_dir, "worlds", "spotlight.world"
+    )  # Path to the custom world file
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -214,7 +256,7 @@ def generate_launch_description():
         parameters=[
             {"use_sim_time": True},
         ],
-        condition=UnlessCondition(PythonExpression(['"', num_cameras, '" == "2"']))
+        condition=UnlessCondition(PythonExpression(['"', num_cameras, '" == "2"'])),
     )
 
     # Aruco Detector Double Node
@@ -225,14 +267,13 @@ def generate_launch_description():
         parameters=[
             {"use_sim_time": True},
         ],
-        condition=IfCondition(PythonExpression(['"', num_cameras, '" == "2"']))
+        condition=IfCondition(PythonExpression(['"', num_cameras, '" == "2"'])),
     )
 
     # Launch Actions
     actions = [
         num_cameras_arg,  # Added the launch argument
         SetParameter(name="use_sim_time", value=True),
-
         # Event handlers for controller loading
         RegisterEventHandler(
             event_handler=OnProcessExit(
@@ -252,7 +293,6 @@ def generate_launch_description():
                 on_exit=[move_group_node],
             )
         ),
-
         # Event handler to start other nodes after move_group_node starts
         RegisterEventHandler(
             event_handler=OnProcessStart(
@@ -265,17 +305,15 @@ def generate_launch_description():
                 ],
             )
         ),
-
         # Event handler to shutdown when standard_joint_test_node exits
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=standard_joint_test_node,
                 on_exit=[
-                    Shutdown(reason='Standard joint test completed'),
+                    Shutdown(reason="Standard joint test completed"),
                 ],
             )
         ),
-
         # Nodes to be launched
         gazebo,
         robot_state_publisher_node,
