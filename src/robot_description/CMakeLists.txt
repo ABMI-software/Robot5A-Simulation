@@ -21,5 +21,11 @@ install(
     ${CMAKE_CURRENT_SOURCE_DIR}/urdf/r5a_v_ros.urdf.xacro
   DESTINATION share/${PROJECT_NAME}/urdf
 )
+# Installer les matériaux
+install(DIRECTORY media/materials/
+  DESTINATION share/${PROJECT_NAME}/materials/)
+
+install(DIRECTORY worlds/
+  DESTINATION share/${PROJECT_NAME}/worlds/)
 
 ament_package()

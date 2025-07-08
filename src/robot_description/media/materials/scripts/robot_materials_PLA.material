@@ -1,0 +1,27 @@
+material PlasticBlackGlossy
+{
+    technique
+    {
+        pass
+        {
+            ambient 0.1 0.1 0.1 1.0
+            diffuse 0.15 0.15 0.15 1.0
+            specular 0.3 0.3 0.3 1.0 50.0
+            emissive 0.0 0.0 0.0 1.0
+        }
+    }
+}
+material PlasticOffWhite
+{
+    technique
+    {
+        pass
+        {
+            ambient 0.75 0.75 0.7 1.0
+            diffuse 0.9 0.9 0.85 1.0
+            specular 0.2 0.2 0.2 1.0 30.0
+            emissive 0.0 0.0 0.0 1.0
+            
+        }
+    }
+}

@@ -2,9 +2,9 @@
 @file gazebo_move.launch.py
 @brief Launch file for setting up the robot simulation and MoveIt configurations.
 
-This launch file initializes the robot simulation in Gazebo, spawns the robot entity,
-sets up the MoveIt configuration, and starts the necessary nodes and controllers
-for the robot operation.
+This launch file initializes the robot simulation in Gazebo with custom spotlight world,
+spawns the robot entity, sets up the MoveIt configuration, and starts the necessary 
+nodes and controllers for the robot operation. Modified to include custom plastic black materials.
 """
 
 import os
@@ -19,6 +19,7 @@ from launch.actions import (
     ExecuteProcess,
     IncludeLaunchDescription,
     RegisterEventHandler,
+    SetEnvironmentVariable,
 )
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -27,8 +28,8 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 def generate_launch_description():
     """
     @brief Generates the launch description for the robot simulation and MoveIt setup.
-    This function sets up the robot description, launches Gazebo, spawns the robot entity,
-    configures MoveIt, and starts the necessary nodes and controllers.
+    This function sets up the robot description, launches Gazebo with custom spotlight world,
+    spawns the robot entity, configures MoveIt, and starts the necessary nodes and controllers.
 
     @return LaunchDescription object containing all the nodes and configurations to launch.
     """
@@ -38,6 +39,28 @@ def generate_launch_description():
     share_dir = get_package_share_directory(
         pkg_name
     )  # Get the share directory of the package
+
+    # Configure custom materials path for Gazebo
+    materials_path = os.path.join(share_dir, "materials")
+    
+    # Path to custom spotlight world
+    world_file = os.path.join(share_dir, "worlds", "spotlight.world")
+    
+    # Check if materials directory exists
+    if not os.path.exists(materials_path):
+        print(f"⚠️  Warning: Materials directory not found at {materials_path}")
+        print("   Robot will use default Gazebo materials instead of custom plastic materials")
+    else:
+        print(f"✅ Custom materials found at: {materials_path}")
+    
+    # Check if custom world exists
+    if os.path.exists(world_file):
+        print(f"✅ Using custom spotlight world: {world_file}")
+        print(f"🌟 Enhanced lighting will be used for better reflections")
+    else:
+        print(f"⚠️  Custom spotlight world not found at {world_file}")
+        print("   Using default Gazebo world instead")
+        world_file = ""  # Use default world
 
     # Use xacro to process the file
     xacro_file = os.path.join(
@@ -72,7 +95,17 @@ def generate_launch_description():
         output="screen",
     )
 
-    # Include the Gazebo launch file
+    # Include the Gazebo launch file with custom world and materials
+    gazebo_launch_args = {
+        'verbose': 'true',  # Enable verbose output for debugging materials
+        'pause': 'false',   # Don't pause simulation on start
+    }
+    
+    # Add world file if it exists
+    if world_file:
+        gazebo_launch_args['world'] = world_file
+        print(f"💡 Gazebo will launch with spotlight world for maximum reflections")
+    
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -80,6 +113,7 @@ def generate_launch_description():
                 "/gazebo.launch.py",
             ]
         ),
+        launch_arguments=gazebo_launch_args.items()
     )
 
     # Commands to load and start controllers after spawning the robot
@@ -135,12 +169,54 @@ def generate_launch_description():
         parameters=[config_dict],  # Parameters including MoveIt configurations
     )
 
+    # Environment variables to configure Gazebo for custom materials
+    set_gazebo_resource_path = SetEnvironmentVariable(
+        name='GAZEBO_RESOURCE_PATH',
+        value=[
+            materials_path, 
+            ':', 
+            os.environ.get('GAZEBO_RESOURCE_PATH', '')
+        ]
+    )
+
+    set_gazebo_model_path = SetEnvironmentVariable(
+        name='GAZEBO_MODEL_PATH',
+        value=[
+            share_dir,
+            ':',
+            os.environ.get('GAZEBO_MODEL_PATH', '')
+        ]
+    )
+
+    # Optional: Add a small delay before spawning to ensure Gazebo is fully loaded
+    delay_spawn_entity = ExecuteProcess(
+        cmd=['sleep', '2'],
+        output='screen'
+    )
+
     # Return the LaunchDescription with all the nodes and event handlers
     return LaunchDescription(
         [
+            # Set environment variables first for custom materials
+            set_gazebo_resource_path,
+            set_gazebo_model_path,
+            
+            # Launch Gazebo with custom spotlight world
             gazebo,
+            
+            # Robot state publisher
             node_robot_state_publisher,
-            spawn_entity,
+            
+            # Delay before spawning to ensure Gazebo is ready
+            delay_spawn_entity,
+            
+            # Sequential controller and node loading with proper dependencies
+            RegisterEventHandler(
+                event_handler=OnProcessExit(
+                    target_action=delay_spawn_entity,
+                    on_exit=[spawn_entity],
+                )
+            ),
             RegisterEventHandler(
                 event_handler=OnProcessExit(
                     target_action=spawn_entity,

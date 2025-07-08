@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot name="armr5" xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:include filename="aruco.urdf.xacro" />
+  <!-- <xacro:include filename="aruco.urdf.xacro" /> -->
+
   <link name="world"></link>
   <joint name="base_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -686,52 +687,82 @@
       effort="5"
       velocity="1" />
   </joint>
-  <gazebo reference="base_link">                                                                
-    <material>Gazebo/White</material>
+
+  <!-- MATÉRIAUX PLASTIQUE NOIR MAT PERSONNALISÉS -->
+  <!-- Corps principal du robot en plastique noir mat -->
+  <gazebo reference="base_link">
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
   </gazebo>                                         
   
   <gazebo reference="R5A_link1">
-    <material>Gazebo/White</material>
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
   </gazebo>                 
                           
   <gazebo reference="R5A_link2">
-    <material>Gazebo/White</material>
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
   </gazebo>
 
   <gazebo reference="R5A_link3">
-    <material>Gazebo/White</material>
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
   </gazebo>
 
   <gazebo reference="R5A_link4">
-    <material>Gazebo/White</material>
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
   </gazebo>
 
   <gazebo reference="R5A_link5">
-    <material>Gazebo/Black</material>
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
   </gazebo>
 
+  <!-- Gripper en plastique noir légèrement brillant pour contraste -->
   <gazebo reference="R5A_GripperRight_Link1">
-    <material>Gazebo/White</material>
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
   </gazebo>
 
   <gazebo reference="R5A_GripperRight_Link2">
-    <material>Gazebo/Black</material>
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
   </gazebo>
 
   <gazebo reference="R5A_GripperRight_Link3">
-    <material>Gazebo/White</material>
+    <material>PlasticOffWhite</material>
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
   </gazebo>
 
   <gazebo reference="R5A_GripperLeft_Link1">
-    <material>Gazebo/White</material>
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
   </gazebo>
 
   <gazebo reference="R5A_GripperLeft_Link2">
-    <material>Gazebo/Black</material>
+    <material>PlasticBlackGlossy</material>
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
   </gazebo>
 
   <gazebo reference="R5A_GripperLeft_Link3">
-    <material>Gazebo/White</material>
+    <material>PlasticOffWhite</material>
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
   </gazebo>
 
 
