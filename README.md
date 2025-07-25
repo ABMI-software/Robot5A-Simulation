@@ -71,20 +71,20 @@ This project simulates and controls a robotic arm using **ROS2 Jassy**, **Gazebo
 3. **Clone the Repository**
 
     ```bash
-    git clone https://github.com/ABMI-software/Robot5A-Simulation.git ~/Robot5A-Simulation
+    git clone -b Jazzy_feature_rothvichea --single-branch https://github.com/ABMI-software/Robot5A-Simulation.git R5A_Jazzy
     ```
 
 4. **Build the Workspace**
 
     ```bash
-    cd ~/Robot5A-Simulation
+    cd ~/R5A_Jazzy
     source /opt/ros/jazzy/setup.bash
     rosdep update
     rosdep install --from-paths src --ignore-src -r -y
     ```
 
     ```bash
-    colcon build
+    colcon build --symlink-install
     ```
 
 5. **Source the Workspace**
@@ -103,7 +103,7 @@ This project simulates and controls a robotic arm using **ROS2 Jassy**, **Gazebo
 
     ```bash
     echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
-    echo "source ~/Robot5A-Simulation/install/setup.bash" >> ~/.bashrc
+    echo "source ~/R5A_Jazzy/install/setup.bash" >> ~/.bashrc
     echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
     ```
 
