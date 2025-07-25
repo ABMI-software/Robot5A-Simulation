@@ -1,1084 +1,512 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <robot name="armr5" xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:include filename="aruco.urdf.xacro" />
-  <link name="world"></link>
+
+  <!-- Base to world fixed joint -->
+  <link name="world"/>
   <joint name="base_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="world"/>
-    <child link="base_link"/> 
+    <child link="base_link"/>
   </joint>
 
-  <link
-    name="base_link">
-    <inertial>
-      <origin
-        xyz="0.00683000289839214 0.0492858185856111 0.102410796188668"
-        rpy="0 0 0" />
-      <mass
-        value="1.54608760930939" />
-      <inertia
-        ixx="0.00335325507409126"
-        ixy="-2.743396733147E-05"
-        ixz="6.86594556642029E-08"
-        iyy="0.00381821146815156"
-        iyz="-1.9423420965472E-06"
-        izz="0.00646111115889031" />
-    </inertial>
+  <!-- base_link -->
+  <link name="base_link">
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/base_link.STL" />
+        <mesh filename="package://robot_description/meshes/base_link.STL" scale="1 1 1"/>
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/base_link.STL" />
+        <mesh filename="package://robot_description/meshes/base_link.STL" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.00683000289839214 0.0492858185856111 0.102410796188668" rpy="0 0 0" />
+      <mass value="1.54608760930939" />
+      <inertia
+        ixx="0.00335325507409126" ixy="-2.743396733147E-05" ixz="6.86594556642029E-08"
+        iyy="0.00381821146815156" iyz="-1.9423420965472E-06" izz="0.00646111115889031" />
+    </inertial>
+  </link>
+
+  <!-- R0_Yaw between base_link and R5A_link1 -->
+  <joint name="R0_Yaw" type="revolute">
+    <origin xyz="0.00685726 0 0.15825" rpy="1.5708 0 0"/>
+    <parent link="base_link"/>
+    <child link="R5A_link1"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="5.0" velocity="1.0"/>
+  </joint>
+
+  <!-- R5A_link1 -->
+  <link name="R5A_link1">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link1.STL" scale="1 1 1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link1.STL" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="-0.00086354 0.0792884 0.00021713" rpy="0 0 0"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0" iyy="0.05" iyz="0.0" izz="0.05"/>
+    </inertial>
+  </link>
+
+  <!-- R1_Pitch between R5A_link1 and R5A_link2 -->
+  <joint name="R1_Pitch" type="revolute">
+    <origin xyz="-0.00310901 0.1655 0" rpy="0 0 0"/>
+    <parent link="R5A_link1"/>
+    <child link="R5A_link2"/>
+    <axis xyz="-1 0 0"/>
+    <limit lower="-1.57" upper="1.5" effort="5.0" velocity="1.0"/>
+  </joint>
+
+  <!-- R5A_link2 -->
+  <link name="R5A_link2">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link2.STL" scale="1 1 1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link2.STL" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0.00059034 0.07927498 -0.00001606" rpy="0 0 0"/>
+      <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.04"/>
+    </inertial>
+  </link>
+
+  <!-- R2_Pitch between R5A_link2 and R5A_link3 -->
+  <joint name="R2_Pitch" type="revolute">
+    <origin xyz="0.00300704 0.22112379 0" rpy="0 0 0"/>
+    <parent link="R5A_link2"/>
+    <child link="R5A_link3"/>
+    <axis xyz="-1 0 0"/>
+    <limit lower="-1.57" upper="1.57" effort="5.0" velocity="1.0"/>
+  </joint>
+
+  <!-- R5A_link3 -->
+  <link name="R5A_link3">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link3.STL" scale="1 1 1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link3.STL" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.8"/>
+      <origin xyz="-0.00031555 0.04244496 0.00042316" rpy="0 0 0"/>
+      <inertia ixx="0.03" ixy="0.0" ixz="0.0" iyy="0.03" iyz="0.0" izz="0.03"/>
+    </inertial>
+  </link>
+
+  <!-- R3_Yaw between R5A_link3 and R5A_link4 -->
+  <joint name="R3_Yaw" type="revolute">
+    <origin xyz="0 0.1375 0" rpy="0 0 0"/>
+    <parent link="R5A_link3"/>
+    <child link="R5A_link4"/>
+    <axis xyz="0 -0.999718303067734 -0.0237342476470231"/>
+    <limit lower="-1.57" upper="1.57" effort="5.0" velocity="1.0"/>
+  </joint>
+
+  <!-- R5A_link4 -->
+  <link name="R5A_link4">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link4.STL" scale="1 1 1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link4.STL" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.4"/>
+      <origin xyz="-0.00020605 0.04548739 -0.00021911" rpy="0 0 0"/>
+      <inertia ixx="0.015" ixy="0.0" ixz="0.0" iyy="0.015" iyz="0.0" izz="0.015"/>
+    </inertial>
+  </link>
+
+  <!-- R4_Pitch between R5A_link4 and R5A_link5 -->
+  <joint name="R4_Pitch" type="revolute">
+    <origin xyz="0 0.095 0" rpy="1.5708 0 3.14159"/>
+    <parent link="R5A_link4"/>
+    <child link="R5A_link5"/>
+    <axis xyz="-0.995634790742834 0.0933346852058426 0"/>
+    <limit lower="-1.57" upper="1.57" effort="5.0" velocity="1.0"/>
+  </joint>
+
+  <!-- R5A_link5 -->
+  <link name="R5A_link5">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link5.STL" scale="1 1 1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_link5.STL" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <origin xyz="-0.00035 0.00017 0.01382" rpy="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <!-- ServoGear joint -->
+  <joint name="ServoGear" type="revolute">
+    <origin xyz="0.014 -0.00039 0.065" rpy="1.5708 0 3.1416"/>
+    <parent link="R5A_link5"/>
+    <child link="R5A_GripperLeft_Link1"/>
+    <axis xyz="0 -0.006066 -0.999982"/>
+    <limit lower="-0.01" upper="1.0" effort="5" velocity="1"/>
+  </joint>
+
+  <!-- R5A_GripperLeft_Link1 -->
+  <link name="R5A_GripperLeft_Link1">
+    <inertial>
+      <origin xyz="-0.00659452357779758 -0.000394229793377554 2.33412007890428E-06" rpy="0 0 0" />
+      <mass value="0.00487858122952023" />
+      <inertia ixx="2.28094324920978E-07" ixy="1.69392169643129E-08" ixz="-1.00081436396101E-10"
+               iyy="9.51062234425361E-07" iyz="1.21242073786193E-09" izz="1.15060635431209E-06" />
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_GripperLeft_Link1.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/R5A_GripperLeft_Link1.STL"/>
       </geometry>
     </collision>
   </link>
-  <link
-    name="R5A_link1">
+
+  <!-- LeftGripper joint -->
+  <joint name="LeftGripper" type="revolute">
+    <origin xyz="-0.04 0 0" rpy="0 0 0"/>
+    <parent link="R5A_GripperLeft_Link1"/>
+    <child link="R5A_GripperLeft_Link2"/>
+    <axis xyz="0 -0.006066 -0.999982"/>
+    <limit lower="-1.0" upper="0.01" effort="5" velocity="1"/>
+  </joint>
+
+  <!-- R5A_GripperLeft_Link2 -->
+  <link name="R5A_GripperLeft_Link2">
     <inertial>
-      <origin
-        xyz="-0.000863539879134213 0.0792884229151367 0.000217126309188408"
-        rpy="0 0 0" />
-      <mass
-        value="2.08660345546666" />
-      <inertia
-        ixx="0.00705202984610834"
-        ixy="4.18495769536855E-07"
-        ixz="-5.35090527857546E-08"
-        iyy="0.00650257727022909"
-        iyz="-7.95450001919519E-07"
-        izz="0.00859235014286563" />
+      <origin xyz="0.0121769148397674 0.0264987914633908 -0.00015844305881356" rpy="0 0 0" />
+      <mass value="0.010285119366326" />
+      <inertia ixx="3.24436687710476E-06" ixy="-1.54511287979719E-06" ixz="9.58011795509873E-09"
+               iyy="1.30527398272079E-06" iyz="1.62739383329718E-08" izz="3.9267289910886E-06" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link1.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperLeft_Link2.STL"/>
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link1.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperLeft_Link2.STL"/>
       </geometry>
     </collision>
   </link>
-  <joint
-    name="R0_Yaw"
-    type="revolute">
-    <origin
-      xyz="0.00685726045199512 0 0.15825"
-      rpy="1.5707963267949 0 0" />
-    <parent
-      link="base_link" />
-    <child
-      link="R5A_link1" />
-    <axis
-      xyz="0 1 0" />
-    <limit
-      lower="-1.5"
-      upper="1.5"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
+
+  <!-- LeftPivotArm joint -->
+  <joint name="LeftPivotArm" type="revolute">
+    <origin xyz="0.007 -0.0005156 0.085" rpy="1.5708 0 3.1416"/>
+    <parent link="R5A_link5"/>
+    <child link="R5A_GripperLeft_Link3"/>
+    <axis xyz="0 0.006066 0.999982"/>
+    <limit lower="-1.0" upper="0.01" effort="5" velocity="1"/>
   </joint>
-  <link
-    name="R5A_link2">
+
+  <!-- R5A_GripperLeft_Link3 -->
+  <link name="R5A_GripperLeft_Link3">
     <inertial>
-      <origin
-        xyz="0.000590340031700784 0.0792749789345383 -1.60575865215828E-05"
-        rpy="0 0 0" />
-      <mass
-        value="1.92247082198063" />
-      <inertia
-        ixx="0.00487699383852877"
-        ixy="-3.67976990627086E-05"
-        ixz="1.05680472821134E-06"
-        iyy="0.00293274601666501"
-        iyz="-4.85804534901831E-08"
-        izz="0.00503562271238706" />
+      <origin xyz="-0.0199999997525652 3.14595219752523E-06 -1.9083866895607E-08" rpy="0 0 0" />
+      <mass value="0.00167027391699932" />
+      <inertia ixx="1.0506836483145E-08" ixy="4.70838754646716E-11" ixz="-2.85618585168146E-13"
+               iyy="3.09836744743029E-07" iyz="5.57882383972831E-12" izz="3.10756375336318E-07" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link2.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperLeft_Link3.STL"/>
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link2.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperLeft_Link3.STL"/>
       </geometry>
     </collision>
   </link>
-  <joint
-    name="R1_Pitch"
-    type="revolute">
-    <origin
-      xyz="-0.00310901547925538 0.1655 0"
-      rpy="0 0 0" />
-    <parent
-      link="R5A_link1" />
-    <child
-      link="R5A_link2" />
-    <axis
-      xyz="-0.999934112328875 0 -0.011479155067573" />
-    <limit
-      lower="-1.5"
-      upper="1.5"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
+
+  <!-- PassifGear joint -->
+  <joint name="PassifGear" type="revolute">
+    <origin xyz="-0.014 -0.00039 0.065" rpy="1.5708 0 3.1416"/>
+    <parent link="R5A_link5"/>
+    <child link="R5A_GripperRight_Link1"/>
+    <axis xyz="0 -0.006066 -0.999982"/>
+    <limit lower="-1.0" upper="0.01" effort="5" velocity="1"/>
   </joint>
-  <link
-    name="R5A_link3">
+
+  <!-- R5A_GripperRight_Link1 -->
+  <link name="R5A_GripperRight_Link1">
     <inertial>
-      <origin
-        xyz="-0.000315549279166789 0.042444959407996 0.00042316309562433"
-        rpy="0 0 0" />
-      <mass
-        value="0.749292336081855" />
-      <inertia
-        ixx="0.00200425601332893"
-        ixy="9.1795637501825E-06"
-        ixz="-2.55766332056785E-08"
-        iyy="0.000697358197450952"
-        iyz="-7.84063656624641E-06"
-        izz="0.00196480563389349" />
+      <origin xyz="0.00645173751362635 -0.000420742089632498 2.55112204775943E-06" rpy="0 0 0" />
+      <mass value="0.0050032197309173" />
+      <inertia ixx="2.29355330577406E-07" ixy="-1.79692415236652E-08" ixz="1.09050530560748E-10"
+               iyy="9.5760807063583E-07" iyz="1.21374586203625E-09" izz="1.15767989130762E-06" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link3.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperRight_Link1.STL"/>
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link3.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperRight_Link1.STL"/>
       </geometry>
     </collision>
   </link>
-  <joint
-    name="R2_Pitch"
-    type="revolute">
-    <origin
-      xyz="0.00300704230231069 0.221123792803564 0"
-      rpy="0 0 0" />
-    <parent
-      link="R5A_link2" />
-    <child
-      link="R5A_link3" />
-    <axis
-      xyz="-1 0 0" />
-    <limit
-      lower="-1.5"
-      upper="1.5"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
 
+  <!-- RightGripper joint -->
+  <joint name="RightGripper" type="revolute">
+    <origin xyz="0.04 0 0" rpy="0 0 0"/>
+    <parent link="R5A_GripperRight_Link1"/>
+    <child link="R5A_GripperRight_Link2"/>
+    <axis xyz="0 -0.006066 -0.999982"/>
+    <limit lower="-0.01" upper="1.0" effort="5" velocity="1"/>
   </joint>
-  <link
-    name="R5A_link4">
+
+  <!-- R5A_GripperRight_Link2 -->
+  <link name="R5A_GripperRight_Link2">
     <inertial>
-      <origin
-        xyz="-0.000206047771187218 0.0454873904143415 -0.000219105733632293"
-        rpy="0 0 0" />
-      <mass
-        value="0.355077243317478" />
-      <inertia
-        ixx="0.000669805200123062"
-        ixy="-4.71996739637697E-07"
-        ixz="-1.57736445584604E-07"
-        iyy="0.000358674558440891"
-        iyz="-5.41990968682589E-08"
-        izz="0.000768116251564114" />
+      <origin xyz="-0.0121769121022437 0.0264987629997102 -0.000158239935641401" rpy="0 0 0" />
+      <mass value="0.010285143205825" />
+      <inertia ixx="3.24437190589205E-06" ixy="1.54511360510839E-06" ixz="-9.56821825775037E-09"
+               iyy="1.30527511012569E-06" iyz="1.63061443850165E-08" izz="3.92673308798733E-06" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link4.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperRight_Link2.STL"/>
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link4.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperRight_Link2.STL"/>
       </geometry>
     </collision>
   </link>
-  <joint
-    name="R3_Yaw"
-    type="revolute">
-    <origin
-      xyz="0 0.1375 0"
-      rpy="0 0 0" />
-    <parent
-      link="R5A_link3" />
-    <child
-      link="R5A_link4" />
-    <axis
-      xyz="0 -0.999718303067734 -0.0237342476470231" />
-    <limit
-      lower="-1.5"
-      upper="1.5"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
+
+  <!-- RightPivotArm joint -->
+  <joint name="RightPivotArm" type="revolute">
+    <origin xyz="-0.007 -0.0005156 0.085" rpy="1.5708 0 3.1416"/>
+    <parent link="R5A_link5"/>
+    <child link="R5A_GripperRight_Link3"/>
+    <axis xyz="0 -0.006066 -0.999982"/>
+    <limit lower="-1.0" upper="0.01" effort="5" velocity="1"/>
   </joint>
-  <link
-    name="R5A_link5">
+
+  <!-- R5A_GripperRight_Link3 -->
+  <link name="R5A_GripperRight_Link3">
     <inertial>
-      <origin
-        xyz="-0.000347552332670687 0.000167028378251888 0.0138173380766619"
-        rpy="0 0 0" />
-      <mass
-        value="0.198451767848984" />
-      <inertia
-        ixx="0.000113354976202718"
-        ixy="-9.1633661632938E-08"
-        ixz="2.54500165125599E-07"
-        iyy="8.47211726683811E-05"
-        iyz="4.4543875805716E-08"
-        izz="6.47134110451793E-05" />
+      <origin xyz="0.0199999522633234 -4.36966718082576E-05 2.65070677277451E-07" rpy="0 0 0" />
+      <mass value="0.00167027391699932" />
+      <inertia ixx="1.05082579798437E-08" ixy="6.53984435711288E-10" ixz="-3.96716935937682E-12"
+               iyy="3.09835323298637E-07" iyz="5.58744653817654E-12" izz="3.10756375284011E-07" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link5.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperRight_Link3.STL"/>
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_link5.STL" />
+        <mesh filename="package://robot_description/meshes/R5A_GripperRight_Link3.STL"/>
       </geometry>
     </collision>
   </link>
-  <joint
-    name="R4_Pitch"
-    type="revolute">
-    <origin
-      xyz="0 0.0950000000000002 0"
-      rpy="1.5707963267949 0 3.14159265358979" />
-    <parent
-      link="R5A_link4" />
-    <child
-      link="R5A_link5" />
-    <axis
-      xyz="-0.995634790742834 0.0933346852058426 0" />
-    <limit
-      lower="-1.5"
-      upper="1.5"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
 
-  </joint>
-  <link
-    name="R5A_GripperLeft_Link1">
-    <inertial>
-      <origin
-        xyz="-0.00659452357779758 -0.000394229793377554 2.33412007890428E-06"
-        rpy="0 0 0" />
-      <mass
-        value="0.00487858122952023" />
-      <inertia
-        ixx="2.28094324920978E-07"
-        ixy="1.69392169643129E-08"
-        ixz="-1.00081436396101E-10"
-        iyy="9.51062234425361E-07"
-        iyz="1.21242073786193E-09"
-        izz="1.15060635431209E-06" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperLeft_Link1.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperLeft_Link1.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="ServoGear"
-    type="revolute">
-    <origin
-      xyz="0.0140000000000435 -0.000394292596204153 0.0649988040916903"
-      rpy="1.5707963267949 0 3.14159265358979" />
-    <parent
-      link="R5A_link5" />
-    <child
-      link="R5A_GripperLeft_Link1" />
-    <axis
-      xyz="0 -0.006066039941515 -0.99998160141046" />
-    <limit
-      lower="-0.01"
-      upper="1.0"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
-   
-  </joint>
-  <link
-    name="R5A_GripperLeft_Link2">
-    <inertial>
-      <origin
-        xyz="0.0121769148397674 0.0264987914633908 -0.00015844305881356"
-        rpy="0 0 0" />
-      <mass
-        value="0.010285119366326" />
-      <inertia
-        ixx="3.24436687710476E-06"
-        ixy="-1.54511287979719E-06"
-        ixz="9.58011795509873E-09"
-        iyy="1.30527398272079E-06"
-        iyz="1.62739383329718E-08"
-        izz="3.9267289910886E-06" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperLeft_Link2.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperLeft_Link2.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="LeftGripper"
-    type="revolute">
-    <origin
-      xyz="-0.0399999995050676 0 0"
-      rpy="0 0 0" />
-    <parent
-      link="R5A_GripperLeft_Link1" />
-    <child
-      link="R5A_GripperLeft_Link2" />
-    <axis
-      xyz="0 -0.00606603994152109 -0.99998160141046" />
-    <limit
-      lower="-1.0"
-      upper="0.01"
-      effort="5"
-      velocity="1" />
-   <hardwareInterface>position</hardwareInterface>
-
-  </joint>
-  <link
-    name="R5A_GripperRight_Link1">
-    <inertial>
-      <origin
-        xyz="0.00645173751362635 -0.000420742089632498 2.55112204775943E-06"
-        rpy="0 0 0" />
-      <mass
-        value="0.0050032197309173" />
-      <inertia
-        ixx="2.29355330577406E-07"
-        ixy="-1.79692415236652E-08"
-        ixz="1.09050530560748E-10"
-        iyy="9.5760807063583E-07"
-        iyz="1.21374586203625E-09"
-        izz="1.15767989130762E-06" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperRight_Link1.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperRight_Link1.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="PassifGear"
-    type="revolute">
-    <origin
-      xyz="-0.014 -0.00039429 0.064999"
-      rpy="1.5708 0 3.1416" />
-    <parent
-      link="R5A_link5" />
-    <child
-      link="R5A_GripperRight_Link1" />
-    <axis
-      xyz="0 -0.006066 -0.99998" />
-    <limit
-      lower="-1.0"
-      upper="0.01"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
-   
-  </joint>
-  <link
-    name="R5A_GripperRight_Link2">
-    <inertial>
-      <origin
-        xyz="-0.0121769121022437 0.0264987629997102 -0.000158239935641401"
-        rpy="0 0 0" />
-      <mass
-        value="0.010285143205825" />
-      <inertia
-        ixx="3.24437190589205E-06"
-        ixy="1.54511360510839E-06"
-        ixz="-9.56821825775037E-09"
-        iyy="1.30527511012569E-06"
-        iyz="1.63061443850165E-08"
-        izz="3.92673308798733E-06" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperRight_Link2.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperRight_Link2.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="RightGripper"
-    type="revolute">
-    <origin
-      xyz="0.0399999045264166 -8.73933436228436E-05 0"
-      rpy="0 0 0" />
-    <parent
-      link="R5A_GripperRight_Link1" />
-    <child
-      link="R5A_GripperRight_Link2" />
-    <axis
-      xyz="0 -0.00606603994152205 -0.99998160141046" />
-    <limit
-      lower="-0.01"
-      upper="1.0"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
-
-  </joint>
-  <link
-    name="R5A_GripperLeft_Link3">
-    <inertial>
-      <origin
-        xyz="-0.0199999997525652 3.14595219752523E-06 -1.9083866895607E-08"
-        rpy="0 0 0" />
-      <mass
-        value="0.00167027391699932" />
-      <inertia
-        ixx="1.0506836483145E-08"
-        ixy="4.70838754646716E-11"
-        ixz="-2.85618585168146E-13"
-        iyy="3.09836744743029E-07"
-        iyz="5.57882383972831E-12"
-        izz="3.10756375336318E-07" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperLeft_Link3.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperLeft_Link3.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="LeftPivotArm"
-    type="revolute">
-    <origin
-      xyz="0.007000000000237 -0.000515613395019377 0.0849984361199003"
-      rpy="1.5707963267949 0 3.14159265358979" />
-    <parent
-      link="R5A_link5" />
-    <child
-      link="R5A_GripperLeft_Link3" />
-    <axis
-      xyz="0 0.00606603994152107 0.99998160141046" />
-    <limit
-      lower="-1.0"
-      upper="0.01"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
-
-  </joint>
-  <link
-    name="R5A_GripperRight_Link3">
-    <inertial>
-      <origin
-        xyz="0.0199999522633234 -4.36966718082576E-05 2.65070677277451E-07"
-        rpy="0 0 0" />
-      <mass
-        value="0.00167027391699932" />
-      <inertia
-        ixx="1.05082579798437E-08"
-        ixy="6.53984435711288E-10"
-        ixz="-3.96716935937682E-12"
-        iyy="3.09835323298637E-07"
-        iyz="5.58744653817654E-12"
-        izz="3.10756375284011E-07" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperRight_Link3.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find robot_description)/meshes/R5A_GripperRight_Link3.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="RightPivotArm"
-    type="revolute">
-    <origin
-      xyz="-0.00699999999995929 -0.000515613394988563 0.0849984361199004"
-      rpy="1.5707963267949 0 3.14159265358979" />
-    <parent
-      link="R5A_link5" />
-    <child
-      link="R5A_GripperRight_Link3" />
-    <axis
-      xyz="0 -0.00606603994152203 -0.99998160141046" />
-    <limit
-      lower="-1.0"
-      upper="0.01"
-      effort="5"
-      velocity="1" />
-    <hardwareInterface>position</hardwareInterface>
-
-  </joint>
-                                           
-  
-                   
-  
+  <!-- XACRO argument for package path -->
 
 
-  
-
-  
 
 
-<!-- Automatically updated r5a_v_ros.urdf.xacro with <transmission> blocks -->
+  <!-- Existing links, joints, ros2_control unchanged -->
+  <!-- ... (as provided previously) ... -->
 
-<!-- You still need to insert this into your full file manually at the correct spot -->
-
-<!-- Begin transmission blocks -->
-  <transmission name="R0_Yaw_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R0_Yaw">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="R0_Yaw_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="R1_Pitch_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R1_Pitch">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="R1_Pitch_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="R2_Pitch_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R2_Pitch">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="R2_Pitch_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="R3_Yaw_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R3_Yaw">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="R3_Yaw_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="R4_Pitch_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R4_Pitch">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="R4_Pitch_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="ServoGear_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="ServoGear">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="ServoGear_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="LeftGripper_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="LeftGripper">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="LeftGripper_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="LeftPivotArm_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="LeftPivotArm">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="LeftPivotArm_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="PassifGear_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="PassifGear">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="PassifGear_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="RightGripper_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RightGripper">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="RightGripper_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-  <transmission name="RightPivotArm_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RightPivotArm">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="RightPivotArm_motor">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
-
-<!-- First Camera -->
-  <link name="camera_link1"> 
-    <visual> 
-      <geometry> 
-        <mesh filename="file://$(find robot_description)/meshes/3dCamera.DAE"/> 
-      </geometry>
-      <origin rpy="0 1.5708 0"/> <!-- Rotate 90 degrees around the Y-axis (1.5708 radians = 90 degrees) -->
-    </visual> 
-    <collision> 
-      <geometry> 
-        <mesh filename="file://$(find robot_description)/meshes/3dCamera.DAE"/> 
-      </geometry>
-      <origin rpy="0 1.5708 0"/> 
-    </collision> 
-  </link>
-
-  
-
-  <joint name="camera_joint1" type="fixed"> 
-    <origin xyz="1.2 0.0 0.45" rpy="0 0 3.14159"/> 
-    <parent link="base_link"/> 
-    <child link="camera_link1"/> 
-  </joint> 
-
-  <!-- Gazebo Camera Plugin for First Camera --> 
-  
-
-  <!-- Second Camera -->
-  <link name="camera_link2"> 
-    <visual> 
-      <geometry> 
-        <mesh filename="file://$(find robot_description)/meshes/3dCamera.DAE"/> 
-      </geometry>
-      <origin rpy="0 1.5708 0"/> <!-- Rotate 90 degrees around the Y-axis (1.5708 radians = 90 degrees) -->
-    </visual> 
-    <collision> 
-      <geometry> 
-        <mesh filename="file://$(find robot_description)/meshes/3dCamera.DAE"/> 
-      </geometry>
-      <origin rpy="0 1.5708 0"/> 
-    </collision> 
-  </link>
-
-  
-
-  <joint name="camera_joint2" type="fixed"> 
-    <origin xyz="-0.5 0.5 1" rpy="0 0.7854 -0.7854"/> <!-- Adjust xyz to place in front of the first camera --> 
-    <parent link="base_link"/> 
-    <child link="camera_link2"/> 
-  </joint> 
-
-  <!-- Gazebo  --> 
-    
-<!-- Add this for Gazebo ros2_control plugin integration -->
-  
+  <!-- Updated Gazebo plugin -->
+  <!-- Updated Gazebo plugin -->
   <gazebo>
     <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
-      <ros2_control>
-        <robot_param>robot_description</robot_param>
-        <parameters>/home/rothvichea/ros2_jazzy/install/robot_control/share/robot_control/config/controller.yaml</parameters>
-      </ros2_control>
+      <robotNamespace>/</robotNamespace>
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+      <robot_sim_type>gz_ros2_control/GazeboSimSystem</robot_sim_type>
+      <parameters>$(find robot_control)/config/controller.yaml</parameters>
+      <controller_manager_name>controller_manager</controller_manager_name>
     </plugin>
   </gazebo>
 
 
 
-
-  <transmission name="R0_Yaw_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R0_Yaw">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="R0_Yaw_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="R1_Pitch_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R1_Pitch">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="R1_Pitch_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="R2_Pitch_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R2_Pitch">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="R2_Pitch_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="R3_Yaw_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R3_Yaw">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="R3_Yaw_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="R4_Pitch_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="R4_Pitch">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="R4_Pitch_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="ServoGear_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="ServoGear">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="ServoGear_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="LeftGripper_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="LeftGripper">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="LeftGripper_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="PassifGear_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="PassifGear">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="PassifGear_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="RightGripper_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RightGripper">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="RightGripper_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="LeftPivotArm_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="LeftPivotArm">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="LeftPivotArm_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="RightPivotArm_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RightPivotArm">
-      <hardwareInterface>position</hardwareInterface>
-    </joint>
-    <actuator name="RightPivotArm_motor">
-      <hardwareInterface>position</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-  <ros2_control name="GazeboSystem" type="system">
+  <!-- ros2_control hardware configuration -->
+  <ros2_control name="ArmSystem" type="system">
     <hardware>
       <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      <param name="use_sim_time" type="bool">true</param>
     </hardware>
-
+    <!-- Arm joints -->
     <joint name="R0_Yaw">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-100.0</param>
+        <param name="max">100.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
+      <state_interface name="position"/>
     </joint>
     <joint name="R1_Pitch">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-100.0</param>
+        <param name="max">100.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
+      <state_interface name="position"/>
     </joint>
     <joint name="R2_Pitch">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-100.0</param>
+        <param name="max">100.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
+      <state_interface name="position"/>
     </joint>
     <joint name="R3_Yaw">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-100.0</param>
+        <param name="max">100.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
+      <state_interface name="position"/>
     </joint>
     <joint name="R4_Pitch">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-100.0</param>
+        <param name="max">100.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
+      <state_interface name="position"/>
     </joint>
+    <!-- Gripper joints -->
     <joint name="ServoGear">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-10.0</param>
+        <param name="max">10.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
-    </joint>
-    <joint name="LeftGripper">
-      <command_interface name="position"/>
       <state_interface name="position"/>
-      <state_interface name="velocity"/>
     </joint>
     <joint name="PassifGear">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-10.0</param>
+        <param name="max">10.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="LeftGripper">
+      <command_interface name="position">
+        <param name="min">-10.0</param>
+        <param name="max">10.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="position"/>
     </joint>
     <joint name="RightGripper">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-10.0</param>
+        <param name="max">10.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
+      <state_interface name="position"/>
     </joint>
     <joint name="LeftPivotArm">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-10.0</param>
+        <param name="max">10.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
+      <state_interface name="position"/>
     </joint>
     <joint name="RightPivotArm">
-      <command_interface name="position"/> 
-      <state_interface name="position"/>
+      <command_interface name="position">
+        <param name="min">-10.0</param>
+        <param name="max">10.0</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
+      <state_interface name="position"/>
     </joint>
   </ros2_control>
-
 
 </robot>
