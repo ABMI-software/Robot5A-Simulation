@@ -112,7 +112,7 @@ This project simulates and controls a robotic arm using **ROS2 Jassy**, **Gazebo
 1. **Build Clean**
 
     ```bash
-    cd ~/Robot5A-Simulation
+    cd ~/R5A_Jazzy
     rm -rf build install log
     source /opt/ros/jazzy/setup.bash
     colcon build --symlink-install --cmake-clean-cache
